@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Painel Gestão Interno</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <div class="min-h-screen grid grid-cols-1 md:grid-cols-[280px_1fr]">
+    <!-- Sidebar -->
+    <aside class="md:sticky md:top-0 md:h-screen bg-white border-r border-slate-200 shadow-sm">
+      <div class="p-5 flex items-center gap-3 border-b">
+        <div class="h-10 w-10 rounded-2xl bg-blue-600 text-white grid place-items-center text-lg font-bold">IT</div>
+        <div>
+          <h1 class="text-lg font-bold">Painel de Gestão</h1>
+          <p class="text-xs text-slate-500">Ativos • Peças • Chamados</p>
+        </div>
+      </div>
+
+      <nav class="p-3 space-y-2">
+        <button data-page="dashboard" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100">📊 Dashboard</button>
+        <button data-page="ativos" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100">
+          💻 <span>Ativos</span>
+          <span id="badgeAtivos" class="ml-auto bg-slate-200 px-2 py-0.5 rounded text-xs">0</span>
+        </button>
+        <button data-page="pecas" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100">
+          🛠️ <span>Peças</span>
+          <span id="badgePecas" class="ml-auto bg-slate-200 px-2 py-0.5 rounded text-xs">0</span>
+        </button>
+        <button data-page="chamados" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100">
+          🎫 <span>Chamados</span>
+        </button>
+      </nav>
+    </aside>
+
+    <!-- Conteúdo principal -->
+    <main class="min-h-screen">
+      <header class="sticky top-0 z-20 bg-white/70 backdrop-blur border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+          <h2 id="pageTitle" class="text-2xl font-bold">Dashboard</h2>
+        </div>
+      </header>
+
+      <div class="max-w-7xl mx-auto p-4 md:p-6">
+        <!-- DASHBOARD -->
+        <section id="page-dashboard" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-xl shadow border">
+              <h3 class="text-sm font-medium text-slate-500">Total Ativos</h3>
+              <p id="dashAtivos" class="text-3xl font-bold mt-2">0</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow border">
+              <h3 class="text-sm font-medium text-slate-500">Total Peças</h3>
+              <p id="dashPecas" class="text-3xl font-bold mt-2">0</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow border">
+              <h3 class="text-sm font-medium text-slate-500">Chamados</h3>
+              <p id="dashChamados" class="text-3xl font-bold mt-2">0</p>
+            </div>
+          </div>
+
+          <div class="bg-white p-6 rounded-xl shadow border">
+            <canvas id="chartAtivos"></canvas>
+          </div>
+        </section>
+
+        <!-- ATIVOS -->
+        <section id="page-ativos" class="hidden space-y-6">
+          <div class="bg-white border rounded-2xl shadow-sm p-6">
+            <h3 class="text-xl font-semibold mb-4">Cadastrar Ativo</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label>Tipo</label>
+                <select id="tipoEquip" class="w-full p-2 border rounded-lg">
+                  <option>Notebook</option><option>Desktop</option><option>Telefonia</option><option>Estoque</option>
+                </select>
+                <label class="block mt-3">Patrimônio</label>
+                <input id="patrimonio" class="w-full p-2 border rounded-lg" />
+                <label class="block mt-3">Marca/Modelo</label>
+                <input id="marca" class="w-full p-2 border rounded-lg" />
+                <label class="block mt-3">Número de Série</label>
+                <input id="serial" class="w-full p-2 border rounded-lg" />
+                <label class="block mt-3">Disco</label>
+                <input id="disco" class="w-full p-2 border rounded-lg" />
+                <label class="block mt-3">Hostname</label>
+                <input id="hostname" class="w-full p-2 border rounded-lg" />
+              </div>
+              <div>
+                <label>Nome</label>
+                <input id="nome" class="w-full p-2 border rounded-lg" />
+                <label class="block mt-3">Login</label>
+                <input id="login" class="w-full p-2 border rounded-lg" />
+                <label class="block mt-3">Setor</label>
+                <input id="setor" class="w-full p-2 border rounded-lg" />
+                <label class="block mt-3">Local</label>
+                <input id="local" class="w-full p-2 border rounded-lg" />
+                <label class="block mt-3">Status</label>
+                <select id="status" class="w-full p-2 border rounded-lg">
+                  <option>Em uso</option><option>Estoque</option><option>Manutenção</option>
+                </select>
+                <label class="block mt-3">Sistema Operacional</label>
+                <input id="sistemaOperacional" class="w-full p-2 border rounded-lg" />
+              </div>
+            </div>
+            <div class="mt-4">
+              <button onclick="adicionarAtivo()" class="bg-green-600 text-white px-4 py-2 rounded">Salvar</button>
+            </div>
+          </div>
+
+          <div class="bg-white border rounded-2xl shadow-sm p-4">
+            <table class="w-full text-sm border rounded-xl overflow-hidden">
+              <thead class="bg-slate-100">
+                <tr>
+                  <th class="px-3 py-2">Tipo</th><th>Patrimônio</th><th>Marca</th><th>Série</th>
+                  <th>Usuário</th><th>Setor</th><th>SO</th><th>Status</th><th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="listaAtivos"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- PEÇAS -->
+        <section id="page-pecas" class="hidden space-y-6">
+          <div class="bg-white border rounded-2xl shadow-sm p-6">
+            <h3 class="text-xl font-semibold mb-4">Cadastrar Peça</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <input id="pecaNome" placeholder="Nome" class="p-2 border rounded-lg" />
+              <input id="pecaCategoria" placeholder="Categoria" class="p-2 border rounded-lg" />
+              <input type="number" id="pecaQtd" placeholder="Quantidade" class="p-2 border rounded-lg" />
+              <input id="pecaObs" placeholder="Observação" class="p-2 border rounded-lg" />
+            </div>
+            <div class="mt-4">
+              <button onclick="adicionarPeca()" class="bg-green-600 text-white px-4 py-2 rounded">Salvar</button>
+            </div>
+          </div>
+          <div class="bg-white border rounded-2xl shadow-sm p-4">
+            <table class="w-full text-sm border rounded-xl overflow-hidden">
+              <thead class="bg-slate-100">
+                <tr><th>Nome</th><th>Categoria</th><th>Qtd</th><th>Obs</th></tr>
+              </thead>
+              <tbody id="listaPecas"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- CHAMADOS -->
+        <section id="page-chamados" class="hidden space-y-6">
+          <div class="bg-white border rounded-2xl shadow-sm p-6">
+            <h3 class="text-xl font-semibold mb-4">Registrar Chamado</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <input id="chamadoUsuario" placeholder="Usuário" class="p-2 border rounded-lg" />
+              <input id="chamadoNumero" placeholder="Número" class="p-2 border rounded-lg" />
+              <input id="chamadoAssunto" placeholder="Assunto" class="p-2 border rounded-lg" />
+              <select id="chamadoTipo" class="p-2 border rounded-lg">
+                <option>Remoto</option><option>Presencial</option><option>Blip</option>
+              </select>
+              <input id="chamadoTecnico" placeholder="Técnico" class="p-2 border rounded-lg" />
+              <input id="chamadoGrupo" placeholder="Grupo" class="p-2 border rounded-lg" />
+              <input type="date" id="chamadoData" class="p-2 border rounded-lg" />
+            </div>
+            <div class="mt-4">
+              <button onclick="adicionarChamado()" class="bg-blue-600 text-white px-4 py-2 rounded">Salvar</button>
+            </div>
+          </div>
+          <div class="bg-white border rounded-2xl shadow-sm p-4">
+            <table class="w-full text-sm border rounded-xl overflow-hidden">
+              <thead class="bg-slate-100">
+                <tr><th>Usuário</th><th>Número</th><th>Assunto</th><th>Tipo</th><th>Técnico</th><th>Grupo</th><th>Data</th></tr>
+              </thead>
+              <tbody id="listaChamados"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const API_URL = "http://127.0.0.1:5000";
+
+    // ------------ Navegação ------------
+    const pageButtons = document.querySelectorAll('aside button[data-page]');
+    const pageTitle = document.getElementById('pageTitle');
+    function showPage(key) {
+      document.querySelectorAll('section[id^="page-"]').forEach(s => s.classList.add('hidden'));
+      const section = document.getElementById(`page-${key}`);
+      if(section){
+        section.classList.remove('hidden');
+      }
+      pageTitle.textContent = key.charAt(0).toUpperCase() + key.slice(1);
+    }
+    pageButtons.forEach(btn => btn.addEventListener('click', () => showPage(btn.dataset.page)));
+
+    window.onload = () => {
+      showPage('dashboard');
+      carregarAtivos();
+      carregarPecas();
+      carregarChamados();
+    }
+
+    // ------------ ATIVOS ------------
+    async function carregarAtivos() {
+      const res = await fetch(`${API_URL}/api/ativos`);
+      const data = await res.json();
+      const lista = document.getElementById('listaAtivos');
+      lista.innerHTML = '';
+      data.forEach(a => {
+        lista.innerHTML += `
+          <tr>
+            <td>${a.tipo}</td><td>${a.patrimonio}</td><td>${a.marca}</td><td>${a.serial}</td>
+            <td>${a.nome}</td><td>${a.setor}</td><td>${a.os||'-'}</td><td>${a.status}</td>
+            <td><button onclick="apagarAtivo(${a.id})" class="bg-red-500 text-white px-2 py-1 rounded">Del</button></td>
+          </tr>`;
+      });
+      document.getElementById('badgeAtivos').textContent = data.length;
+      document.getElementById('dashAtivos').textContent = data.length;
+      atualizarGraficoAtivos(data);
+    }
+    async function adicionarAtivo() {
+      const ativo = {
+        tipo: document.getElementById("tipoEquip").value,
+        patrimonio: document.getElementById("patrimonio").value,
+        marca: document.getElementById("marca").value,
+        serial: document.getElementById("serial").value,
+        disco: document.getElementById("disco").value,
+        hostname: document.getElementById("hostname").value,
+        nome: document.getElementById("nome").value,
+        login: document.getElementById("login").value,
+        setor: document.getElementById("setor").value,
+        local: document.getElementById("local").value,
+        os: document.getElementById("sistemaOperacional").value,
+        status: document.getElementById("status").value
+      };
+      await fetch(`${API_URL}/api/ativos`, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(ativo)});
+      carregarAtivos();
+    }
+    async function apagarAtivo(id) {
+      await fetch(`${API_URL}/api/ativos/${id}`, {method:'DELETE'});
+      carregarAtivos();
+    }
+
+    // ------------ PEÇAS ------------
+    async function carregarPecas() {
+      const res = await fetch(`${API_URL}/api/pecas`);
+      const data = await res.json();
+      const lista = document.getElementById('listaPecas');
+      lista.innerHTML = '';
+      data.forEach(p => {
+        lista.innerHTML += `<tr><td>${p.nome}</td><td>${p.categoria}</td><td>${p.quantidade}</td><td>${p.observacao||'-'}</td></tr>`;
+      });
+      document.getElementById('badgePecas').textContent = data.length;
+      document.getElementById('dashPecas').textContent = data.length;
+    }
+    async function adicionarPeca() {
+      const peca = {
+        nome: document.getElementById('pecaNome').value,
+        categoria: document.getElementById('pecaCategoria').value,
+        quantidade: document.getElementById('pecaQtd').value,
+        observacao: document.getElementById('pecaObs').value
+      };
+      await fetch(`${API_URL}/api/pecas`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(peca)});
+      carregarPecas();
+    }
+
+    // ------------ CHAMADOS ------------
+    async function carregarChamados() {
+      const res = await fetch(`${API_URL}/api/chamados`);
+      const data = await res.json();
+      const lista = document.getElementById('listaChamados');
+      lista.innerHTML = '';
+      data.forEach(c => {
+        lista.innerHTML += `<tr><td>${c.nome}</td><td>${c.numero}</td><td>${c.assunto}</td><td>${c.tipo}</td><td>${c.tecnico}</td><td>${c.grupo}</td><td>${c.data}</td></tr>`;
+      });
+      document.getElementById('dashChamados').textContent = data.length;
+    }
+    async function adicionarChamado() {
+      const chamado = {
+        nome: document.getElementById('chamadoUsuario').value,
+        numero: document.getElementById('chamadoNumero').value,
+        assunto: document.getElementById('chamadoAssunto').value,
+        tipo: document.getElementById('chamadoTipo').value,
+        tecnico: document.getElementById('chamadoTecnico').value,
+        grupo: document.getElementById('chamadoGrupo').value,
+        data: document.getElementById('chamadoData').value
+      };
+      await fetch(`${API_URL}/api/chamados`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(chamado)});
+      carregarChamados();
+    }
