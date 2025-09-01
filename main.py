@@ -7,7 +7,7 @@ from models import Base, Ativo, Peca, Chamado
 app = Flask(__name__)
 
 # -------- Conexão com SQLite --------
-engine = create_engine("postgresql://dbit_1rq1_user:w6xBxZorJABAPzs2J5YhhFRAmsSsDtlS@dpg-d2m935ruibrs7380fh90-a.virginia-postgres.render.com/dbit_1rq1", echo=True)
+engine = create_engine("postgresql://pgi_cmd7_user:KUNg0AwILaoRPQgswasyoSL5ntAvBUKT@dpg-d2qst26mcj7s73ci16qg-a/pgi_cmd7", echo=True)
 Session = sessionmaker(bind=engine)
 session = Session()
 
@@ -135,3 +135,4 @@ def adicionar_chamado():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
