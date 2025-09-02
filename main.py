@@ -19,7 +19,7 @@ engine = create_engine(DATABASE_URL, echo=True)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-Base.metabase.create_all(bing=engine)
+Base.metadata.create_all(bing=engine)
 
 
 #---------------------------------------------Cria rotas da aplicação---------------------------------------------
