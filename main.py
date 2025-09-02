@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -6,7 +7,7 @@ from models import Base, Ativo, Peca, Chamado
 
 app = Flask(__name__)
 
-# -------- Conexão com SQLite --------
+# ------------------------------------------ Conexão com Banco de dados ------------------------------------------
 engine = create_engine("postgresql://pgi_cmd7_user:KUNg0AwILaoRPQgswasyoSL5ntAvBUKT@dpg-d2qst26mcj7s73ci16qg-a/pgi_cmd7", echo=True)
 Session = sessionmaker(bind=engine)
 session = Session()
