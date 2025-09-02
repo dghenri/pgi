@@ -16,7 +16,7 @@
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800">
   <div class="min-h-screen grid grid-cols-1 md:grid-cols-[280px_1fr]">
-    <!-- Sidebar -->
+    <!------------------------------------------------------------------------------------------------------------------------------ Sidebar -->
     <aside class="md:sticky md:top-0 md:h-screen bg-white border-r border-slate-200 shadow-sm">
       <div class="p-5 flex items-center gap-3 border-b">
         <div class="h-10 w-10 rounded-2xl bg-blue-600 text-white grid place-items-center text-lg font-bold">IT</div>
@@ -31,21 +31,27 @@
           <span class="text-xl">📊</span>
           <span class="font-medium">Dashboard</span>
         </button>
-        <button data-page="ativos" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100">
-          💻 <span>Ativos</span>
-          <span id="badgeAtivos" class="ml-auto bg-slate-200 px-2 py-0.5 rounded text-xs">0</span>
+
+        <button data-page="ativos" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100 group">
+          <span class="text-xl">💻</span>
+          <span class="font-medium">Ativos</span>
+          <span id="badgeAtivos" class="ml-auto inline-flex items-center justify-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-700">0</span>
         </button>
-        <button data-page="pecas" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100">
-          🛠️ <span>Peças</span>
-          <span id="badgePecas" class="ml-auto bg-slate-200 px-2 py-0.5 rounded text-xs">0</span>
+
+        <button data-page="pecas" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100 group">
+          <span class="text-xl">🛠️</span>
+          <span class="font-medium">Peças</span>
+          <span id="badgePecas" class="ml-auto inline-flex items-center justify-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-700">0</span>
         </button>
-        <button data-page="chamados" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100">
-          🎫 <span>Chamados</span>
+
+        <button data-page="chamados" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100 group">
+          <span class="text-xl">🎫</span>
+          <span class="font-medium">Chamados</span>
         </button>
       </nav>
     </aside>
 
-    <!-- Conteúdo principal -->
+    <!------------------------------------------------------------------------------------------------------------------- Conteúdo principal -->
     <main class="min-h-screen">
       <header class="sticky top-0 z-20 bg-white/70 backdrop-blur border-b border-slate-200">
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -68,8 +74,8 @@
       </header>
 
       <div class="max-w-7xl mx-auto p-4 md:p-6">
-        <!-- DASHBOARD -->
-        <section id="page-dashboard" class="space-y-6">
+        <!------------------------------------------------------------------------------------------------------------------------ DASHBOARD -->
+        <section id="page-dashboard" class="hidden space-y-6">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-white p-6 rounded-xl shadow border">
               <h3 class="text-sm font-medium text-slate-500">Total Ativos</h3>
@@ -90,87 +96,179 @@
           </div>
         </section>
 
-        <!-- ATIVOS -->
+        <!--------------------------------------------------------------------------------------------------------------------------- ATIVOS -->
         <section id="page-ativos" class="space-y-6">
           <div class="bg-white border rounded-2xl shadow-sm p-6">
             <h3 class="text-xl font-semibold mb-4">Cadastrar Ativo</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label>Tipo</label>
-                <select id="tipoEquip" class="w-full p-2 border rounded-lg">
-                  <option>Notebook</option><option>Desktop</option><option>Telefonia</option><option>Estoque</option>
+                <label class="block text-sm font-medium">Tipo</label>
+                <select id="tipoEquip" class="w-full mt-1 p-2 border rounded-lg">
+                  <option>Notebook</option>
+                  <option>Desktop</option>
+                  <option>Telefonia</option>
+                  <option>Estoque</option>
                 </select>
-                <label class="block mt-3">Patrimônio</label>
-                <input id="patrimonio" class="w-full p-2 border rounded-lg" />
-                <label class="block mt-3">Marca/Modelo</label>
-                <input id="marca" class="w-full p-2 border rounded-lg" />
-                <label class="block mt-3">Número de Série</label>
-                <input id="serial" class="w-full p-2 border rounded-lg" />
-                <label class="block mt-3">Disco</label>
-                <input id="disco" class="w-full p-2 border rounded-lg" />
-                <label class="block mt-3">Hostname</label>
-                <input id="hostname" class="w-full p-2 border rounded-lg" />
+                <label class="block text-sm font-medium mt-3">Patrimônio</label>
+                <input id="patrimonio" class="w-full mt-1 p-2 border rounded-lg" />
+                <label class="block text-sm font-medium mt-3">Marca/Modelo</label>
+                <input id="marca" class="w-full mt-1 p-2 border rounded-lg" />
+                <label class="block text-sm font-medium mt-3">Número de Série</label>
+                <input id="serial" class="w-full mt-1 p-2 border rounded-lg" />
+                <label class="block text-sm font-medium mt-3">Disco</label>
+                <input id="disco" class="w-full mt-1 p-2 border rounded-lg" />
+                <label class="block text-sm font-medium mt-3">Hostname</label>
+                <input id="hostname" class="w-full mt-1 p-2 border rounded-lg" />
               </div>
               <div>
-                <label>Nome</label>
-                <input id="nome" class="w-full p-2 border rounded-lg" />
-                <label class="block mt-3">Login</label>
-                <input id="login" class="w-full p-2 border rounded-lg" />
-                <label class="block mt-3">Setor</label>
-                <input id="setor" class="w-full p-2 border rounded-lg" />
-                <label class="block mt-3">Local</label>
-                <input id="local" class="w-full p-2 border rounded-lg" />
-                <label class="block mt-3">Status</label>
-                <select id="status" class="w-full p-2 border rounded-lg">
-                  <option>Em uso</option><option>Estoque</option><option>Manutenção</option>
+                <label class="block text-sm font-medium">Nome</label>
+                <input id="nome" class="w-full mt-1 p-2 border rounded-lg" />
+                <label class="block text-sm font-medium mt-3">Login</label>
+                <input id="login" class="w-full mt-1 p-2 border rounded-lg" />
+                <label class="block text-sm font-medium mt-3">Setor</label>
+                <input id="setor" class="w-full mt-1 p-2 border rounded-lg" />
+                <label class="block text-sm font-medium mt-3">Local</label>
+                <input id="local" class="w-full mt-1 p-2 border rounded-lg" />
+                <label class="block text-sm font-medium mt-3">Status</label>
+                <select id="status" class="w-full mt-1 p-2 border rounded-lg">
+                  <option>Em uso</option>
+                  <option>Estoque</option>
+                  <option>Manutenção</option>
                 </select>
-                <label class="block mt-3">Sistema Operacional</label>
-                <input id="sistemaOperacional" class="w-full p-2 border rounded-lg" />
+                <label class="block text-sm font-medium mt-3">Sistema Operacional</label>
+                <input id="sistemaOperacional" class="w-full mt-1 p-2 border rounded-lg" />
               </div>
             </div>
-            <div class="mt-4">
-              <button onclick="adicionarAtivo()" class="bg-green-600 text-white px-4 py-2 rounded">Salvar</button>
+            <div class="mt-5 flex flex-wrap gap-3">
+              <button onclick="adicionarOuEditar()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Adicionar</button>
+
+              <button onclick="cancelarEdicao()" id="cancelEditBtn" class="hidden bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-xl">Cancelar Edição</button>
+
+              <input type="file" id="importExcel" accept=".xlsx, .xls" class="hidden" onchange="importarExcel(event)" />
+              <button onclick="document.getElementById('importExcel').click()" 
+              class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl">Importar Dados</button>
+
             </div>
           </div>
 
           <div class="bg-white border rounded-2xl shadow-sm p-4">
-            <table class="w-full text-sm border rounded-xl overflow-hidden">
-              <thead class="bg-slate-100">
-                <tr>
-                  <th class="px-3 py-2">Tipo</th><th>Patrimônio</th><th>Marca</th><th>Série</th>
-                  <th>Usuário</th><th>Setor</th><th>SO</th><th>Status</th><th>Ações</th>
-                </tr>
-              </thead>
-              <tbody id="listaAtivos"></tbody>
-            </table>
+            <div class="mb-4 flex flex-wrap gap-3 items-center">
+              <div>
+                <label class="block text-sm font-medium">Filtrar (Tipo)</label>
+                <select id="filtroTipo" class="w-full mt-1 p-2 border rounded-lg" onchange="renderAtivos()">
+                  <option value="">Todos</option>
+                  <option>Notebook</option>
+                  <option>Desktop</option>
+                  <option>Telefonia</option>
+                  <option>Estoque</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="bg-white border rounded-2xl shadow-sm p-4">
+              <table class="w-full text-sm border rounded-xl overflow-hidden">
+                <thead class="bg-slate-50 text-slate-600">
+                  <tr>
+                    <th class="text-left px-4 py-2 border-b">Tipo</th>
+                    <th class="text-left px-4 py-2 border-b">Patrimônio</th>
+                    <th class="text-left px-4 py-2 border-b">Marca</th>
+                    <th class="text-left px-4 py-2 border-b">Série</th>
+                    <th class="text-left px-4 py-2 border-b">Usuário</th>
+                    <th class="text-left px-4 py-2 border-b">Setor</th>
+                    <th class="text-left px-4 py-2 border-b">SO</th>
+                    <th class="text-left px-4 py-2 border-b">Status</th>
+                    <th class="text-left px-4 py-2 border-b">Ações</th>
+                  </tr>
+                </thead>
+
+                <tbody id="listaAtivos" class="text-slate-800">
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2 border-b">Notebook</td>
+                    <td class="px-4 py-2 border-b">Chesf</td>
+                    <td class="px-4 py-2 border-b">Acer Aspire</td>
+                    <td class="px-4 py-2 border-b">123456</td>
+                    <td class="px-4 py-2 border-b">Douglas Henrique</td>
+                    <td class="px-4 py-2 border-b">Recursos Humanos</td>
+                    <td class="px-4 py-2 border-b">Windows 11 Pro</td>
+                    <td class="px-4 py-2 border-b">
+                    <span class="inline-flex items-center gap-2">
+                      <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>Em uso</span>
+                    </td>
+                    <td class="px-4 py-2 border-b flex gap-2">
+                      <button class="text-xs bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded"
+                      onclick="editarAtivo(0)">Editar</button>
+
+                      <button class="text-xs bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded ml-2"
+                      onclick="apagarAtivo(0)">Apagar</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </section>
 
-        <!-- PEÇAS -->
-        <section id="page-pecas" class="hidden space-y-6">
+        <!---------------------------------------------------------------------------------------------------------------------------- PEÇAS -->
+        <section id="page-pecas" class=" space-y-6">
           <div class="bg-white border rounded-2xl shadow-sm p-6">
             <h3 class="text-xl font-semibold mb-4">Cadastrar Peça</h3>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <input id="pecaNome" placeholder="Nome" class="p-2 border rounded-lg" />
-              <input id="pecaCategoria" placeholder="Categoria" class="p-2 border rounded-lg" />
-              <input type="number" id="pecaQtd" placeholder="Quantidade" class="p-2 border rounded-lg" />
-              <input id="pecaObs" placeholder="Observação" class="p-2 border rounded-lg" />
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium">Nome</label>
+                <input id="pecaNome" placeholder="Memória RAM, Placa mãe" class="w-full mt-1 p-2 border rounded-lg" />
+                <label class="block text-sm font-medium mt-3">Categoria</label>
+                <input id="pecaCategoria" placeholder="Armazenamento, Rede" class="w-full mt-1 p-2 border rounded-lg" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium">Quantidade</label>
+                <input type="number" id="pecaQtd" placeholder="1, 2, 3" class="w-full mt-1 p-2 border rounded-lg" />
+                <label class="block text-sm font-medium mt-3">Observação</label>
+                <input id="pecaObs" placeholder="Nova, Testada, Usada" class="w-full mt-1 p-2 border rounded-lg" />
+              </div>
+
             </div>
             <div class="mt-4">
-              <button onclick="adicionarPeca()" class="bg-green-600 text-white px-4 py-2 rounded">Salvar</button>
+              <button onclick="adicionarPeca()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Adicionar</button>
             </div>
           </div>
+
+          <div class="bg-white border rounded-2xl shadow-sm p-4">
+          <div class="mb-4 flex flex-wrap gap-3 items-center">
+            <input id="pesquisaPecas" type="text" placeholder="Pesquisar peça" class="p-2 border rounded-lg" oninput="renderPecas()" />
+          </div>
+
           <div class="bg-white border rounded-2xl shadow-sm p-4">
             <table class="w-full text-sm border rounded-xl overflow-hidden">
-              <thead class="bg-slate-100">
-                <tr><th>Nome</th><th>Categoria</th><th>Qtd</th><th>Obs</th></tr>
+              <thead class="bg-slate-50 text-slate-600">
+                <tr>
+                  <th class="text-left px-4 py-2 border-b">Nome</th>
+                  <th class="text-left px-4 py-2 border-b">Categoria</th>
+                  <th class="text-left px-4 py-2 border-b">Quantidade</th>
+                  <th class="text-left px-4 py-2 border-b">Observação</th>
+                  <th class="text-left px-4 py-2 border-b">Ações</th>
+                </tr>
               </thead>
-              <tbody id="listaPecas"></tbody>
+              <!--
+              #------------------------------------------------------------------------------------------------------------------exemplo de peça
+              <tbody id="listaPecas">
+                <tr class="hover:bg-slate-50">
+                  <td class="px-4 py-2 border-b">Sst 256gb</td>
+                  <td class="px-4 py-2 border-b">Armazenamento</td>
+                  <td class="px-4 py-2 border-b">1</td>
+                  <td class="px-4 py-2 border-b">Nova</td>
+                  <td class="px-4 py-2 border-b flex gap-2">
+                    <button class="text-md bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded" onclick="editarPeca(0)">✏️</button>
+                    <button class="text-md bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded" onclick="apagarPeca(0)">🗑️</button>
+                  </td>
+                </tr>
+              </tbody>
+            -->
             </table>
           </div>
         </section>
 
-        <!-- CHAMADOS -->
+        <!------------------------------------------------------------------------------------------------------------------------- CHAMADOS -->
         <section id="page-chamados" class="hidden space-y-6">
           <div class="bg-white border rounded-2xl shadow-sm p-6">
             <h3 class="text-xl font-semibold mb-4">Registrar Chamado</h3>
