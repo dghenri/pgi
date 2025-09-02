@@ -10,16 +10,19 @@ app = Flask(__name__)
 CORS(app)
 
 # ------------------------------------------ Conexão com Banco de dados ------------------------------------------
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = os.getenv("DATABASE_URL")  # ou: os.environ.get("DATABASE_URL")
 
-if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
-    DATABASE_URL = DATABASE_URL.replace("postfres://", "postgresql://", 1)
+if not DATABASE_URL:
+    raise RuntimeError("DATABASE_URL não definido. Defina a variável de ambiente DATABASE_URL antes de iniciar a aplicação.")
+
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
     
 engine = create_engine(DATABASE_URL, echo=True)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-Base.metadata.create_all(bing=engine)
+Base.metadata.create_all(bind=engine)
 
 
 #---------------------------------------------Cria rotas da aplicação---------------------------------------------
@@ -143,5 +146,5 @@ def adicionar_chamado():
 
 #---------------------------------------------Inicia a aplicação---------------------------------------------
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("port", 5000)), debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=True)
 
