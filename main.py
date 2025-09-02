@@ -1,18 +1,26 @@
 import os
 from flask import Flask, render_template, request, jsonify
+from flask_cors import CORS
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from datetime import date
 from models import Base, Ativo, Peca, Chamado
 
 app = Flask(__name__)
+CORS(app)
 
 # ------------------------------------------ Conexão com Banco de dados ------------------------------------------
-engine = create_engine("postgresql://pgi_cmd7_user:KUNg0AwILaoRPQgswasyoSL5ntAvBUKT@dpg-d2qst26mcj7s73ci16qg-a/pgi_cmd7", echo=True)
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postfres://", "postgresql://", 1)
+    
+engine = create_engine(DATABASE_URL, echo=True)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-Base.metadata.create_all(bind=engine)
+Base.metabase.create_all(bing=engine)
+
 
 #---------------------------------------------Cria rotas da aplicação---------------------------------------------
 # ---------------- FRONT ----------------
@@ -133,7 +141,7 @@ def adicionar_chamado():
     session.commit()
     return jsonify({"message": "Chamado adicionado"})
 
-
+#---------------------------------------------Inicia a aplicação---------------------------------------------
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get("port", 5000)), debug=True)
 
