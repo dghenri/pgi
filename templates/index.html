@@ -272,19 +272,38 @@
         <section id="page-chamados" class=" space-y-6">
           <div class="bg-white border rounded-2xl shadow-sm p-6">
             <h3 class="text-xl font-semibold mb-4">Registrar Chamado</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <input id="chamadoUsuario" placeholder="Usuário" class="p-2 border rounded-lg" />
-              <input id="chamadoNumero" placeholder="Número" class="p-2 border rounded-lg" />
-              <input id="chamadoAssunto" placeholder="Assunto" class="p-2 border rounded-lg" />
-              <select id="chamadoTipo" class="p-2 border rounded-lg">
-                <option>Remoto</option><option>Presencial</option><option>Blip</option>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+              <div>
+              <label class="block text-sm font-medium">Nome</label>
+              <input id="chamadoUsuario" placeholder="ex: Laudivan" class="w-full mt-1 p-2 border rounded-lg" />
+              <label class="block text-sm font-medium mt-3">Tipo</label>
+              <select id="chamadoTipo" class="w-full mt-1 p-2 border rounded-lg">
+                <option>Remoto</option>
+                <option>Presencial</option>
+                <option>Blip</option>
               </select>
-              <input id="chamadoTecnico" placeholder="Técnico" class="p-2 border rounded-lg" />
-              <input id="chamadoGrupo" placeholder="Grupo" class="p-2 border rounded-lg" />
-              <input type="date" id="chamadoData" class="p-2 border rounded-lg" />
+              <label class="block text-sm font-medium mt-3">Data</label>
+              <input type="date" id="chamadoData" class="w-full mt-1 p-2 border rounded-lg" />
+              </div>
+
+              <div>
+              <label class="block text-sm font-medium">Número</label>
+              <input id="chamadoNumero" placeholder="#12345" class="w-full mt-1 p-2 border rounded-lg" />
+              <label class="block text-sm font-medium mt-3">Técnico</label>
+              <input id="chamadoTecnico" placeholder="ex: Douglas" class="w-full mt-1 p-2 border rounded-lg" />
+              </div>
+
+              <div>
+              <label class="block text-sm font-medium">Assunto</label>
+              <input id="chamadoAssunto" placeholder="ex: Teclado não funciona" class="w-full mt-1 p-2 border rounded-lg" />
+              <label class="block text-sm font-medium mt-3">Grupo</label>
+              <input id="chamadoGrupo" placeholder="ex: TI_CSC_Suporte ao Usuário - Cidade" class="w-full mt-1 p-2 border rounded-lg" />
+              </div>
+
             </div>
             <div class="mt-4">
-              <button onclick="adicionarChamado()" class="bg-blue-600 text-white px-4 py-2 rounded">Salvar</button>
+              <button onclick="adicionarChamado()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl">Registrar</button>
             </div>
           </div>
           <div class="bg-white border rounded-2xl shadow-sm p-4">
@@ -315,7 +334,7 @@
                   </td>
                 </tr>
               </tbody>
-              
+
             </table>
           </div>
         </section>
