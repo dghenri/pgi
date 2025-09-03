@@ -281,7 +281,7 @@
 
               <div>
               <label class="block text-sm font-medium">Número</label>
-              <input id="chamadoNumero" placeholder="#12345" class="w-full mt-1 p-2 border rounded-lg" />
+              <input id="chamadoNumero" placeholder="#00000" class="w-full mt-1 p-2 border rounded-lg" />
               <label class="block text-sm font-medium mt-3">Técnico</label>
               <input id="chamadoTecnico" placeholder="e.g. Douglas" class="w-full mt-1 p-2 border rounded-lg" />
               </div>
@@ -462,14 +462,16 @@
       document.getElementById('dashChamados').textContent = data.length;
     }
 
-    const input = document.getElementById("pesquisaChamados");{
+    const inputs = document.querySelectorAll('#pesquisaChamados, #chamadoNumero');
 
+    inputs.forEach(input => {
       input.addEventListener("focus", function () {
         if (!this.value.startsWith("#")) {
           this.value = "#" + this.value;
         }
       });
-    }
+    });
+
     async function adicionarChamado() {
       const chamado = {
         nome: document.getElementById('chamadoUsuario').value,
