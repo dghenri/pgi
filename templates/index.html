@@ -330,7 +330,7 @@
                   <button onclick="limparFiltro()" class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Limpar</button>
                 </div>
                 <div class="ml-auto">
-                  <label class="block text-sm font-medium">Pesquisar Chamados</label>
+                  <label class="block text-sm font-medium" for="pesquisaChamados">Pesquisar Chamados</label>
                   <input id="pesquisaChamados" type="text" placeholder="#00000"
                   class="p-2 border rounded-lg"
                   oninput="renderChamados()" />
@@ -472,9 +472,15 @@
         lista.innerHTML += `<tr><td>${c.nome}</td><td>${c.numero}</td><td>${c.assunto}</td><td>${c.tipo}</td><td>${c.tecnico}</td><td>${c.grupo}</td><td>${c.data}</td></tr>`;
       });
       document.getElementById('dashChamados').textContent = data.length;
+    }
 
-      
+    const input = document.getElementById("pesquisaChamados");{
 
+      input.addEventListener("focus", function () {
+        if (!this.value.startsWith("#")) {
+          this.value = "#" + this.value;
+        }
+      });
     }
     async function adicionarChamado() {
       const chamado = {
@@ -489,3 +495,6 @@
       await fetch(`${API_URL}/api/chamados`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(chamado)});
       carregarChamados();
     }
+  </script>
+</body>
+
