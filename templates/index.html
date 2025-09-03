@@ -91,8 +91,65 @@
             </div>
           </div>
 
-          <div class="bg-white p-6 rounded-xl shadow border">
-            <canvas id="chartAtivos"></canvas>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-4 rounded-2xl border shadow-sm">
+              <h3 class="text-lg font-semibold mb-2">Distribuição por Tipo</h3>
+              <canvas id="graficoTipo" height="220"></canvas>
+            </div>
+            <div class="bg-white p-4 rounded-2xl border shadow-sm">
+              <h3 class="text-lg font-semibold mb-2">Distribuição por Status</h3>
+              <canvas id="graficoStatus" height="220"></canvas>
+            </div>
+          </div>
+
+          <div id='blabla'class="bg-white p-4 rounded-2xl border shadow-sm mb-4 gap-4 items-center">
+            <h3 class="text-lg font-semibold mb-2">Ativos Resumidos</h3>
+            <div class="mb-4 flex flex-wrap gap-3 items-center">
+              <div>
+                <label class="block text-sm font-medium">Filtrar Tipo</label>
+                <select id="dashFiltroTipo" class="p-2 border rounded-lg"></select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium">Filtrar Status</label>
+                <select id="dashFiltroStatus" class="p-2 border rounded-lg"></select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium">Pesquisar</label>
+                <input id="pesquisaDashboard" type="text" placeholder="Nº de série" class="p-2 border rounded-lg"
+                oninput="renderTabelaResumo()" />
+              </div>
+            </div>
+            <div>
+              <div>
+                <table class="w-full text-sm border rounded-xl overflow-hidden shadow-md">
+                  <thead class="bg-slate-50 text-slate-600">
+                    <tr>
+                      <th class="text-left px-4 py-2 border-b">Tipo</th>
+                      <th class="text-left px-4 py-2 border-b">Patrimônio</th>
+                      <th class="text-left px-4 py-2 border-b">Marca/Modelo</th>
+                      <th class="text-left px-4 py-2 border-b">Usuário</th>
+                      <th class="text-left px-4 py-2 border-b">Setor</th>
+                      <th class="text-left px-4 py-2 border-b">SO</th>
+                      <th class="text-left px-4 py-2 border-b">Status</th>
+                    </tr>
+                  </thead>
+                  <!-------------------------------------------------------------------------------------exemplo de ativo-->
+                  <tbody id="listaAtivos" class="text-slate-800">
+                    <tr> <!--class="hover:bg-slate-200"-->
+                      <td class="px-4 py-2 border-b">Notebook</td>
+                      <td class="px-4 py-2 border-b">Chesf</td>
+                      <td class="px-4 py-2 border-b">Acer Aspire</td>
+                      <td class="px-4 py-2 border-b">Douglas Henrique</td>
+                      <td class="px-4 py-2 border-b">Recursos Humanos</td>
+                      <td class="px-4 py-2 border-b">Windows 11 Pro</td>
+                      <td class="px-4 py-2 border-b">
+                        <span class="inline-flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>Em uso</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </section>
 
