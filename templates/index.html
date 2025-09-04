@@ -427,6 +427,7 @@
     // ------------ Navegação ------------
     const pageButtons = document.querySelectorAll('aside button[data-page]');
     const pageTitle = document.getElementById('pageTitle');
+    
     function showPage(key) {
       document.querySelectorAll('section[id^="page-"]').forEach(s => s.classList.add('hidden'));
       const section = document.getElementById(`page-${key}`);
@@ -434,6 +435,11 @@
         section.classList.remove('hidden');
       }
       pageTitle.textContent = key.charAt(0).toUpperCase() + key.slice(1);
+
+      pageButtons.forEach(btn => btn.classList.remove('bg-blue-600', 'text-white', 'hover:bg-blue-600'));
+      document.querySelector(`aside nav button[data-page="${key}"]`).classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-600');
+
+      if (key === 'dashboard') refreshDashboard();
     }
     pageButtons.forEach(btn => btn.addEventListener('click', () => showPage(btn.dataset.page)));
 
