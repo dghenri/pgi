@@ -310,7 +310,7 @@
                   <td class="px-4 py-2 border-b">1</td>
                   <td class="px-4 py-2 border-b">Nova</td>
                   <td class="px-4 py-2 border-b flex gap-2">
-                    <button class="text-md bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded" onclick="editarPeca(0)">✏️</button>
+                    <button class="text-md bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded" onclick="editarPeca(0)">✏️ Editar</button>
                     <button class="text-md bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded" onclick="apagarPeca(0)">🗑️</button>
                   </td>
                 </tr>
@@ -424,7 +424,7 @@
   <script>
     const API_URL = 'https://pgi-kt9a.onrender.com';
 
-    // ------------ Navegação ------------
+    //-------------------------------------------------------------------------------------------------------------------------------- Navegação
     const pageButtons = document.querySelectorAll('aside button[data-page]');
     const pageTitle = document.getElementById('pageTitle');
     
@@ -442,31 +442,79 @@
       if (key === 'dashboard') refreshDashboard();
     }
     pageButtons.forEach(btn => btn.addEventListener('click', () => showPage(btn.dataset.page)));
-
-    window.onload = () => {
       showPage('ativos');
-      carregarAtivos();
-      carregarPecas();
-      carregarChamados();
+
+    //------------------------------------------------------------------------------------------------------------------------------ Menu Mobile
+
+    //----------------------------------------------------------------------------------------------------------------------------Importar Excel
+    function importarExcel(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: "array" });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+
+      rows.forEach(row => {
+        const ativo = {
+          tipoEquip: row["Tipo"] || "Notebook",
+          patrimonio: row["Patrimonio"] || "",
+          marca: row["Marca"] || "",
+          serial: row["Serie"] || "",
+          disco: row["Disco"] || "",
+          hostname: row["Hostname"] || "",
+          nome: row["Nome"] || "",
+          login: row["Login"] || "",
+          setor: row["Setor"] || "",
+          local: row["Local"] || "",
+          status: row["Status"] || "Em uso",
+          sistemaOperacional: row["SO"] || ""
+        };
+        ativos.push(ativo);
+      });
+
+      saveAtivos();
+      renderAtivos();
+      alert("Importação concluída com sucesso!");
+      };
+
+      reader.readAsArrayBuffer(file);
     }
 
-    // ------------ ATIVOS ------------
+    // ---------------------------------------------------------------------------------------------------------------------------------- ATIVOS
     async function carregarAtivos() {
       const res = await fetch(`${API_URL}/api/ativos`);
       const data = await res.json();
       const lista = document.getElementById('listaAtivos');
-      lista.innerHTML = '';
-      data.forEach(a => {
-        lista.innerHTML += `
-          <tr>
-            <td>${a.tipo}</td><td>${a.patrimonio}</td><td>${a.marca}</td><td>${a.serial}</td>
-            <td>${a.nome}</td><td>${a.setor}</td><td>${a.os||'-'}</td><td>${a.status}</td>
-            <td><button onclick="apagarAtivo(${a.id})" class="bg-red-500 text-white px-2 py-1 rounded">Del</button></td>
-          </tr>`;
-      });
-      document.getElementById('badgeAtivos').textContent = data.length;
-      document.getElementById('dashAtivos').textContent = data.length;
-      atualizarGraficoAtivos(data);
+      ativos
+        .filter(a => tipoFiltro ? a.tipoEquip === tipoFiltro : true)
+        .forEach((a, index) => {
+          lista.innerHTML += `
+            <tr class="hover:bg-slate-200">
+              <td class="px-4 py-2 border-b">${a.tipoEquip}</td>
+              <td class="px-4 py-2 border-b">${a.patrimonio}</td>
+              <td class="px-4 py-2 border-b">${a.marca}</td>
+              <td class="px-4 py-2 border-b">${a.serial}</td>
+              <td class="px-4 py-2 border-b">${a.nome}</td>
+              <td class="px-4 py-2 border-b">${a.setor}</td>
+              <td class="px-4 py-2 border-b">${a.sistemaOperacional || '-'}</td>
+              <td class="px-4 py-2 border-b">
+                <span class="inline-flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full ${a.status === 'Em uso' ? 'bg-green-500' : a.status === 'Manutenção' ? 'bg-yellow-500' : 'bg-slate-400'}"></span>
+                  ${a.status}
+                </span>
+              </td>
+              <td class="px-4 py-2 border-b">
+                <button class="text-md bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded" onclick="editarAtivo(${index})">✏️ Editar</button>
+                <button class="text-md bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded" onclick="apagarAtivo(${index})">🗑️ Apagar</button>
+              </td>
+            </tr>`;
+        });
+      // -----------------------------------------------------------------------------------------------------------------Atualiza badge do menu
+      document.getElementById('badgeAtivos').textContent = ativos.length;
     }
     async function adicionarAtivo() {
       const ativo = {
