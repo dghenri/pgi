@@ -14,7 +14,7 @@ class Ativo(Base):
     )
     patrimonio = Column(String)
     marca = Column(String)
-    serial = Column(Integer)
+    serial = Column(String)
     disco = Column(String)
     hostname = Column(String)
     nome = Column(String)
