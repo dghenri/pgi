@@ -480,6 +480,9 @@
         console.error('Erro ao carregar Ativos:', res.status); // Log de erro
         return;
       }
+      // pega os dados do backend
+      const data = await res.json();
+      ativos = data; // Atualiza a variável global
 
       const listaPrincipal = document.getElementById('listaAtivos');
       const listaResumo = document.getElementById('listaAtivosResumo');
@@ -511,9 +514,6 @@
             </td>
           </tr>`;
 
-        // adiciona em ambas as tabelas (se existirem)
-        const listaPrincipal = document.getElementById('listaAtivos');
-        const listaResumo = document.getElementById('listaAtivosResumo');
         if (listaPrincipal) listaPrincipal.innerHTML += row;
         if (listaResumo) listaResumo.innerHTML += row;
       });
