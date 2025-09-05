@@ -235,28 +235,6 @@
                   <th class="text-left px-4 py-2 border-b">Ações</th>
                 </tr>
               </thead>
-              <!-------------------------------------------------------------------------------------exemplo de ativo-->
-              <tbody id="listaAtivos" class="text-slate-800">
-                <tr class="hover:bg-slate-200">
-                  <td class="px-4 py-2 border-b">Notebook</td>
-                  <td class="px-4 py-2 border-b">Chesf</td>
-                  <td class="px-4 py-2 border-b">Acer Aspire</td>
-                  <td class="px-4 py-2 border-b">123456</td>
-                  <td class="px-4 py-2 border-b">Douglas Henrique</td>
-                  <td class="px-4 py-2 border-b">Recursos Humanos</td>
-                  <td class="px-4 py-2 border-b">Windows 11 Pro</td>
-                  <td class="px-4 py-2 border-b">
-                    <span class="inline-flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>Em uso</span>
-                  </td>
-                  <td class="px-4 py-2 border-b flex gap-2">
-                    <button class="text-md bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded"
-                    onclick="editarAtivo(0)">✏️</button>
-
-                    <button class="text-md bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded ml-2"
-                    onclick="apagarAtivo(0)">🗑️</button>
-                  </td>
-                </tr>
-              </tbody>
             </table>
           </div>
         </section>
@@ -424,6 +402,48 @@
   <script>
     const API_URL = 'https://pgi-kt9a.onrender.com';
 
+    //---------------------------------------------------- Variáveis Globais
+    let ativos = []; // armazena os ativos carregados do servidor
+    let tipoFiltro = ''; // filtro de tipo para a lista de ativos
+
+    // Salva ativos no backend (ou adapte para localStorage se preferir)
+    async function saveAtivos() {
+      if (!Array.isArray(ativos) || ativos.length === 0) return;
+      try {
+        const envio = ativos.map(a => {
+          const payload = {
+            tipo: a.tipo || a.tipoEquip || "Notebook",
+            patrimonio: a.patrimonio || "",
+            marca: a.marca || "",
+            serial: a.serial || "",
+            disco: a.disco || "",
+            hostname: a.hostname || "",
+            nome: a.nome || "",
+            login: a.login || "",
+            setor: a.setor || "",
+            local: a.local || "",
+            os: a.os || a.sistemaOperacional || "",
+            status: a.status || "Em uso"
+          };
+          return fetch(`${API_URL}/api/ativos`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+        });
+
+        const results = await Promise.allSettled(envio);
+        const failed = results.filter(r => r.status === 'rejected' || (r.status === 'fulfilled' && !r.value.ok));
+        if (failed.length) {
+          console.warn('Algumas importações falharam', failed);
+        }
+        await renderAtivos();
+      } catch (err) {
+        console.error('Erro em saveAtivos:', err);
+        throw err;
+      }
+    }
+
     //-------------------------------------------------------------------------------------------------------------------------------- Navegação
     const pageButtons = document.querySelectorAll('aside button[data-page]');
     const pageTitle = document.getElementById('pageTitle');
@@ -476,19 +496,33 @@
         ativos.push(ativo);
       });
 
-      saveAtivos();
-      renderAtivos();
-      alert("Importação concluída com sucesso!");
+      // envia para o backend e atualiza a UI
+      saveAtivos()
+        .then(() => {
+          renderAtivos();
+          alert("Importação concluída com sucesso!");
+        })
+        .catch(err => {
+          console.error(err);
+          alert("Erro ao importar: verifique o console.");
+        });
       };
 
       reader.readAsArrayBuffer(file);
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------- ATIVOS
-    async function carregarAtivos() {
+    async function renderAtivos() {
       const res = await fetch(`${API_URL}/api/ativos`);
+      if (!res.ok) {
+        console.error('Erro ao carregar Ativos:', res.status); // Log de erro
+        return;
+      }
       const data = await res.json();
+      ativos = data; // Atualiza a variável global
       const lista = document.getElementById('listaAtivos');
+      lista.innerHTML = ''; // Limpa a lista antes de renderizar
+
       ativos
         .filter(a => tipoFiltro ? a.tipoEquip === tipoFiltro : true)
         .forEach((a, index) => {
@@ -513,10 +547,11 @@
               </td>
             </tr>`;
         });
-      // -----------------------------------------------------------------------------------------------------------------Atualiza badge do menu
+      //Atualiza badge do menu
       document.getElementById('badgeAtivos').textContent = ativos.length;
     }
-    async function adicionarAtivo() {
+    // Adiciona Ativo
+    async function adicionarOuEditar() {
       const ativo = {
         tipo: document.getElementById("tipoEquip").value,
         patrimonio: document.getElementById("patrimonio").value,
@@ -531,22 +566,55 @@
         os: document.getElementById("sistemaOperacional").value,
         status: document.getElementById("status").value
       };
-      await fetch(`${API_URL}/api/ativos`, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(ativo)});
-      carregarAtivos();
-    }
-    async function apagarAtivo(id) {
-      await fetch(`${API_URL}/api/ativos/${id}`, {method:'DELETE'});
-      carregarAtivos();
+
+      // Confirmação antes de adicionar
+      const confirmar = confirm(`Deseja realmente adicionar o ativo "${ativo.hostname}"?`);
+      if (!confirmar) return;
+
+     try {
+      const response = await fetch(`${API_URL}/api/ativos`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(ativo)
+      });
+
+      if (!response.ok) {
+        const erro = await response.text();
+        throw new Error(`Erro ao adicionar ativo: ${erro}`); // Log de erro
+      }
+
+      alert("✅ Ativo adicionado com sucesso!");
+      renderAtivos();
+      }
+      catch (err) {
+        console.error(err);
+        alert("❌ Não foi possível adicionar o ativo."); // Log de erro
+      }
     }
 
-    // ------------ PEÇAS ------------
+    // Apaga Ativo
+    async function apagarAtivo(id) {
+      try {
+        const response = await fetch(`${API_URL}/api/ativos/${id}`, { method: 'DELETE' });
+        if (!response.ok) {
+          throw new Error("Erro ao excluir ativo");
+        }
+        carregarAtivos();
+      }
+      catch (err) {
+        console.error(err);
+        alert("Não foi possível apagar o ativo.");
+      }
+    }
+
+    // ----------------------------------------------------------------------------------------------------------------------------------- PEÇAS
     async function carregarPecas() {
       const res = await fetch(`${API_URL}/api/pecas`);
       const data = await res.json();
       const lista = document.getElementById('listaPecas');
       lista.innerHTML = '';
       data.forEach(p => {
-        lista.innerHTML += `<tr><td>${p.nome}</td><td>${p.categoria}</td><td>${p.quantidade}</td><td>${p.observacao||'-'}</td></tr>`;
+        lista.innerHTML += `<tr><td>${p.nome}</td><td>${p.categoria}</td><td>${p.quantidade}</td><td>${p.observacao||'-'}</td>`;
       });
       document.getElementById('badgePecas').textContent = data.length;
       document.getElementById('dashPecas').textContent = data.length;
@@ -562,7 +630,7 @@
       carregarPecas();
     }
 
-    // ------------ CHAMADOS ------------
+    // -------------------------------------------------------------------------------------------------------------------------------- CHAMADOS
     async function carregarChamados() {
       const res = await fetch(`${API_URL}/api/chamados`);
       const data = await res.json();
