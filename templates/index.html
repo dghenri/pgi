@@ -576,7 +576,13 @@
       const lista = document.getElementById('listaPecas');
       lista.innerHTML = '';
       data.forEach(p => {
-        lista.innerHTML += `<tr><td>${p.nome}</td><td>${p.categoria}</td><td>${p.quantidade}</td><td>${p.observacao||'-'}</td>`;
+        lista.innerHTML += `
+        <tr>
+          <td>${p.nome}</td>
+          <td>${p.categoria}</td>
+          <td>${p.quantidade}</td>
+          <td>${p.observacao||'-'}</td>
+        </tr>`;
       });
       document.getElementById('badgePecas').textContent = data.length;
       document.getElementById('dashPecas').textContent = data.length;
@@ -599,7 +605,16 @@
       const lista = document.getElementById('listaChamados');
       lista.innerHTML = '';
       data.forEach(c => {
-        lista.innerHTML += `<tr><td>${c.nome}</td><td>${c.numero}</td><td>${c.assunto}</td><td>${c.tipo}</td><td>${c.tecnico}</td><td>${c.grupo}</td><td>${c.data}</td></tr>`;
+        lista.innerHTML += `
+        <tr>
+          <td>${c.nome}</td>
+          <td>${c.numero}</td>
+          <td>${c.assunto}</td>
+          <td>${c.tipo}</td>
+          <td>${c.tecnico}</td>
+          <td>${c.grupo}</td>
+          <td>${c.data}</td>
+        </tr>`;
       });
       document.getElementById('dashChamados').textContent = data.length;
     }
@@ -619,7 +634,7 @@
         nome: document.getElementById('chamadoUsuario').value,
         numero: document.getElementById('chamadoNumero').value,
         assunto: document.getElementById('chamadoAssunto').value,
-        tipo: document.getElementById('chamadoTipo').value,
+        tipoChamado: document.getElementById('chamadoTipo').value,
         tecnico: document.getElementById('chamadoTecnico').value,
         grupo: document.getElementById('chamadoGrupo').value,
         data: document.getElementById('chamadoData').value

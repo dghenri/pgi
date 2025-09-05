@@ -38,7 +38,7 @@ def listar_ativos():
     ativos = session.query(Ativo).all()
     return jsonify([{
         "id": a.id,
-        "tipo": a.tipo,
+        "tipoEquip": a.tipoEquip,
         "patrimonio": a.patrimonio,
         "marca": a.marca,
         "serial": a.serial,
@@ -121,7 +121,7 @@ def listar_chamados():
         "nome": c.nome,
         "numero": c.numero,
         "assunto": c.assunto,
-        "tipo": c.tipo,
+        "tipo": c.tipoChamado,
         "tecnico": c.tecnico,
         "grupo": c.grupo,
         "data": c.data.isoformat() if c.data else None
@@ -135,7 +135,7 @@ def adicionar_chamado():
         nome=data["nome"],
         numero=data["numero"],
         assunto=data["assunto"],
-        tipo=data.get("tipo", "Remoto"),
+        tipoChamado=data.get("tipoChamado", "Remoto"),
         tecnico=data.get("tecnico"),
         grupo=data.get("grupo"),
         data=date.fromisoformat(data["data"]) if data.get("data") else date.today()
