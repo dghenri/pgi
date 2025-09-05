@@ -556,9 +556,12 @@
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------Edita Ativo
-    function editarAtivo(index) {
-      const a = ativos[index];
-      editarIndex = index;
+    function editarAtivo(id) {
+      const ativo = ativos.find(a => a.id === id);
+      if (!ativo) {
+        alert("Ativo não encontrado.");
+        return;
+      }
 
       document.getElementById('formTitle').innerText = 'Editar Ativo';
       document.getElementById('submitBtn').innerText = 'Salvar Alterações';
@@ -579,6 +582,10 @@
 
     // Apaga Ativo
     async function apagarAtivo(id) {
+
+      const confirmar = confirm(`❌ Deseja realmente cancelar o ativo "${ativo.hostname}"? Esta ação não pode ser desfeita.`);
+      if (!confirmar) return;
+
       try {
         const response = await fetch(`${API_URL}/api/ativos/${id}`, { method: 'DELETE' });
         if (!response.ok) {
