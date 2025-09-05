@@ -356,6 +356,7 @@
     //------------------------------------------------------------------------------------------------------------------------ Variáveis Globais
     let ativos = []; // armazena os ativos carregados do servidor
     let tipoFiltro = ''; // filtro de tipo para a lista de ativos
+    let editarId = null; // id do ativo sendo editado
 
     // Salva ativos no backend (ou adapte para localStorage se preferir)
     async function saveAtivos() {
@@ -600,7 +601,7 @@
     }
 
     function cancelarEdicao() {
-      editarIndex = -1;
+      editarId = -1;
       document.getElementById('formTitle').innerText = 'Cadastrar Ativo';
       document.getElementById('submitBtn').innerText = 'Adicionar';
       document.getElementById('cancelEditBtn').classList.add('hidden');
