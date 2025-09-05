@@ -74,6 +74,27 @@ def adicionar_ativo():
     session.commit()
     return jsonify({"message": "Ativo adicionado"})
 
+@app.route("/api/ativos/<int:id>", methods=["PUT"])
+def atualizar_ativo(id):
+    data = request.json
+    ativo = session.query(Ativo).filter_by(id=id).first()
+    if not ativo:
+        return jsonify({"error": "Ativo não encontrado"}), 404
+    ativo.tipoEquip = data.get("tipoEquip", ativo.tipoEquip)
+    ativo.patrimonio = data.get("patrimonio", ativo.patrimonio)
+    ativo.marca = data.get("marca", ativo.marca)
+    ativo.serial = data.get("serial", ativo.serial)
+    ativo.disco = data.get("disco", ativo.disco)
+    ativo.hostname = data.get("hostname", ativo.hostname)
+    ativo.nome = data.get("nome", ativo.nome)
+    ativo.login = data.get("login", ativo.login)
+    ativo.setor = data.get("setor", ativo.setor)
+    ativo.local = data.get("local", ativo.local)
+    ativo.sistemaOperacional = data.get("sistemaOperacional", ativo.sistemaOperacional)
+    ativo.status = data.get("status", ativo.status)
+    session.commit()
+    return jsonify({"message": "Ativo atualizado"})
+
 
 @app.route("/api/ativos/<int:id>", methods=["DELETE"])
 def deletar_ativo(id):
