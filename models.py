@@ -8,8 +8,8 @@ class Ativo(Base):
     __tablename__ = 'ativos'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    tipo = Column(
-        Enum('Notebook', 'Desktop', 'Telefonia', 'Estoque', name='tipo_enum'),
+    tipoEquip = Column(
+        Enum('Notebook', 'Desktop', 'Telefonia', 'Estoque', name='tipoEquip_enum'),
         nullable=False, default='Notebook'
     )
     patrimonio = Column(String)
@@ -21,7 +21,7 @@ class Ativo(Base):
     login = Column(String)
     setor = Column(String)
     local = Column(String)
-    os = Column(String)
+    sistemaOperacional = Column(String)
     status = Column(
         Enum('Em uso', 'Estoque', 'Manutenção', name='status_enum'),
         nullable=False, default='Em uso'
@@ -45,8 +45,8 @@ class Chamado(Base):
     nome = Column(String)
     numero = Column(Integer)
     assunto = Column(String)
-    tipo = Column(
-        Enum('Remoto', 'Presencial', 'Blip', name='tipo_chamado_enum'),
+    tipoEquip = Column(
+        Enum('Remoto', 'Presencial', 'Blip', name='tipoEquip_chamado_enum'),
         nullable=False, default='Remoto'
     )
     tecnico = Column(String)
