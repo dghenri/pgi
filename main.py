@@ -48,7 +48,7 @@ def listar_ativos():
         "login": a.login,
         "setor": a.setor,
         "local": a.local,
-        "os": a.os,
+        "sistemaOperacional": a.sistemaOperacional,
         "status": a.status
     } for a in ativos])
 
@@ -57,7 +57,7 @@ def listar_ativos():
 def adicionar_ativo():
     data = request.json
     novo = Ativo(
-        tipo=data.get("tipo", "Notebook"),
+        tipoEquip=data.get("tipo", "Notebook"),
         patrimonio=data.get("patrimonio"),
         marca=data.get("marca"),
         serial=data.get("serial"),
@@ -67,7 +67,7 @@ def adicionar_ativo():
         login=data.get("login"),
         setor=data.get("setor"),
         local=data.get("local"),
-        os=data.get("os"),
+        sistemaOperacional=data.get("sistemaOperacional"),
         status=data.get("status", "Em uso"),
     )
     session.add(novo)
