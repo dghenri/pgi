@@ -60,17 +60,6 @@
             <button id="mobileMenuBtn" class="md:hidden rounded-lg border px-2 py-1">☰</button>
             <h2 id="pageTitle" class="text-2xl font-bold tracking-tight text-gray-900">Dashboard</h2>
           </div>
-          <!--
-          <div class="flex items-center gap-4">
-            <input type="file" id="importBackup" accept=".json" class="hidden" onchange="importarBackup(event)" />
-              <button onclick="document.getElementById('importBackup').click()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl">
-                Importar Backup
-              </button>
-            <button onclick="exportarBackup()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl">
-                Exportar Backup
-              </button>
-          </div>
-          -->
         </div>
       </header>
 
@@ -144,7 +133,7 @@
         <!--------------------------------------------------------------------------------------------------------------------------- ATIVOS -->
         <section id="page-ativos" class="hidden space-y-6">
           <div class="bg-white border rounded-2xl shadow-sm p-6">
-            <h3 class="text-xl font-semibold mb-4">Cadastrar Ativo</h3>
+            <h3 id="formTitle" class="text-xl font-semibold mb-4">Cadastrar Ativo</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label class="block text-sm font-medium">Tipo</label>
@@ -406,6 +395,10 @@
       }
     }
 
+    function limparCampos() {
+      document.querySelectorAll('#page-ativos input, #page-ativos select').forEach(el => el.value = '');
+    }
+
     //-------------------------------------------------------------------------------------------------------------------------------- Navegação
     const pageButtons = document.querySelectorAll('aside button[data-page]');
     const pageTitle = document.getElementById('pageTitle');
@@ -427,6 +420,9 @@
       showPage('ativos');
 
     //------------------------------------------------------------------------------------------------------------------------------ Menu Mobile
+
+    //---------------------------------------------------------------------------------------------------------------------------------Dashboard
+    // Chamada de lista igual a ativos, sem ações
 
     //----------------------------------------------------------------------------------------------------------------------------Importar Excel
     function importarExcel(event) {
@@ -483,12 +479,8 @@
       // pega os dados do backend
       const data = await res.json();
       ativos = data; // Atualiza a variável global
-
       const listaPrincipal = document.getElementById('listaAtivos');
-      const listaResumo = document.getElementById('listaAtivosResumo');
-
       if (listaPrincipal) listaPrincipal.innerHTML = '';
-      if (listaResumo) listaResumo.innerHTML = '';
 
       ativos
       .filter(a => tipoFiltro ? a.tipoEquip === tipoFiltro : true)
@@ -509,52 +501,17 @@
               </span>
             </td>
             <td class="px-4 py-2 border-b">
-              <button class="text-md bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded" onclick="editarAtivo(${index})">✏️ Editar</button>
-              <button class="text-md bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded" onclick="apagarAtivo(${index})">🗑️ Apagar</button>
+              <button class="text-md bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded" onclick="editarAtivo(${a.id})">✏️ Editar</button>
+              <button class="text-md bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded" onclick="apagarAtivo(${a.id})">🗑️ Apagar</button>
             </td>
-          </tr>`;
-
+          </ta.id
         if (listaPrincipal) listaPrincipal.innerHTML += row;
-        if (listaResumo) listaResumo.innerHTML += row;
       });
 
       // Atualiza badge do menu
       document.getElementById('badgeAtivos').textContent = ativos.length;
-
-
-      /* const data = await res.json();
-      ativos = data; // Atualiza a variável global
-      const lista = document.getElementById('listaAtivos');
-      lista.innerHTML = '';
-
-      ativos
-        .filter(a => tipoFiltro ? a.tipoEquip === tipoFiltro : true)
-        .forEach((a, index) => {
-          lista.innerHTML += `
-            <tr class="hover:bg-slate-200">
-              <td class="px-4 py-2 border-b">${a.tipoEquip}</td>
-              <td class="px-4 py-2 border-b">${a.patrimonio}</td>
-              <td class="px-4 py-2 border-b">${a.marca}</td>
-              <td class="px-4 py-2 border-b">${a.serial}</td>
-              <td class="px-4 py-2 border-b">${a.nome}</td>
-              <td class="px-4 py-2 border-b">${a.setor}</td>
-              <td class="px-4 py-2 border-b">${a.sistemaOperacional || '-'}</td>
-              <td class="px-4 py-2 border-b">
-                <span class="inline-flex items-center gap-2">
-                  <span class="w-2.5 h-2.5 rounded-full ${a.status === 'Em uso' ? 'bg-green-500' : a.status === 'Manutenção' ? 'bg-yellow-500' : 'bg-slate-400'}"></span>
-                  ${a.status}
-                </span>
-              </td>
-              <td class="px-4 py-2 border-b">
-                <button class="text-md bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded" onclick="editarAtivo(${index})">✏️ Editar</button>
-                <button class="text-md bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded" onclick="apagarAtivo(${index})">🗑️ Apagar</button>
-              </td>
-            </tr>`;
-        });
-      //Atualiza badge do menu
-      document.getElementById('badgeAtivos').textContent = ativos.length; */
     }
-    // Adiciona Ativo
+    //----------------------------------------------------------------------------------------------------------------------------Adiciona Ativo
     async function adicionarOuEditar() {
       const ativo = {
         tipo: document.getElementById("tipoEquip").value,
@@ -596,6 +553,28 @@
       }
     }
 
+    //-------------------------------------------------------------------------------------------------------------------------------Edita Ativo
+    function editarAtivo(index) {
+      const a = ativos[index];
+      editarIndex = index;
+
+      document.getElementById('formTitle').innerText = 'Editar Ativo';
+      document.getElementById('submitBtn').innerText = 'Salvar Alterações';
+      document.getElementById('cancelEditBtn').classList.remove('hidden');
+      document.getElementById('tipoEquip').value = a.tipoEquip;
+      document.getElementById('patrimonio').value = a.patrimonio;
+      document.getElementById('marca').value = a.marca;
+      document.getElementById('serial').value = a.serial;
+      document.getElementById('disco').value = a.disco;
+      document.getElementById('hostname').value = a.hostname;
+      document.getElementById('nome').value = a.nome;
+      document.getElementById('login').value = a.login;
+      document.getElementById('setor').value = a.setor;
+      document.getElementById('local').value = a.local;
+      document.getElementById('status').value = a.status;
+      document.getElementById('sistemaOperacional').value = a.sistemaOperacional;
+    }
+
     // Apaga Ativo
     async function apagarAtivo(id) {
       try {
@@ -603,12 +582,20 @@
         if (!response.ok) {
           throw new Error("Erro ao excluir ativo");
         }
-        carregarAtivos();
+        renderAtivos();
       }
       catch (err) {
         console.error(err);
         alert("Não foi possível apagar o ativo.");
       }
+    }
+
+    function cancelarEdicao() {
+      editarIndex = -1;
+      document.getElementById('formTitle').innerText = 'Cadastrar Ativo';
+      document.getElementById('submitBtn').innerText = 'Adicionar';
+      document.getElementById('cancelEditBtn').classList.add('hidden');
+      limparCampos();
     }
 
     // ----------------------------------------------------------------------------------------------------------------------------------- PEÇAS
