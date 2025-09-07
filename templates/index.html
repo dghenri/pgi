@@ -174,7 +174,9 @@
               </div>
             </div>
             <div class="mt-5 flex flex-wrap gap-3">
-              <button onclick="adicionarOuEditar()" id="submitBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Adicionar</button>
+              <button onclick="adicionarAtivo()" id="submitBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Adicionar</button>
+
+              <button onclick="editarAtivo()" id="editBtn" class="hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Salvar Alterações</button>
 
               <button onclick="cancelarEdicao()" id="cancelEditBtn" class="hidden bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-xl">Cancelar Edição</button>
 
@@ -514,7 +516,7 @@
       document.getElementById('badgeAtivos').textContent = ativos.length;
     }
     //----------------------------------------------------------------------------------------------------------------------------Adiciona Ativo
-    async function adicionarOuEditar() {
+    async function adicionarAtivo() {
       const ativo = {
         tipoEquip: document.getElementById("tipoEquip").value,
         patrimonio: document.getElementById("patrimonio").value,
@@ -566,7 +568,7 @@
 
       // Muda título e botões do formulário
       document.getElementById('formTitle').innerText = 'Editar Ativo';
-      document.getElementById('submitBtn').innerText = 'Salvar Alterações';
+      document.getElementById('editBtn').classList.remove('hidden');
       document.getElementById('cancelEditBtn').classList.remove('hidden');
 
       // Preenche os inputs com os dados do ativo
