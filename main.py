@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.exc import SQLAlchemyError
 from datetime import date
 from models import Base, Ativo, Peca, Chamado
 
@@ -57,7 +58,7 @@ def listar_ativos():
 def adicionar_ativo():
     data = request.json
     novo = Ativo(
-        tipoEquip=data.get("tipo", "Notebook"),
+        tipoEquip=data.get("tipoEquip", "Notebook"),
         patrimonio=data.get("patrimonio"),
         marca=data.get("marca"),
         serial=data.get("serial"),
@@ -76,25 +77,33 @@ def adicionar_ativo():
 
 @app.route("/api/ativos/<int:id>", methods=["PUT"])
 def atualizar_ativo(id):
-    data = request.json
-    ativo = session.query(Ativo).filter_by(id=id).first()
-    if not ativo:
-        return jsonify({"error": "Ativo não encontrado"}), 404
-    ativo.tipoEquip = data.get("tipoEquip", ativo.tipoEquip)
-    ativo.patrimonio = data.get("patrimonio", ativo.patrimonio)
-    ativo.marca = data.get("marca", ativo.marca)
-    ativo.serial = data.get("serial", ativo.serial)
-    ativo.disco = data.get("disco", ativo.disco)
-    ativo.hostname = data.get("hostname", ativo.hostname)
-    ativo.nome = data.get("nome", ativo.nome)
-    ativo.login = data.get("login", ativo.login)
-    ativo.setor = data.get("setor", ativo.setor)
-    ativo.local = data.get("local", ativo.local)
-    ativo.sistemaOperacional = data.get("sistemaOperacional", ativo.sistemaOperacional)
-    ativo.status = data.get("status", ativo.status)
-    session.commit()
-    return jsonify({"message": "Ativo atualizado"})
-
+    try:
+        data = request.json
+        ativo = session.query(Ativo).filter_by(id=id).first()
+        if not ativo:
+            return jsonify({"error": "Ativo não encontrado"}), 404
+        
+        ativo.tipoEquip = data.get("tipoEquip", ativo.tipoEquip)
+        ativo.patrimonio = data.get("patrimonio", ativo.patrimonio)
+        ativo.marca = data.get("marca", ativo.marca)
+        ativo.serial = data.get("serial", ativo.serial)
+        ativo.disco = data.get("disco", ativo.disco)
+        ativo.hostname = data.get("hostname", ativo.hostname)
+        ativo.nome = data.get("nome", ativo.nome)
+        ativo.login = data.get("login", ativo.login)
+        ativo.setor = data.get("setor", ativo.setor)
+        ativo.local = data.get("local", ativo.local)
+        ativo.sistemaOperacional = data.get("sistemaOperacional", ativo.sistemaOperacional)
+        ativo.status = data.get("status", ativo.status)
+        
+        session.commit()
+        return jsonify({"message": "Ativo atualizado com sucesso"}), 200
+    
+    except SQLAlchemyError as e:
+        session.rollback()
+        return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        return jsonify({"error": f"Erro inesperado: {str(e)}"}), 500
 
 @app.route("/api/ativos/<int:id>", methods=["DELETE"])
 def deletar_ativo(id):
