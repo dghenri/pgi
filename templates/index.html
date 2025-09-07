@@ -516,7 +516,7 @@
     //----------------------------------------------------------------------------------------------------------------------------Adiciona Ativo
     async function adicionarOuEditar() {
       const ativo = {
-        tipo: document.getElementById("tipoEquip").value,
+        tipoEquip: document.getElementById("tipoEquip").value,
         patrimonio: document.getElementById("patrimonio").value,
         marca: document.getElementById("marca").value,
         serial: document.getElementById("serial").value,
@@ -564,26 +564,29 @@
         return;
       }
 
+      // Muda título e botões do formulário
       document.getElementById('formTitle').innerText = 'Editar Ativo';
       document.getElementById('submitBtn').innerText = 'Salvar Alterações';
       document.getElementById('cancelEditBtn').classList.remove('hidden');
 
-      document.getElementById('tipoEquip').value = a.tipoEquip;
-      document.getElementById('patrimonio').value = a.patrimonio;
-      document.getElementById('marca').value = a.marca;
-      document.getElementById('serial').value = a.serial;
-      document.getElementById('disco').value = a.disco;
-      document.getElementById('hostname').value = a.hostname;
-      document.getElementById('nome').value = a.nome;
-      document.getElementById('login').value = a.login;
-      document.getElementById('setor').value = a.setor;
-      document.getElementById('local').value = a.local;
-      document.getElementById('status').value = a.status;
-      document.getElementById('sistemaOperacional').value = a.sistemaOperacional;
+      // Preenche os inputs com os dados do ativo
+      document.getElementById('tipoEquip').value = ativo.tipoEquip || "";
+      document.getElementById('patrimonio').value = ativo.patrimonio || "";
+      document.getElementById('marca').value = ativo.marca || "";
+      document.getElementById('serial').value = ativo.serial || "";
+      document.getElementById('disco').value = ativo.disco || "";
+      document.getElementById('hostname').value = ativo.hostname || "";
+      document.getElementById('nome').value = ativo.nome || "";
+      document.getElementById('login').value = ativo.login || "";
+      document.getElementById('setor').value = ativo.setor || "";
+      document.getElementById('local').value = ativo.local || "";
+      document.getElementById('status').value = ativo.status || "";
+      document.getElementById('sistemaOperacional').value = ativo.sistemaOperacional || "";
+
+      // Guarda o id do ativo que está sendo editado
+      document.getElementById("submitBtn").dataset.editingId = ativo.id;
     }
 
-    // Guarda o id do ativo em edição
-    document.getElementById("submitBtn").dataset.editingId = id;
 
     // Apaga Ativo
     async function apagarAtivo(id) {
