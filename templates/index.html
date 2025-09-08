@@ -209,7 +209,7 @@
               </div>
               <div>
                 <label class="block text-sm font-medium">Buscar</label>
-                  <input type="text" id="filtroBusca" placeholder="Usuário, setor" class="w-full mt-1 p-2 border rounded-lg" oninput="renderAtivos()">
+                  <input type="text" id="buscaAtivo" placeholder="Usuário, setor" class="w-full mt-1 p-2 border rounded-lg" oninput="renderAtivos()">
               </div>
             </div>
             <div class="w-auto overflow-x-auto overflow-y-auto max-h-96 rounded-xl shadow-md border">
@@ -260,21 +260,26 @@
 
           <div class="bg-white border rounded-2xl shadow-sm p-4">
             <div class="mb-4 flex flex-wrap gap-3 items-center">
-              <input id="pesquisaPecas" type="text" placeholder="Pesquisar peça" class="p-2 border rounded-lg" oninput="renderPecas()" />
+              <input id="buscaPeca" type="text" placeholder="Pesquisar peça" class="p-2 border rounded-lg" oninput="renderPecas()" />
             </div>
-
-            <table class="w-full text-sm border rounded-xl overflow-hidden shadow-md">
-              <thead class="bg-slate-50 text-slate-600">
-                <tr>
-                  <th class="text-left px-4 py-2 border-b">Nome</th>
-                  <th class="text-left px-4 py-2 border-b">Categoria</th>
-                  <th class="text-left px-4 py-2 border-b">Quantidade</th>
-                  <th class="text-left px-4 py-2 border-b">Observação</th>
-                  <th class="text-left px-4 py-2 border-b">Ações</th>
-                </tr>
-              </thead>
-              <tbody id="listaPecas"></tbody>
-            </table>
+            <div>
+              <label class="">Categoria</label>
+              <input id="buscaCategoria" type="text" placeholder="Pesquisar categoria">
+            </div>
+            <div class="w-auto overflow-x-auto overflow-y-auto max-h-96 rounded-xl shadow-md border">
+              <table class="w-full text-sm border rounded-xl overflow-hidden shadow-md">
+                <thead class="bg-slate-50 text-slate-600">
+                  <tr>
+                    <th class="text-left px-4 py-2 border-b">Nome</th>
+                    <th class="text-left px-4 py-2 border-b">Categoria</th>
+                    <th class="text-left px-4 py-2 border-b">Quantidade</th>
+                    <th class="text-left px-4 py-2 border-b">Observação</th>
+                    <th class="text-left px-4 py-2 border-b">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="listaPecas"></tbody>
+              </table>
+            </div>
         </section>
 
         <!-- ---------------------------------------------------------------------------------------------------------------------- CHAMADOS -->
@@ -372,7 +377,6 @@
 
     //------------------------------------------------------------------------------------------------------------------------ Variáveis Globais
     let ativos = []; // armazena os ativos carregados do servidor
-    let tipoFiltro = ''; // filtro de tipo para a lista de ativos
     let editingId = -1; // id do ativo sendo editado
 
     //------------------------------------------------------------------------------------------------------------------------- Carregar as informações do db
@@ -507,7 +511,7 @@
 
       const tipoFiltro = document.getElementById('filtroTipo').value;
       const statusFiltro = document.getElementById('filtroStatus').value;
-      const busca = document.getElementById('filtroBusca').value.toLowerCase();
+      const busca = document.getElementById('buscaAtivo').value.toLowerCase();
       const listaPrincipal = document.getElementById('listaAtivos');
       listaPrincipal.innerHTML = '';
 
@@ -690,25 +694,45 @@
     // ----------------------------------------------------------------------------------------------------------------------------------- PEÇAS
     async function renderPecas() {
       const res = await fetch(`${API_URL}/api/pecas`);
+      if (!res.ok) {
+        console.error('Erro ao carregar Peças:', res.status); // Log de erro
+        return;
+      }
+
+      // Pega os dados do backend
       const data = await res.json();
+      pecas = data; // Atualiza a variável global
+
+      const buscaCategoria = document.getElementById('buscaCategoria').value.toLowerCase();
+      const busca = document.getElementById('buscaPeca').value.toLowerCase();
       const lista = document.getElementById('listaPecas');
       lista.innerHTML = '';
-      data.forEach(p => {
-        lista.innerHTML += `
-        <tr>
-          <td class="px-4 py-2 border-b">${p.nome}</td>
-          <td class="px-4 py-2 border-b">${p.categoria}</td>
-          <td class="px-4 py-2 border-b">${p.quantidade}</td>
-          <td class="px-4 py-2 border-b">${p.observacao||'-'}</td>
-          <td class="px-4 py-2 border-b">
-              <button class="text-md bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded" onclick="editarPeca(${p.id})">✏️ Editar</button>
-              <button class="text-md bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded" onclick="apagarPeca(${p.id})">🗑️ Apagar</button>
-            </td>
-        </tr>`;
+
+      pecas
+      .filter(p => !buscaCategoria || (p.categoria && p.categoria.toLowerCase().includes(buscaCategoria)))
+      .filter(p => !busca || (p.nome && p.nome.toLowerCase().includes(busca)))
+      .forEach(p => {
+        const row = `
+          <tr>
+            <td class="px-4 py-2 border-b">${p.id}</td>
+            <td class="px-4 py-2 border-b">${p.nome}</td>
+            <td class="px-4 py-2 border-b">${p.categoria}</td>
+            <td class="px-4 py-2 border-b">${p.quantidade}</td>
+            <td class="px-4 py-2 border-b">${p.observacao||'-'}</td>
+            <td class="px-4 py-2 border-b">
+                <button class="text-md bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded" onclick="editarPeca(${p.id})">✏️ Editar</button>
+                <button class="text-md bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded" onclick="apagarPeca(${p.id})">🗑️ Apagar</button>
+              </td>
+          </tr>`;
+        if (lista) lista.innerHTML += row;
       });
-      document.getElementById('badgePecas').textContent = data.length;
-      document.getElementById('dashPecas').textContent = data.length;
+
+      // Atualiza badges
+      document.getElementById('badgePecas').textContent = pecas.length;
+      document.getElementById('dashPecas').textContent = pecas.length;
     }
+
+    //-------------------------------------------------------------------------------------------------------------------------------- Adicionar Peça
     async function adicionarPeca() {
       const peca = {
         nome: document.getElementById('pecaNome').value,
@@ -719,6 +743,8 @@
       await fetch(`${API_URL}/api/pecas`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(peca)});
       renderPecas();
     }
+
+    //-------------------------------------------------------------------------------------------------------------------------------- Apagar Peça
 
     // -------------------------------------------------------------------------------------------------------------------------------- CHAMADOS
     async function carregarChamados() {
