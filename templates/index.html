@@ -358,7 +358,7 @@
     //------------------------------------------------------------------------------------------------------------------------ Variáveis Globais
     let ativos = []; // armazena os ativos carregados do servidor
     let tipoFiltro = ''; // filtro de tipo para a lista de ativos
-    let editarId = null; // id do ativo sendo editado
+    let editingId = -1; // id do ativo sendo editado
 
     //------------------------------------------------------------------------------------------------------------------------- Carregar as informações do db
     renderAtivos();
@@ -564,7 +564,7 @@
       limparCampos();
     }
 
-    //-------------------------------------------------------------------------------------------------------------------------------Edita Ativo
+    //-------------------------------------------------------------------------------------------------------------------------------Editar Ativo
     function editarAtivo(id) {
       const ativo = ativos.find(a => a.id === id);
       if (!ativo) {
@@ -593,17 +593,10 @@
       document.getElementById('sistemaOperacional').value = ativo.sistemaOperacional || "";
 
       // Guarda o id do ativo que está sendo editado
-      document.getElementById("editBtn").dataset.editingId = ativo.id;
+      editingId = id;
     }
 
     async function salvarEdição() {
-      const editingId = document.getElementById("editBtn").dataset.editingId;
-
-      if (!editingId) {
-        alert("Nenhum ativo selecionado para edição.");
-        return;
-      }
-      
       const ativo = {
         tipoEquip: document.getElementById("tipoEquip").value,
         patrimonio: document.getElementById("patrimonio").value,
@@ -619,28 +612,42 @@
         status: document.getElementById("status").value
       };
 
-      await fetch(`${API_URL}/api/ativos/${editingId}`, {
-        method: 'PUT',
+      const method = editingId === -1 ? 'POST' : 'PUT';
+      const url = editingId === -1 ? `${API_URL}/api/ativos` : `${API_URL}/api/ativos/${editingId}`;
+      
+      const res = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(ativo)
       });
 
-      alert("✅ Ativo atualizado com sucesso!");
+      if (!res.ok) {
+        const err = await res.json();
+        alert ("❌ Erro: " + err.error );
+        return;
+      }
+
+      alert(editingId === -1 ? "✅ Ativo adicionado com sucesso!" : "✅ Alterações salvas com sucesso!");
 
       // Reseta o estato
-      delete document.getElementById("editBtn").dataset.editingId;
-      document.getElementById('formTitle').innerText = 'Cadastrar Ativo';
-      document.getElementById('submitBtn').classList.remove('hidden');
-      document.getElementById('editBtn').classList.add('hidden');
-      document.getElementById('cancelEditBtn').classList.add('hidden');
-
+      cancelarEdicao();
       renderAtivos();
       limparCampos();
     }
 
+    function cancelarEdicao() {
+      editingId = -1;
+      document.getElementById('formTitle').innerText = 'Cadastrar Ativo';
+      document.getElementById('submitBtn').classList.remove('hidden');
+      document.getElementById('cancelEditBtn').classList.add('hidden');
+      document.getElementById('editBtn').classList.add('hidden');
+      limparCampos();
+    }
 
-    // Apaga Ativo
+    //--------------------------------------------------------------------------------------------------------------------------------Apagar Ativo
     async function apagarAtivo(id) {
+
+
 
       const confirmar = confirm(`❌ Deseja realmente cancelar o ativo "${ativo.hostname}"? Esta ação não pode ser desfeita.`);
       if (!confirmar) return;
@@ -656,15 +663,6 @@
         console.error(err);
         alert("Não foi possível apagar o ativo.");
       }
-    }
-
-    function cancelarEdicao() {
-      editingId = -1;
-      document.getElementById('formTitle').innerText = 'Cadastrar Ativo';
-      document.getElementById('submitBtn').classList.remove('hidden');
-      document.getElementById('cancelEditBtn').classList.add('hidden');
-      document.getElementById('editBtn').classList.add('hidden');
-      limparCampos();
     }
 
     // ----------------------------------------------------------------------------------------------------------------------------------- PEÇAS
