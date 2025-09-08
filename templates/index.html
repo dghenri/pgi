@@ -360,6 +360,11 @@
     let tipoFiltro = ''; // filtro de tipo para a lista de ativos
     let editarId = null; // id do ativo sendo editado
 
+    //-------------------------------------------------------------------------------------------------------------------------Refresh
+    renderAtivos();
+    renderPecas();
+    renderChamados();
+
     // Salva ativos no backend (ou adapte para localStorage se preferir)
     async function saveAtivos() {
       if (!Array.isArray(ativos) || ativos.length === 0) return;
