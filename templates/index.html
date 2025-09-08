@@ -189,7 +189,7 @@
           <div class="bg-white border rounded-2xl shadow-sm p-4">
             <div class="mb-4 flex flex-wrap gap-3 items-center">
               <div>
-                <label class="block text-sm font-medium">Filtrar (Tipo)</label>
+                <label class="block text-sm font-medium">Tipo</label>
                 <select id="filtroTipo" class="w-full mt-1 p-2 border rounded-lg" onchange="renderAtivos()">
                   <option value="">Todos</option>
                   <option>Notebook</option>
@@ -197,6 +197,19 @@
                   <option>Telefonia</option>
                   <option>Estoque</option>
                 </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium">Status</label>
+                <select id="filtroStatus" class="w-full mt-1 p-2 border rounded-lg" onchange="renderAtivos()">
+                  <option value="">Todos</option>
+                  <option>Em uso</option>
+                  <option>Estoque</option>
+                  <option>Manutenção</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium">Buscar</label>
+                  <input type="text" id="filtroBusca" placeholder="Usuário, setor" class="w-full mt-1 p-2 border rounded-lg" oninput="renderAtivos()">
               </div>
             </div>
             <div class="w-auto overflow-x-auto overflow-y-auto max-h-96 rounded-xl shadow-md border">
@@ -486,15 +499,22 @@
         console.error('Erro ao carregar Ativos:', res.status); // Log de erro
         return;
       }
+
       // pega os dados do backend
       const data = await res.json();
       ativos = data; // Atualiza a variável global
+
+
       const tipoFiltro = document.getElementById('filtroTipo').value;
+      const statusFiltro = document.getElementById('filtroStatus').value;
+      const busca = document.getElementById('filtroBusca').value.toLowerCase();
       const listaPrincipal = document.getElementById('listaAtivos');
       listaPrincipal.innerHTML = '';
 
       ativos
-      .filter(a => !tipoFiltro || a.tipoEquip === tipoFiltro)
+      .filter(a => tipoFiltro ? a.tipoEquip === tipoFiltro: true)
+      .filter(a => statusFiltro ? a.status === statusFiltro: true)
+      .filter(a => !busca || (a.nome && a.nome.toLowerCase().includes(busca)) || (a.setor && a.setor.toLowerCase().includes(busca)))
       .forEach(a => {
         const row = `
           <tr class="hover:bg-slate-200">
