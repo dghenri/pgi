@@ -360,10 +360,10 @@
     let tipoFiltro = ''; // filtro de tipo para a lista de ativos
     let editarId = null; // id do ativo sendo editado
 
-    //-------------------------------------------------------------------------------------------------------------------------Refresh
+    //------------------------------------------------------------------------------------------------------------------------- Carregar as informações do db
     renderAtivos();
-    renderPecas();
-    renderChamados();
+    //renderPecas();
+    //renderChamados();
 
     // Salva ativos no backend (ou adapte para localStorage se preferir)
     async function saveAtivos() {
