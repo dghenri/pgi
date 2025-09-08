@@ -174,11 +174,11 @@
               </div>
             </div>
             <div class="mt-5 flex flex-wrap gap-3">
-              <button onclick="adicionarAtivo()" id="submitBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Adicionar</button>
+              <button onclick="adicionarAtivo()" id="a_addBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Adicionar</button>
 
-              <button onclick="salvarEdição()" id="editBtn" class="hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Salvar Alterações</button>
+              <button onclick="a_salvarEdicao()" id="a_editBtn" class="hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Salvar Alterações</button>
 
-              <button onclick="cancelarEdicao()" id="cancelEditBtn" class="hidden bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-xl">Cancelar Edição</button>
+              <button onclick="a_cancelarEdicao()" id="a_cancelEditBtn" class="hidden bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-xl">Cancelar Edição</button>
 
               <input type="file" id="importExcel" accept=".xlsx, .xls" class="hidden" onchange="importarExcel(event)" />
               <button onclick="document.getElementById('importExcel').click()" 
@@ -247,14 +247,16 @@
 
               <div>
                 <label class="block text-sm font-medium">Quantidade</label>
-                <input type="number" id="pecaQtd" placeholder="1, 2, 3" class="w-full mt-1 p-2 border rounded-lg" />
+                <input type="number" id="pecaQuantidade" placeholder="1, 2, 3" class="w-full mt-1 p-2 border rounded-lg" />
                 <label class="block text-sm font-medium mt-3">Observação</label>
-                <input id="pecaObs" placeholder="Nova, Testada, Usada" class="w-full mt-1 p-2 border rounded-lg" />
+                <input id="pecaObservacao" placeholder="Nova, Testada, Usada" class="w-full mt-1 p-2 border rounded-lg" />
               </div>
             </div>
-
             <div class="mt-4">
-              <button onclick="adicionarPeca()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Adicionar</button>
+              <button onclick="adicionarPeca()" id="p-addBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Adicionar</button>
+
+              <button onclick="salvarEdicao()" id="p-editBtn" class="hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Salvar Alterações</button>
+
             </div>
           </div>
 
@@ -423,7 +425,7 @@
     }
 
     function limparCampos() {
-      document.querySelectorAll('#page-ativos input, #page-ativos select').forEach(el => el.value = '');
+      document.querySelectorAll('#page-ativos input, #page-ativos select, #page-pecas input, #page-pecas select').forEach(el => el.value = '');
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------- Navegação
@@ -569,20 +571,20 @@
       if (!confirm(`Deseja realmente adicionar o ativo "${ativo.hostname}"?`)) return;
 
      try {
-      const response = await fetch(`${API_URL}/api/ativos`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(ativo)
-      });
+        const response = await fetch(`${API_URL}/api/ativos`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(ativo)
+        });
 
-      if (!response.ok) {
-        const erro = await response.json().catch(() => ({ error: "❓ Erro desconhecido." }));
-        throw new Error(erro.error || "❌ Erro ao adicionar ativo."); // Log de erro
-      }
+        if (!response.ok) {
+          const erro = await response.json().catch(() => ({ error: "❓ Erro desconhecido." }));
+          throw new Error(erro.error || "❌ Erro ao adicionar ativo."); // Log de erro
+        }
 
-      alert("✅ Ativo adicionado com sucesso!");
-      await renderAtivos();
-      limparCampos();
+        alert("✅ Ativo adicionado com sucesso!");
+        await renderAtivos();
+        limparCampos();
       }
       catch (err) {
         console.error("❌ Erro ao adicionar ativo: ", err);
@@ -600,9 +602,9 @@
 
       // Muda título e botões do formulário
       document.getElementById('formTitle').innerText = 'Editar Ativo';
-      document.getElementById('submitBtn').classList.add('hidden');
-      document.getElementById('editBtn').classList.remove('hidden');
-      document.getElementById('cancelEditBtn').classList.remove('hidden');
+      document.getElementById('a_addBtn').classList.add('hidden');
+      document.getElementById('a_editBtn').classList.remove('hidden');
+      document.getElementById('a_cancelEditBtn').classList.remove('hidden');
 
       // Preenche os inputs com os dados do ativo
       document.getElementById('tipoEquip').value = ativo.tipoEquip || "";
@@ -622,7 +624,7 @@
       editingId = id;
     }
 
-    async function salvarEdição() {
+    async function salvarEdicao() {
       const ativo = {
         tipoEquip: document.getElementById("tipoEquip").value,
         patrimonio: document.getElementById("patrimonio").value,
@@ -656,17 +658,17 @@
       alert(editingId === -1 ? "✅ Ativo adicionado com sucesso!" : "✅ Alterações salvas com sucesso!");
 
       // Reseta o estato
-      cancelarEdicao();
+      a_cancelarEdicao();
       renderAtivos();
       limparCampos();
     }
 
-    function cancelarEdicao() {
+    function a_cancelarEdicao() {
       editingId = -1;
       document.getElementById('formTitle').innerText = 'Cadastrar Ativo';
-      document.getElementById('submitBtn').classList.remove('hidden');
-      document.getElementById('cancelEditBtn').classList.add('hidden');
-      document.getElementById('editBtn').classList.add('hidden');
+      document.getElementById('a_addBtn').classList.remove('hidden');
+      document.getElementById('a_cancelEditBtn').classList.add('hidden');
+      document.getElementById('a_editBtn').classList.add('hidden');
       limparCampos();
     }
 
@@ -713,7 +715,7 @@
       .filter(p => !busca || (p.nome && p.nome.toLowerCase().includes(busca)))
       .forEach(p => {
         const row = `
-          <tr>
+          <tr class="hover:bg-slate-200">
             <td class="px-4 py-2 border-b">${p.id}</td>
             <td class="px-4 py-2 border-b">${p.nome}</td>
             <td class="px-4 py-2 border-b">${p.categoria}</td>
@@ -737,13 +739,48 @@
       const peca = {
         nome: document.getElementById('pecaNome').value,
         categoria: document.getElementById('pecaCategoria').value,
-        quantidade: document.getElementById('pecaQtd').value,
-        observacao: document.getElementById('pecaObs').value
+        quantidade: document.getElementById('pecaQuantidade').value,
+        observacao: document.getElementById('pecaObservacao').value
       };
-      await fetch(`${API_URL}/api/pecas`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(peca)});
-      renderPecas();
+
+      if (!confirm(`Deseja realmente adicionar a peça "${peca.nome}"?`)) return;
+
+      try {
+        const response = await fetch(`${API_URL}/api/pecas`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(peca)
+        });
+
+        if (!response.ok) {
+          const erro = await response.json().catch(() => ({ error: "❓ Erro desconhecido." }));
+          throw new Error(erro.error || "❌ Erro ao adicionar peça."); // Log de erro
+        }
+        alert("✅ Peça adicionada com sucesso!");
+        await renderPecas();
+        limparCampos();
+      }
+      catch (err) {
+        console.error("❌ Erro ao adicionar peça: ", err);
+        alert("❌ Não foi possível adicionar a peça."); // Log de erro
+      }
     }
 
+    //-------------------------------------------------------------------------------------------------------------------------------- Editar Peça
+    function editarPeca(id) {
+      const peca = pecas.find(p => p.id === id);
+      if (!peca) {
+        alert("Peça não encontrada.");
+        return;
+      }
+
+      // Muda título e botões do formulário
+      document.getElementById('formTitle').innerText = 'Editar Peça';
+      
+    }
+
+    /* async func salvarEdicao
+    func cancelarEdicao */
     //-------------------------------------------------------------------------------------------------------------------------------- Apagar Peça
 
     // -------------------------------------------------------------------------------------------------------------------------------- CHAMADOS
