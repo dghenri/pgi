@@ -676,7 +676,7 @@
     //--------------------------------------------------------------------------------------------------------------------------------Apagar Ativo
     async function apagarAtivo(id) {
       const ativo = ativos.find(a => a.id === id);
-      if (!confirm(`❌ Deseja realmente cancelar o ativo "${ativo.serial}"?\nEsta ação não pode ser desfeita.`)) return;
+      if (!confirm(`❌ Deseja realmente apagar o ativo "${ativo.serial}"?\nEsta ação não pode ser desfeita.`)) return;
 
       try {
         const response = await fetch(`${API_URL}/api/ativos/${id}`, { method: 'DELETE' });
@@ -684,13 +684,12 @@
           throw new Error("Erro ao excluir ativo");
         }
         renderAtivos();
+        alert("✅ Ativo apagado com sucesso!");
       }
       catch (err) {
         console.error(err);
         alert("Não foi possível apagar o ativo.");
       }
-
-      alert("✅ Ativo apagado com sucesso!");
     }
 
     // ----------------------------------------------------------------------------------------------------------------------------------- PEÇAS
@@ -833,21 +832,20 @@
     //-------------------------------------------------------------------------------------------------------------------------------- Apagar Peça
     async function apagarPeca(id) {
       const peca = pecas.find(p => p.id === id);
-      if (!confirm(`❌ Deseja realmente cancelar a peça "${peca.nome}"?\nEsta ação não pode ser desfeita.`)) return;
+      if (!confirm(`❌ Deseja realmente apagar a peça "${peca.nome}"?\nEsta ação não pode ser desfeita.`)) return;
 
       try {
-        const p_response = await fetch(`${API_URL}/api/pecas/${id}`, { method: 'DELETE' });
-        if (!p_response.ok) {
+        const response = await fetch(`${API_URL}/api/pecas/${id}`, { method: 'DELETE' });
+        if (!response.ok) {
           throw new Error("Erro ao excluir peça");
         }
         renderPecas();
+        alert("✅ Peça apagada com sucesso!");
       }
       catch (err) {
         console.error(err);
         alert("Não foi possível apagar a peça.");
       }
-
-      alert("✅ Peça apagada com sucesso!");
     }
     // -------------------------------------------------------------------------------------------------------------------------------- CHAMADOS
     async function carregarChamados() {
