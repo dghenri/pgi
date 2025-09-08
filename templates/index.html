@@ -489,12 +489,13 @@
       // pega os dados do backend
       const data = await res.json();
       ativos = data; // Atualiza a variável global
+      const tipoFiltro = document.getElementById('filtroTipo').value;
       const listaPrincipal = document.getElementById('listaAtivos');
-      if (listaPrincipal) listaPrincipal.innerHTML = '';
+      listaPrincipal.innerHTML = '';
 
       ativos
-      .filter(a => tipoFiltro ? a.tipoEquip === tipoFiltro : true)
-      .forEach((a, index) => {
+      .filter(a => !tipoFiltro || a.tipoEquip === tipoFiltro)
+      .forEach(a => {
         const row = `
           <tr class="hover:bg-slate-200">
             <td class="px-4 py-2 border-b">${a.id}</td>
