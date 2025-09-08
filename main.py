@@ -141,6 +141,28 @@ def adicionar_peca():
     session.commit()
     return jsonify({"message": "Peça adicionada"})
 
+@app.route("/api/pecas/<int:id>", methods=["PUT"])
+def atualizar_peca(id):
+    try:
+        data = request.json
+        peca = session.query(Peca).filter_by(id=id).first()
+        if not peca:
+            return jsonify({"error": "Peça não encontrada"}), 404
+        
+        peca.nome = data.get("nome", peca.nome)
+        peca.categoria = data.get("categoria", peca.categoria)
+        peca.quantidade = data.get("quantidade", peca.quantidade)
+        peca.observacao = data.get("observacao", peca.observacao)
+        
+        session.commit()
+        return jsonify({"message": "Peça atualizada com sucesso"}), 200
+    
+    except SQLAlchemyError as e:
+        session.rollback()
+        return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        return jsonify({"error": f"Erro inesperado: {str(e)}"}), 500
+
 
 # ---------------- CHAMADOS ----------------
 @app.route("/api/chamados", methods=["GET"])
