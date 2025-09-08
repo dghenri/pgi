@@ -151,7 +151,7 @@ def listar_chamados():
         "nome": c.nome,
         "numero": c.numero,
         "assunto": c.assunto,
-        "tipo": c.tipoChamado,
+        "tipoChamado": c.tipoChamado,
         "tecnico": c.tecnico,
         "grupo": c.grupo,
         "data": c.data.isoformat() if c.data else None

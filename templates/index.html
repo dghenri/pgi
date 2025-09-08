@@ -176,7 +176,7 @@
             <div class="mt-5 flex flex-wrap gap-3">
               <button onclick="adicionarAtivo()" id="submitBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Adicionar</button>
 
-              <button onclick="editarAtivo()" id="editBtn" class="hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Salvar Alterações</button>
+              <button onclick="salvarEdição()" id="editBtn" class="hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Salvar Alterações</button>
 
               <button onclick="cancelarEdicao()" id="cancelEditBtn" class="hidden bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-xl">Cancelar Edição</button>
 
@@ -495,6 +495,7 @@
       .forEach((a, index) => {
         const row = `
           <tr class="hover:bg-slate-200">
+            <td class="px-4 py-2 border-b">${a.id}</td>
             <td class="px-4 py-2 border-b">${a.tipoEquip}</td>
             <td class="px-4 py-2 border-b">${a.patrimonio}</td>
             <td class="px-4 py-2 border-b">${a.marca}</td>
@@ -592,7 +593,49 @@
       document.getElementById('sistemaOperacional').value = ativo.sistemaOperacional || "";
 
       // Guarda o id do ativo que está sendo editado
-      document.getElementById("submitBtn").dataset.editingId = ativo.id;
+      document.getElementById("editBtn").dataset.editingId = ativo.id;
+    }
+
+    async function salvarEdição() {
+      const editingId = document.getElementById("editBtn").dataset.editingId;
+
+      if (!editingId) {
+        alert("Nenhum ativo selecionado para edição.");
+        return;
+      }
+      
+      const ativo = {
+        tipoEquip: document.getElementById("tipoEquip").value,
+        patrimonio: document.getElementById("patrimonio").value,
+        marca: document.getElementById("marca").value,
+        serial: document.getElementById("serial").value,
+        disco: document.getElementById("disco").value,
+        hostname: document.getElementById("hostname").value,
+        nome: document.getElementById("nome").value,
+        login: document.getElementById("login").value,
+        setor: document.getElementById("setor").value,
+        local: document.getElementById("local").value,
+        sistemaOperacional: document.getElementById("sistemaOperacional").value,
+        status: document.getElementById("status").value
+      };
+
+      await fetch(`${API_URL}/api/ativos/${editingId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(ativo)
+      });
+
+      alert("✅ Ativo atualizado com sucesso!");
+
+      // Reseta o estato
+      delete document.getElementById("editBtn").dataset.editingId;
+      document.getElementById('formTitle').innerText = 'Cadastrar Ativo';
+      document.getElementById('submitBtn').classList.remove('hidden');
+      document.getElementById('editBtn').classList.add('hidden');
+      document.getElementById('cancelEditBtn').classList.add('hidden');
+
+      renderAtivos();
+      limparCampos();
     }
 
 
@@ -618,8 +661,9 @@
     function cancelarEdicao() {
       editingId = -1;
       document.getElementById('formTitle').innerText = 'Cadastrar Ativo';
-      document.getElementById('submitBtn').innerText = 'Adicionar';
+      document.getElementById('submitBtn').classList.remove('hidden');
       document.getElementById('cancelEditBtn').classList.add('hidden');
+      document.getElementById('editBtn').classList.add('hidden');
       limparCampos();
     }
 
