@@ -539,8 +539,7 @@
       };
 
       // Confirmação antes de adicionar
-      const confirmar = confirm(`Deseja realmente adicionar o ativo "${ativo.hostname}"?`);
-      if (!confirmar) return;
+      if (!confirm(`Deseja realmente adicionar o ativo "${ativo.hostname}"?`)) return;
 
      try {
       const response = await fetch(`${API_URL}/api/ativos`, {
@@ -550,18 +549,18 @@
       });
 
       if (!response.ok) {
-        const erro = await response.text();
-        throw new Error(`Erro ao adicionar ativo: ${erro}`); // Log de erro
+        const erro = await response.json().catch(() => ({ error: "❓ Erro desconhecido." }));
+        throw new Error(erro.error || "❌ Erro ao adicionar ativo."); // Log de erro
       }
 
       alert("✅ Ativo adicionado com sucesso!");
-      renderAtivos();
+      await renderAtivos();
+      limparCampos();
       }
       catch (err) {
-        console.error(err);
+        console.error("❌ Erro ao adicionar ativo: ", err);
         alert("❌ Não foi possível adicionar o ativo."); // Log de erro
       }
-      limparCampos();
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------Editar Ativo
@@ -646,7 +645,6 @@
 
     //--------------------------------------------------------------------------------------------------------------------------------Apagar Ativo
     async function apagarAtivo(id) {
-
 
 
       const confirmar = confirm(`❌ Deseja realmente cancelar o ativo "${ativo.hostname}"? Esta ação não pode ser desfeita.`);
