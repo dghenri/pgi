@@ -377,7 +377,7 @@
 
     //------------------------------------------------------------------------------------------------------------------------- Carregar as informações do db
     renderAtivos();
-    //renderPecas();
+    renderPecas();
     //renderChamados();
 
     // Salva ativos no backend (ou adapte para localStorage se preferir)
@@ -440,7 +440,7 @@
       if (key === 'dashboard') refreshDashboard();
     }
     pageButtons.forEach(btn => btn.addEventListener('click', () => showPage(btn.dataset.page)));
-      showPage('ativos');
+      showPage('pecas');
 
     //------------------------------------------------------------------------------------------------------------------------------ Menu Mobile
 
@@ -518,7 +518,7 @@
       .forEach(a => {
         const row = `
           <tr class="hover:bg-slate-200">
-            <td class="px-4 py-2 border-b">${a.id}</td>
+            <td class="hidden px-4 py-2 border-b">${a.id}</td>
             <td class="px-4 py-2 border-b">${a.tipoEquip}</td>
             <td class="px-4 py-2 border-b">${a.patrimonio}</td>
             <td class="px-4 py-2 border-b">${a.marca}</td>
@@ -688,7 +688,7 @@
     }
 
     // ----------------------------------------------------------------------------------------------------------------------------------- PEÇAS
-    async function carregarPecas() {
+    async function renderPecas() {
       const res = await fetch(`${API_URL}/api/pecas`);
       const data = await res.json();
       const lista = document.getElementById('listaPecas');
@@ -696,10 +696,14 @@
       data.forEach(p => {
         lista.innerHTML += `
         <tr>
-          <td>${p.nome}</td>
-          <td>${p.categoria}</td>
-          <td>${p.quantidade}</td>
-          <td>${p.observacao||'-'}</td>
+          <td class="px-4 py-2 border-b">${p.nome}</td>
+          <td class="px-4 py-2 border-b">${p.categoria}</td>
+          <td class="px-4 py-2 border-b">${p.quantidade}</td>
+          <td class="px-4 py-2 border-b">${p.observacao||'-'}</td>
+          <td class="px-4 py-2 border-b">
+              <button class="text-md bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded" onclick="editarPeca(${p.id})">✏️ Editar</button>
+              <button class="text-md bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded" onclick="apagarPeca(${p.id})">🗑️ Apagar</button>
+            </td>
         </tr>`;
       });
       document.getElementById('badgePecas').textContent = data.length;
@@ -713,7 +717,7 @@
         observacao: document.getElementById('pecaObs').value
       };
       await fetch(`${API_URL}/api/pecas`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(peca)});
-      carregarPecas();
+      renderPecas();
     }
 
     // -------------------------------------------------------------------------------------------------------------------------------- CHAMADOS
