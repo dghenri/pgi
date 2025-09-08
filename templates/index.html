@@ -646,9 +646,8 @@
     //--------------------------------------------------------------------------------------------------------------------------------Apagar Ativo
     async function apagarAtivo(id) {
 
-
-      const confirmar = confirm(`❌ Deseja realmente cancelar o ativo "${ativo.hostname}"? Esta ação não pode ser desfeita.`);
-      if (!confirmar) return;
+      const ativo = ativos.find(a => a.id === id);
+      if (!confirm(`❌ Deseja realmente cancelar o ativo "${ativo.serial}"?\nEsta ação não pode ser desfeita.`)) return;
 
       try {
         const response = await fetch(`${API_URL}/api/ativos/${id}`, { method: 'DELETE' });
@@ -661,6 +660,8 @@
         console.error(err);
         alert("Não foi possível apagar o ativo.");
       }
+
+      alert("✅ Ativo apagado com sucesso!");
     }
 
     // ----------------------------------------------------------------------------------------------------------------------------------- PEÇAS
