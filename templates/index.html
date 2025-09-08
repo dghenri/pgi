@@ -253,10 +253,11 @@
               </div>
             </div>
             <div class="mt-4">
-              <button onclick="adicionarPeca()" id="p-addBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Adicionar</button>
+              <button onclick="adicionarPeca()" id="p_addBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Adicionar</button>
 
-              <button onclick="salvarEdicao()" id="p-editBtn" class="hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Salvar Alterações</button>
+              <button onclick="p_salvarEdicao()" id="p_editBtn" class="hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Salvar Alterações</button>
 
+              <button onclick="p_cancelarEdicao()" id="p_cancelEditBtn" class="hidden bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-xl">Cancelar Edição</button>
             </div>
           </div>
 
@@ -624,7 +625,7 @@
       editingId = id;
     }
 
-    async function salvarEdicao() {
+    async function a_salvarEdicao() {
       const ativo = {
         tipoEquip: document.getElementById("tipoEquip").value,
         patrimonio: document.getElementById("patrimonio").value,
@@ -674,7 +675,6 @@
 
     //--------------------------------------------------------------------------------------------------------------------------------Apagar Ativo
     async function apagarAtivo(id) {
-
       const ativo = ativos.find(a => a.id === id);
       if (!confirm(`❌ Deseja realmente cancelar o ativo "${ativo.serial}"?\nEsta ação não pode ser desfeita.`)) return;
 
@@ -776,13 +776,79 @@
 
       // Muda título e botões do formulário
       document.getElementById('formTitle').innerText = 'Editar Peça';
-      
+      document.getElementById('p_addBtn').classList.add('hidden');
+      document.getElementById('p_editBtn').classList.remove('hidden');
+      document.getElementById('p_cancelEditBtn').classList.remove('hidden');
+
+      // Preenche os inputs com os dados da peça
+      document.getElementById('pecaNome').value = peca.nome || "";
+      document.getElementById('pecaCategoria').value = peca.categoria || "";
+      document.getElementById('pecaQuantidade').value = peca.quantidade || "";
+      document.getElementById('pecaObservacao').value = peca.observacao || "";
+
+      // Guarda o id da peça que está sendo editada
+      editingId = id;
     }
 
-    /* async func salvarEdicao
-    func cancelarEdicao */
-    //-------------------------------------------------------------------------------------------------------------------------------- Apagar Peça
+    async function p_salvarEdicao() {
+      const peca = {
+        nome: document.getElementById('pecaNome').value,
+        categoria: document.getElementById('pecaCategoria').value,
+        quantidade: document.getElementById('pecaQuantidade').value,
+        observacao: document.getElementById('pecaObservacao').value
+      };
 
+      const method = editingId === -1 ? 'POST' : 'PUT';
+      const url = editingId === -1 ? `${API_URL}/api/pecas` : `${API_URL}/api/pecas/${editingId}`;
+      
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(peca)
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        alert ("❌ Erro: " + err.error );
+        return;
+      }
+
+      alert(editingId === -1 ? "✅ Peça adicionada com sucesso!" : "✅ Alterações salvas com sucesso!");
+
+      // Reseta o estato
+      p_cancelarEdicao();
+      renderPecas();
+      limparCampos();
+    }
+
+    function p_cancelarEdicao() {
+      editingId = -1;
+      document.getElementById('formTitle').innerText = 'Cadastrar Peça';
+      document.getElementById('p_addBtn').classList.remove('hidden');
+      document.getElementById('p_cancelEditBtn').classList.add('hidden');
+      document.getElementById('p_editBtn').classList.add('hidden');
+      limparCampos();
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------------------- Apagar Peça
+    async function apagarPeca(id) {
+      const peca = pecas.find(p => p.id === id);
+      if (!confirm(`❌ Deseja realmente cancelar a peça "${peca.nome}"?\nEsta ação não pode ser desfeita.`)) return;
+
+      try {
+        const p_response = await fetch(`${API_URL}/api/pecas/${id}`, { method: 'DELETE' });
+        if (!p_response.ok) {
+          throw new Error("Erro ao excluir peça");
+        }
+        renderPecas();
+      }
+      catch (err) {
+        console.error(err);
+        alert("Não foi possível apagar a peça.");
+      }
+
+      alert("✅ Peça apagada com sucesso!");
+    }
     // -------------------------------------------------------------------------------------------------------------------------------- CHAMADOS
     async function carregarChamados() {
       const res = await fetch(`${API_URL}/api/chamados`);
