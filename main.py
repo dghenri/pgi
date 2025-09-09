@@ -197,7 +197,9 @@ def adicionar_chamado():
         tipoChamado=data.get("tipoChamado", "Remoto"),
         tecnico=data.get("tecnico"),
         grupo=data.get("grupo"),
-        data=date.fromisoformat(data["data"]) if data.get("data") else date.today()
+        data=date.fromisoformat(data["data"]) 
+        if data.get("data") 
+        else date.today()
     )
     session.add(novo)
     session.commit()

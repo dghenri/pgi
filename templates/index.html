@@ -423,7 +423,7 @@
     }
 
     function limparCampos() {
-      document.querySelectorAll('#page-ativos input, #page-ativos select, #page-pecas input, #page-pecas select').forEach(el => el.value = '');
+      document.querySelectorAll('#page-ativos input, #page-ativos select, #page-pecas input, #page-pecas select, #page-chamados input, #page-chamados select').forEach(el => el.value = '');
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------- Navegação
@@ -843,6 +843,13 @@
       }
     }
     // -------------------------------------------------------------------------------------------------------------------------------- CHAMADOS
+    // Função auxiliar de conversão
+    function parseDataBR(dataSrc) {
+      if (!dataSrc) return null;
+      const [dia, mes, ano] = dataSrc.split('/');
+      return new Date(`${ano}-${mes}-${dia}T00:00:00`);
+    }
+   
     async function renderChamados() {
       const res = await fetch(`${API_URL}/api/chamados`);
       if (!res.ok) {
@@ -856,29 +863,45 @@
 
       const dataInicio = document.getElementById('dataInicio').value;
       const dataFim = document.getElementById('dataFim').value;
-      }
       const busca = document.getElementById('buscaChamado').value.toLowerCase();
       const lista = document.getElementById('listaChamados');
       lista.innerHTML = '';
 
       chamados
-      .filter(c => dataInicio)
+      .filter(c => {
+        const dataChamado = parseDataBR(c.data);
+
+        const inicio = dataInicio ? new Date(dataInicio + 'T00:00:00') : null;
+        const fim = dataFim ? new Date(dataFim + 'T23:59:59') : null;
+
+        const entreIntervalo =
+        (!inicio || dataChamado >= inicio) &&
+        (!fim || dataChamado <= fim);
+
+        const busca = 
+        !busca || c.nome.toLowerCase().includes(busca) || c.numero.toString().includes(busca) || c.assunto.toLowerCase().includes(busca) || c.tecnico.toLowerCase().includes(busca) || c.grupo.toLowerCase().includes(busca);
+        return entreIntervalo && busca;
+      })
+      .forEach (c => {
+        lista.innerHTML += `
         <tr>
           <td class="px-4 py-2 border-b">${c.id}</td>
           <td class="px-4 py-2 border-b">${c.nome}</td>
           <td class="px-4 py-2 border-b">${c.numero}</td>
           <td class="px-4 py-2 border-b">${c.assunto}</td>
-          <td class="px-4 py-2 border-b">${c.tipo}</td>
+          <td class="px-4 py-2 border-b">${c.tipoChamado}</td>
           <td class="px-4 py-2 border-b">${c.tecnico}</td>
           <td class="px-4 py-2 border-b">${c.grupo}</td>
           <td class="px-4 py-2 border-b">${c.data}</td>
         </tr>`;
       });
-      document.getElementById('dashChamados').textContent = data.length;
+      // Atualiza badges
+      document.getElementById('badgeChamados').textContent = chamados.length;
+      document.getElementById('dashChamados').textContent = chamados.length;
     }
 
-    /* const inputs = document.querySelectorAll('#pesquisaChamados, #chamadoNumero'); */
-
+    // inclui # no início do número do chamado
+    const inputs = document.querySelectorAll('#chamadoNumero');
     inputs.forEach(input => {
       input.addEventListener("focus", function () {
         if (!this.value.startsWith("#")) {
@@ -886,7 +909,7 @@
         }
       });
     });
-
+    //------------------------------------------------------------------------------------------------------------------- Adicionar Chamado
     async function adicionarChamado() {
       const chamado = {
         nome: document.getElementById('chamadoUsuario').value,
@@ -897,8 +920,29 @@
         grupo: document.getElementById('chamadoGrupo').value,
         data: document.getElementById('chamadoData').value
       };
-      await fetch(`${API_URL}/api/chamados`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(chamado)});
-      renderChamados();
+
+      if (!confirm(`Deseja realmente registrar o chamado ${chamado.numero} para ${chamado.nome}?`)) return;
+      
+      try {
+        const response = await fetch(`${API_URL}/api/chamados`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json' },
+          body: JSON.stringify(chamado)
+        });
+
+      if (!response.ok) {
+        const erro = await response.json().catch(() => ({ error: "❓ Erro desconhecido." }));
+        throw new Error(erro.error || "❌ Erro ao registrar chamado."); // Log de erro
+      }
+
+      alert("✅ Chamado registrado com sucesso!");
+      await renderChamados();
+      limparCampos();
+      }
+      catch (err) {
+        console.error("❌ Erro ao registrar chamado: ", err);
+        alert("❌ Não foi possível registrar o chamado."); // Log de erro
+      }
     }
   </script>
 </body>
