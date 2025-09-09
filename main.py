@@ -203,6 +203,8 @@ def adicionar_chamado():
     session.commit()
     return jsonify({"message": "Chamado adicionado"})
 
+#Delete chamado
+
 #---------------------------------------------Inicia a aplicação---------------------------------------------
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=True)

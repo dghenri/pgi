@@ -682,14 +682,14 @@
       try {
         const response = await fetch(`${API_URL}/api/ativos/${id}`, { method: 'DELETE' });
         if (!response.ok) {
-          throw new Error("Erro ao excluir ativo");
+          throw new Error("Erro ao excluir ativo"); // Log de erro
         }
         renderAtivos();
         alert("✅ Ativo apagado com sucesso!");
       }
       catch (err) {
         console.error(err);
-        alert("Não foi possível apagar o ativo.");
+        alert("Não foi possível apagar o ativo."); // Log de erro
       }
     }
 
