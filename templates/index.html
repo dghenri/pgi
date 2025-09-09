@@ -849,6 +849,20 @@
       const [dia, mes, ano] = dataSrc.split('/');
       return new Date(`${ano}-${mes}-${dia}T00:00:00`);
     }
+
+    function parseData(cData){
+      if (!cData) return null;
+    
+      if (cData.includes("-")) {
+        return new Date(cData + 'T00:00:00');
+      }
+
+      if (!cData.includes("/")) {
+        return new Date(cData + 'T00:00:00');
+      }
+
+      return null;
+    }
    
     async function renderChamados() {
       const res = await fetch(`${API_URL}/api/chamados`);
@@ -876,7 +890,8 @@
       let totalCount = chamados.length;
 
       chamados.forEach(c => {
-        const dataChamado = parseDataBR(c.data);
+        const dataChamado = parseData(c.data);
+        if (!dataChamado) return;
 
         // Chamados de hoje
         if (
