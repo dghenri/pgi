@@ -209,6 +209,15 @@ def adicionar_chamado():
         session.rollback()
         return jsonify({"error": str(e)}), 500
 
+@app.route("/api/chamados/<int:id>", methods=["DELETE"])
+def deletar_chamado(id):
+    chamado = session.query(Chamado).filter_by(id=id).first()
+    if not chamado:
+        return jsonify({"error": "Chamado não encontrado"}), 404
+    session.delete(chamado)
+    session.commit()
+    return jsonify({"message": "Chamado deletado"})
+
 #Delete chamado
 
 #---------------------------------------------Inicia a aplicação---------------------------------------------

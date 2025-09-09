@@ -973,6 +973,25 @@
         alert("❌ Não foi possível registrar o chamado."); // Log de erro
       }
     }
+
+    // ---------------------------------------------------------------------------------------------------------------- Apagar Chamado
+    async function apagarChamado(id) {
+      const chamado = chamados.find(c => c.id === id);
+      if (!confirm(`❌ Deseja realmente apagar o chamado "${chamado.numero}"?\nEsta ação não pode ser desfeita.`)) return;
+
+      try {
+        const response = await fetch(`${API_URL}/api/chamados/${id}`, { method: 'DELETE' });
+        if (!response.ok) {
+          throw new Error("Erro ao excluir chamado"); // Log de erro
+        }
+        renderChamados();
+        alert("✅ Chamado apagado com sucesso!");
+      }
+      catch (err) {
+        console.error(err);
+        alert("Não foi possível apagar o chamado."); // Log de erro
+      }
+    }
   </script>
 </body>
 
