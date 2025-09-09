@@ -867,6 +867,14 @@
       const lista = document.getElementById('listaChamados');
       lista.innerHTML = '';
 
+      // Datas de referência
+      const hoje = new Date();
+      const inicioMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+
+      let total = 0;
+      let hojeCount = 0;
+      let mesCount = 0;
+
       chamados
       .filter(c => {
         const dataChamado = parseDataBR(c.data);
@@ -878,11 +886,34 @@
         (!inicio || dataChamado >= inicio) &&
         (!fim || dataChamado <= fim);
 
-        const busca = 
-        !busca || c.nome.toLowerCase().includes(busca) || c.numero.toString().includes(busca) || c.assunto.toLowerCase().includes(busca) || c.tecnico.toLowerCase().includes(busca) || c.grupo.toLowerCase().includes(busca);
-        return entreIntervalo && busca;
+        const bateBusca = 
+        !busca || 
+        c.nome.toLowerCase().includes(busca) || 
+        c.numero.toString().includes(busca) || 
+        c.assunto.toLowerCase().includes(busca) || 
+        c.tecnico.toLowerCase().includes(busca) || 
+        c.grupo.toLowerCase().includes(busca);
+        return entreIntervalo && bateBusca;
       })
       .forEach (c => {
+        total++;
+
+        const dataChamado = parseDataBR(c.data);
+
+        // Conta chamados de hoje
+        if (
+          dataChamado.getDate() === hoje.getDate() &&
+          dataChamado.getMonth() === hoje.getMonth() &&
+          dataCChamado.getFullYear() === hoje.getFullYear()
+        ) {
+        hojeCount++;
+        }
+
+        // Conta chamados do mês
+        if (dataChamado >= inicioMes && dataChamado <= hoje) {
+          mesCount++;
+        }
+
         lista.innerHTML += `
         <tr>
           <td class="px-4 py-2 border-b">${c.id}</td>
@@ -895,9 +926,12 @@
           <td class="px-4 py-2 border-b">${c.data}</td>
         </tr>`;
       });
-      // Atualiza badges
+      // Atualiza badges e contadores
       document.getElementById('badgeChamados').textContent = chamados.length;
       document.getElementById('dashChamados').textContent = chamados.length;
+      document.getElementById('contadorTotal').textContent = total;
+      document.getElementById('contadorHoje').textContent = hojeCount;
+      document.getElementById('contadorMes').textContent = mesCount;
     }
 
     //------------------------------------------------------------------------------------------------------------------- Adicionar Chamado
