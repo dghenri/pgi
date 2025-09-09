@@ -263,11 +263,10 @@
 
           <div class="bg-white border rounded-2xl shadow-sm p-4">
             <div class="mb-4 flex flex-wrap gap-3 items-center">
-              <input id="buscaPeca" type="text" placeholder="Pesquisar peça" class="p-2 border rounded-lg" oninput="renderPecas()" />
-            </div>
-            <div>
-              <label class="">Categoria</label>
-              <input id="buscaCategoria" type="text" placeholder="Pesquisar categoria">
+              <div>
+                <label class="block text-sm font-medium">Buscar</label>
+                <input id="buscaPeca" type="text" placeholder="Nome, Categoria" class="w-full mt-1 p-2 border rounded-lg" oninput="renderPecas()" />
+              </div>
             </div>
             <div class="w-auto overflow-x-auto overflow-y-auto max-h-96 rounded-xl shadow-md border">
               <table class="w-full text-sm border rounded-xl overflow-hidden shadow-md">
@@ -283,6 +282,7 @@
                 <tbody id="listaPecas"></tbody>
               </table>
             </div>
+          </div>
         </section>
 
         <!-- ---------------------------------------------------------------------------------------------------------------------- CHAMADOS -->
@@ -548,8 +548,9 @@
         if (listaPrincipal) listaPrincipal.innerHTML += row;
       });
 
-      // Atualiza badge do menu
+      // Atualiza badges
       document.getElementById('badgeAtivos').textContent = ativos.length;
+      document.getElementById('dashAtivos').textContent = ativos.length;
     }
     //----------------------------------------------------------------------------------------------------------------------------Adiciona Ativo
     async function adicionarAtivo() {
@@ -704,14 +705,12 @@
       const data = await res.json();
       pecas = data; // Atualiza a variável global
 
-      const buscaCategoria = document.getElementById('buscaCategoria').value.toLowerCase();
       const busca = document.getElementById('buscaPeca').value.toLowerCase();
       const lista = document.getElementById('listaPecas');
       lista.innerHTML = '';
 
       pecas
-      .filter(p => !buscaCategoria || (p.categoria && p.categoria.toLowerCase().includes(buscaCategoria)))
-      .filter(p => !busca || (p.nome && p.nome.toLowerCase().includes(busca)))
+      .filter(p => !busca || (p.nome && p.nome.toLowerCase().includes(busca)) || (p.categoria && p.categoria.toLowerCase().includes(busca)))
       .forEach(p => {
         const row = `
           <tr class="hover:bg-slate-200">
