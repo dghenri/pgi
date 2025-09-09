@@ -900,15 +900,6 @@
       document.getElementById('dashChamados').textContent = chamados.length;
     }
 
-    // inclui # no início do número do chamado
-    const inputs = document.querySelectorAll('#chamadoNumero');
-    inputs.forEach(input => {
-      input.addEventListener("focus", function () {
-        if (!this.value.startsWith("#")) {
-          this.value = "#" + this.value;
-        }
-      });
-    });
     //------------------------------------------------------------------------------------------------------------------- Adicionar Chamado
     async function adicionarChamado() {
       const chamado = {
