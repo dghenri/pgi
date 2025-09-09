@@ -53,7 +53,6 @@ def listar_ativos():
         "status": a.status
     } for a in ativos])
 
-
 @app.route("/api/ativos", methods=["POST"])
 def adicionar_ativo():
     data = request.json
@@ -127,7 +126,6 @@ def listar_pecas():
         "observacao": p.observacao
     } for p in pecas])
 
-
 @app.route("/api/pecas", methods=["POST"])
 def adicionar_peca():
     data = request.json
@@ -162,6 +160,15 @@ def atualizar_peca(id):
         return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": f"Erro inesperado: {str(e)}"}), 500
+    
+@app.route("/api/pecas/<int:id>", methods=["DELETE"])
+def deletar_peca(id):
+    peca = session.query(Peca).filter_by(id=id).first()
+    if not peca:
+        return jsonify({"error": "Peça não encontrada"}), 404
+    session.delete(peca)
+    session.commit()
+    return jsonify({"message": "Peça deletada"})
 
 
 # ---------------- CHAMADOS ----------------
