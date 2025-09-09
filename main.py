@@ -189,21 +189,25 @@ def listar_chamados():
 
 @app.route("/api/chamados", methods=["POST"])
 def adicionar_chamado():
-    data = request.json
-    novo = Chamado(
-        nome=data["nome"],
-        numero=data["numero"],
-        assunto=data["assunto"],
-        tipoChamado=data.get("tipoChamado", "Remoto"),
-        tecnico=data.get("tecnico"),
-        grupo=data.get("grupo"),
-        data=date.fromisoformat(data["data"]) 
-        if data.get("data") 
-        else date.today()
-    )
-    session.add(novo)
-    session.commit()
-    return jsonify({"message": "Chamado adicionado"})
+    try:
+        data = request.json
+        novo = Chamado(
+            nome=data["nome"],
+            numero=data["numero"],
+            assunto=data["assunto"],
+            tipoChamado=data.get("tipoChamado", "Remoto"),
+            tecnico=data.get("tecnico"),
+            grupo=data.get("grupo"),
+            data=date.fromisoformat(data["data"]) 
+            if data.get("data") 
+            else date.today()
+        )
+        session.add(novo)
+        session.commit()
+        return jsonify({"message": "Chamado adicionado"})
+    except Exception as e:
+        session.rollback()
+        return jsonify({"error": str(e)}), 500
 
 #Delete chamado
 
