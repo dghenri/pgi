@@ -346,12 +346,11 @@
                 <button onclick="limparFiltro()" class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Limpar</button>
               </div>
               <div class="ml-auto">
-                <label class="block text-sm font-medium" for="pesquisaChamados">Pesquisar Chamados</label>
-                <input id="pesquisaChamados" type="text" placeholder="#00000"
+                <label class="block text-sm font-medium">Pesquisar Chamados</label>
+                <input id="buscaChamado" type="text" placeholder="#00000"
                 class="p-2 border rounded-lg"
                 oninput="renderChamados()" />
             </div>
-
             <table class="w-full text-sm border rounded-xl overflow-hidden shadow-md">
               <thead class="bg-slate-50 text-slate-600">
                 <tr>
@@ -383,7 +382,7 @@
     //------------------------------------------------------------------------------------------------------------------------- Carregar as informações do db
     renderAtivos();
     renderPecas();
-    //renderChamados();
+    renderChamados();
 
     // Salva ativos no backend (ou adapte para localStorage se preferir)
     async function saveAtivos() {
@@ -508,7 +507,6 @@
       // pega os dados do backend
       const data = await res.json();
       ativos = data; // Atualiza a variável global
-
 
       const tipoFiltro = document.getElementById('filtroTipo').value;
       const statusFiltro = document.getElementById('filtroStatus').value;
@@ -847,11 +845,24 @@
     // -------------------------------------------------------------------------------------------------------------------------------- CHAMADOS
     async function renderChamados() {
       const res = await fetch(`${API_URL}/api/chamados`);
+      if (!res.ok) {
+        console.error('Erro ao carregar Chamados:', res.status); // Log de erro
+        return;
+      }
+
+      // Pega os dados do backend
       const data = await res.json();
+      chamados = data; // Atualiza a variável global
+
+      const dataInicio = document.getElementById('dataInicio').value;
+      const dataFim = document.getElementById('dataFim').value;
+      }
+      const busca = document.getElementById('buscaChamado').value.toLowerCase();
       const lista = document.getElementById('listaChamados');
       lista.innerHTML = '';
-      data.forEach(c => {
-        lista.innerHTML += `
+
+      chamados
+      .filter(c => dataInicio)
         <tr>
           <td class="px-4 py-2 border-b">${c.id}</td>
           <td class="px-4 py-2 border-b">${c.nome}</td>
@@ -866,7 +877,7 @@
       document.getElementById('dashChamados').textContent = data.length;
     }
 
-    const inputs = document.querySelectorAll('#pesquisaChamados, #chamadoNumero');
+    /* const inputs = document.querySelectorAll('#pesquisaChamados, #chamadoNumero'); */
 
     inputs.forEach(input => {
       input.addEventListener("focus", function () {
