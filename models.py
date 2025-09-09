@@ -45,8 +45,8 @@ class Chamado(Base):
     nome = Column(String)
     numero = Column(Integer)
     assunto = Column(String)
-    tipoEquip = Column(
-        Enum('Remoto', 'Presencial', 'Blip', name='tipoEquip_chamado_enum'),
+    tipoChamado = Column(
+        Enum('Remoto', 'Presencial', 'Blip', name='tipoChamado_enum'),
         nullable=False, default='Remoto'
     )
     tecnico = Column(String)
