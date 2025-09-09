@@ -365,8 +365,6 @@
                   <th class="text-left px-4 py-2 border-b">Ações</th>
                 </tr>
               </thead>
-              </div> 
-              
               <tbody id="listaChamados"></tbody>
             </table>
           </div>
@@ -447,7 +445,7 @@
       if (key === 'dashboard') refreshDashboard();
     }
     pageButtons.forEach(btn => btn.addEventListener('click', () => showPage(btn.dataset.page)));
-      showPage('pecas');
+      showPage('chamados');
 
     //------------------------------------------------------------------------------------------------------------------------------ Menu Mobile
 
@@ -768,7 +766,7 @@
     function editarPeca(id) {
       const peca = pecas.find(p => p.id === id);
       if (!peca) {
-        alert("Peça não encontrada.");
+        alert("Peça não encontrada."); // Log de erro
         return;
       }
 
@@ -807,7 +805,7 @@
 
       if (!res.ok) {
         const err = await res.json();
-        alert ("❌ Erro: " + err.error );
+        alert ("❌ Erro: " + err.error ); // Log de erro
         return;
       }
 
@@ -836,18 +834,18 @@
       try {
         const response = await fetch(`${API_URL}/api/pecas/${id}`, { method: 'DELETE' });
         if (!response.ok) {
-          throw new Error("Erro ao excluir peça");
+          throw new Error("Erro ao excluir peça"); // Log de erro
         }
         renderPecas();
         alert("✅ Peça apagada com sucesso!");
       }
       catch (err) {
         console.error(err);
-        alert("Não foi possível apagar a peça.");
+        alert("Não foi possível apagar a peça."); // Log de erro
       }
     }
     // -------------------------------------------------------------------------------------------------------------------------------- CHAMADOS
-    async function carregarChamados() {
+    async function renderChamados() {
       const res = await fetch(`${API_URL}/api/chamados`);
       const data = await res.json();
       const lista = document.getElementById('listaChamados');
@@ -855,13 +853,14 @@
       data.forEach(c => {
         lista.innerHTML += `
         <tr>
-          <td>${c.nome}</td>
-          <td>${c.numero}</td>
-          <td>${c.assunto}</td>
-          <td>${c.tipo}</td>
-          <td>${c.tecnico}</td>
-          <td>${c.grupo}</td>
-          <td>${c.data}</td>
+          <td class="px-4 py-2 border-b">${c.id}</td>
+          <td class="px-4 py-2 border-b">${c.nome}</td>
+          <td class="px-4 py-2 border-b">${c.numero}</td>
+          <td class="px-4 py-2 border-b">${c.assunto}</td>
+          <td class="px-4 py-2 border-b">${c.tipo}</td>
+          <td class="px-4 py-2 border-b">${c.tecnico}</td>
+          <td class="px-4 py-2 border-b">${c.grupo}</td>
+          <td class="px-4 py-2 border-b">${c.data}</td>
         </tr>`;
       });
       document.getElementById('dashChamados').textContent = data.length;
@@ -888,7 +887,7 @@
         data: document.getElementById('chamadoData').value
       };
       await fetch(`${API_URL}/api/chamados`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(chamado)});
-      carregarChamados();
+      renderChamados();
     }
   </script>
 </body>
