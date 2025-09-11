@@ -27,7 +27,7 @@
       </div>
 
       <nav class="p-3 space-y-2">
-        <button data-page="dashboard" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100 group">
+        <button data-page="dashboard" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100 group" onclick="renderAtivos()">
           <span class="text-xl">📊</span>
           <span class="font-medium">Dashboard</span>
         </button>
@@ -102,7 +102,7 @@
             <div class="mb-4 flex flex-wrap gap-3 items-center">
               <div>
                 <label class="block text-sm font-medium">Tipo</label>
-                <select id="filtroTipo" class="w-full mt-1 p-2 border rounded-lg" onchange="renderAtivos()">
+                <select id="dashFiltroTipo" class="w-full mt-1 p-2 border rounded-lg" onchange="renderAtivos()">
                   <option value="">Todos</option>
                   <option>Notebook</option>
                   <option>Desktop</option>
@@ -112,7 +112,7 @@
               </div>
               <div>
                 <label class="block text-sm font-medium">Status</label>
-                <select id="filtroStatus" class="w-full mt-1 p-2 border rounded-lg" onchange="renderAtivos()">
+                <select id="dashFiltroStatus" class="w-full mt-1 p-2 border rounded-lg" onchange="renderAtivos()">
                   <option value="">Todos</option>
                   <option>Em uso</option>
                   <option>Estoque</option>
@@ -121,7 +121,7 @@
               </div>
               <div>
                 <label class="block text-sm font-medium">Pesquisar</label>
-                <input id="buscaAtivo" type="text" placeholder="Usuário, setor" class="w-full mt-1 p-2 border rounded-lg" oninput="renderAtivos()" />
+                <input id="dashBuscaAtivo" type="text" placeholder="Usuário, setor" class="w-full mt-1 p-2 border rounded-lg" oninput="renderAtivos()" />
               </div>
             </div>
             <div>
@@ -395,6 +395,7 @@
     let ativos = []; // armazena os ativos carregados do servidor
     let pecas = []; // armazena as peças carregadas do servidor
     let chamados = []; // armazena os chamados carregados do servidor
+    let chartTipo, chartStatus, chartChamados; // gráficos do dashboard
     let editingId = -1; // id do ativo sendo editado
 
     //------------------------------------------------------------------------------------------------------------------------- Carregar as informações do db
@@ -402,7 +403,7 @@
     renderPecas();
     renderChamados();
 
-    // Salva ativos no backend (ou adapte para localStorage se preferir)
+    // Salva ativos no backend
     async function saveAtivos() {
       if (!Array.isArray(ativos) || ativos.length === 0) return;
       try {
@@ -458,16 +459,88 @@
 
       pageButtons.forEach(btn => btn.classList.remove('bg-blue-600', 'text-white', 'hover:bg-blue-600'));
       document.querySelector(`aside nav button[data-page="${key}"]`).classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-600');
-
-      if (key === 'dashboard') refreshDashboard();
     }
     pageButtons.forEach(btn => btn.addEventListener('click', () => showPage(btn.dataset.page)));
       showPage('dashboard'); // Página inicial
 
     //------------------------------------------------------------------------------------------------------------------------------ Menu Mobile
 
-    //---------------------------------------------------------------------------------------------------------------------------------Dashboard
-    // Chamada de lista igual a ativos, sem ações
+    //---------------------------------------------------------------------------------------------------------------------------------Dashboa  rd
+    function gerarGraficos() {
+      // Limpa gráficos antigos
+      if (chartTipo) chartTipo.destroy();
+      if (chartStatus) chartStatus.destroy();
+      if (chartChamados) chartChamados.destroy();
+
+      //------------------------ Distribuição por Tipo
+      const tipos = {};
+      ativos.forEach(a => {
+        tipos[a.tipoEquip] = (tipos[a.tipoEquip] || 0) + 1;
+      });
+
+      chartTipo = new Chart(document.getElementById('graficoTipo'), {
+        type: 'doughnut',
+        data: {
+          labels: Object.keys(tipos),
+          datasets: [{
+            data: Object.values(tipos),
+            backgroundColor: ["#3b82f6", "#10b981", "#f59e0b", "#ef4444"]
+          }]
+        }
+      });
+
+      //------------------------ Distribuição por Status
+      const statusCount = {};
+      ativos.forEach(a => {
+        statusCount[a.status] = (statusCount[a.status] || 0) + 1;
+      });
+
+      chartStatus = new Chart(document.getElementById('graficoStatus'), {
+        type: 'pie',
+        data: {
+          labels: Object.keys(statusCount),
+          datasets: [{
+            data: Object.values(statusCount),
+            backgroundColor: ["#22c55e", "#eab308", "#64748b"]
+          }]
+        }
+      });
+
+      //------------------------ Chamados no tempo
+      const chamadosPorDia = {};
+      chamados.forEach(c => {
+        if (!c.data) return;
+        const dia = c.data.split("T")[0]; // extrai a parte da data
+        chamadosPorDia[dia] = (chamadosPorDia[dia] || 0) + 1;
+      });
+
+      const dias = Object.keys(chamadosPorDia).sort();
+      const valores = dias.map(d => (chamadosPorDia[d] || 0));
+
+      chartChamados = new Chart(document.getElementById("graficoChamados"), {
+        type: "line",
+        data: {
+          labels: dias,
+          datasets: [{
+            label: "Chamados",
+            data: valores,
+            borderColor: "#2563eb",
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                precision: 0,
+              }
+            }
+          }
+      }
+      });
+    }
 
     //----------------------------------------------------------------------------------------------------------------------------Importar Excel
     function importarExcel(event) {
@@ -527,8 +600,11 @@
       ativos = data; // Atualiza a variável global
 
       const tipoFiltro = document.getElementById('filtroTipo').value;
+      const tipoDashFiltro = document.getElementById('dashFiltroTipo').value;
       const statusFiltro = document.getElementById('filtroStatus').value;
+      const statusDashFiltro = document.getElementById('dashFiltroStatus').value;
       const busca = document.getElementById('buscaAtivo').value.toLowerCase();
+      const buscaDash = document.getElementById('dashBuscaAtivo').value.toLowerCase();
       const listaPrincipal = document.getElementById('listaAtivos');
       const listaResumo = document.getElementById('listaResumo');
       listaPrincipal.innerHTML = '';
@@ -536,8 +612,11 @@
 
       const filtrados = ativos
       .filter(a => tipoFiltro ? a.tipoEquip === tipoFiltro: true)
+      .filter(a => tipoDashFiltro ? a.tipoEquip === tipoDashFiltro: true)
       .filter(a => statusFiltro ? a.status === statusFiltro: true)
-      .filter(a => !busca || (a.nome && a.nome.toLowerCase().includes(busca)) || (a.setor && a.setor.toLowerCase().includes(busca)));
+      .filter(a => statusDashFiltro ? a.status === statusDashFiltro: true)
+      .filter(a => !busca || (a.nome && a.nome.toLowerCase().includes(busca)) || (a.setor && a.setor.toLowerCase().includes(busca)))
+      .filter(a => !buscaDash || (a.nome && a.nome.toLowerCase().includes(buscaDash)) || (a.setor && a.setor.toLowerCase().includes(buscaDash)));
 
       // Tabela Principal
       filtrados.forEach(a => {
@@ -563,6 +642,7 @@
             </td>
           </tr>`;
         listaPrincipal.innerHTML += row;
+        gerarGraficos(); // Atualiza gráficos
       });
 
       // Tabela Resumo
@@ -965,6 +1045,7 @@
       // Atualiza badges
       document.getElementById('badgeChamados').textContent = chamados.length;
       document.getElementById('dashChamados').textContent = chamados.length;
+      gerarGraficos(); // Atualiza gráficos
     }
 
     // Filtro de data chamados
@@ -1080,16 +1161,7 @@
       }
     }
 
-    // -------------------------------------------------------------------------------------------------------------------- Atualiza Dashboard
-    function refreshDashboard() {
-      document.getElementById('dashAtivos').textContent = ativos.length;
-      document.getElementById('dashPecas').textContent = pecas.length;
-      document.getElementById('dashChamados').textContent = chamados.length;
-    }
-
-    // Atualiza o dashboard sempre que a página é carregada
-    window.addEventListener('DOMContentLoaded', refreshDashboard);
-
+    //-------------------------------------------------------------------------------------------------------------------------- Atalhos de Teclado
     // Permite "Enter" para adicionar ativo
     const sectionAtivos = document.getElementById('page-ativos');
     const sectionPecas = document.getElementById('page-pecas');
