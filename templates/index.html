@@ -510,8 +510,12 @@
       const chamadosPorDia = {};
       chamados.forEach(c => {
         if (!c.data) return;
-        const dia = c.data.split("T")[0]; // extrai a parte da data
-        chamadosPorDia[dia] = (chamadosPorDia[dia] || 0) + 1;
+
+        const dataObj = new Date(c.data);
+
+        const diaBR = dataObj.toLocaleDateString("pt-BR");
+
+        chamadosPorDia[diaBR] = (chamadosPorDia[diaBR] || 0) + 1;
       });
 
       const dias = Object.keys(chamadosPorDia).sort();
@@ -1021,6 +1025,8 @@
           mesCount++;
         }
 
+        const dataBR = dataChamado ? dataChamado.toLocaleDateString("pt-BR") : c.data;
+
         lista.innerHTML += `
         <tr class="hover:bg-slate-200">
           <td class="hidden px-4 py-2 border-b">${c.id}</td>
@@ -1030,7 +1036,7 @@
           <td class="px-4 py-2 border-b">${c.tipoChamado}</td>
           <td class="px-4 py-2 border-b">${c.tecnico}</td>
           <td class="px-4 py-2 border-b">${c.grupo}</td>
-          <td class="px-4 py-2 border-b">${c.data}</td>
+          <td class="px-4 py-2 border-b">${dataBR}</td>
           <td class="px-4 py-2 border-b">
             <button class="text-md bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded" onclick="apagarChamado(${c.id})">🗑️ Apagar</button>
           </td>
