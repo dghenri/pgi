@@ -101,27 +101,27 @@
             <h3 class="text-lg font-semibold mb-2">Ativos Resumidos</h3>
             <div class="mb-4 flex flex-wrap gap-3 items-center">
               <div>
-                <label class="block text-sm font-medium">Filtrar Tipo</label>
-                <select id="dashFiltroTipo" class="p-2 border rounded-lg">
-                  <option value="null">Todos</option>
-                  <option value="notebook">Notebook</option>
-                  <option value="desktop">Desktop</option>
-                  <option value="telefonia">Telefonia</option>
-                  <option value="estoque">Estoque</option>
+                <label class="block text-sm font-medium">Tipo</label>
+                <select id="filtroTipo" class="w-full mt-1 p-2 border rounded-lg" onchange="renderAtivos()">
+                  <option value="">Todos</option>
+                  <option>Notebook</option>
+                  <option>Desktop</option>
+                  <option>Telefonia</option>
+                  <option>Estoque</option>
                 </select>
               </div>
               <div>
-                <label class="block text-sm font-medium">Filtrar Status</label>
-                <select id="dashFiltroStatus" class="p-2 border rounded-lg">
-                  <option value="null">Todos</option>
-                  <option value="ativo">Em uso</option>
-                  <option value="inativo">Estoque</option>
-                  <option value="manutencao">Manutenção</option>
+                <label class="block text-sm font-medium">Status</label>
+                <select id="filtroStatus" class="w-full mt-1 p-2 border rounded-lg" onchange="renderAtivos()">
+                  <option value="">Todos</option>
+                  <option>Em uso</option>
+                  <option>Estoque</option>
+                  <option>Manutenção</option>
                 </select>
               </div>
               <div>
                 <label class="block text-sm font-medium">Pesquisar</label>
-                <input id="pesquisaDashboard" type="text" placeholder="Nº de série" class="p-2 border rounded-lg" oninput="renderTabelaResumo()" />
+                <input id="buscaAtivo" type="text" placeholder="Usuário, setor" class="w-full mt-1 p-2 border rounded-lg" oninput="renderAtivos()" />
               </div>
             </div>
             <div>
