@@ -92,16 +92,32 @@
             </div>
           </div>
 
-          <div id='blabla'class="bg-white p-4 rounded-2xl border shadow-sm mb-4 gap-4 items-center">
+          <div class="bg-white p-4 rounded-2xl border shadow-sm mb-4 gap-4 items-center">
+            <h3 class="text-lg font-semibold mb-2">Chamados</h3>
+            <canvas id="graficoChamados" height="100"></canvas>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border shadow-sm mb-4 gap-4 items-center">
             <h3 class="text-lg font-semibold mb-2">Ativos Resumidos</h3>
             <div class="mb-4 flex flex-wrap gap-3 items-center">
               <div>
                 <label class="block text-sm font-medium">Filtrar Tipo</label>
-                <select id="dashFiltroTipo" class="p-2 border rounded-lg"></select>
+                <select id="dashFiltroTipo" class="p-2 border rounded-lg">
+                  <option value="null">Todos</option>
+                  <option value="notebook">Notebook</option>
+                  <option value="desktop">Desktop</option>
+                  <option value="telefonia">Telefonia</option>
+                  <option value="estoque">Estoque</option>
+                </select>
               </div>
               <div>
                 <label class="block text-sm font-medium">Filtrar Status</label>
-                <select id="dashFiltroStatus" class="p-2 border rounded-lg"></select>
+                <select id="dashFiltroStatus" class="p-2 border rounded-lg">
+                  <option value="null">Todos</option>
+                  <option value="ativo">Em uso</option>
+                  <option value="inativo">Estoque</option>
+                  <option value="manutencao">Manutenção</option>
+                </select>
               </div>
               <div>
                 <label class="block text-sm font-medium">Pesquisar</label>
@@ -122,7 +138,7 @@
                       <th class="text-left px-4 py-2 border-b">Status</th>
                     </tr>
                   </thead>
-                  <tbody id="listaAtivosResumo" class="text-slate-800"></tbody>
+                  <tbody id="listaResumo" class="text-slate-800"></tbody>
                 </table>
               </div>
             </div>
@@ -377,6 +393,8 @@
 
     //------------------------------------------------------------------------------------------------------------------------ Variáveis Globais
     let ativos = []; // armazena os ativos carregados do servidor
+    let pecas = []; // armazena as peças carregadas do servidor
+    let chamados = []; // armazena os chamados carregados do servidor
     let editingId = -1; // id do ativo sendo editado
 
     //------------------------------------------------------------------------------------------------------------------------- Carregar as informações do db
@@ -512,13 +530,17 @@
       const statusFiltro = document.getElementById('filtroStatus').value;
       const busca = document.getElementById('buscaAtivo').value.toLowerCase();
       const listaPrincipal = document.getElementById('listaAtivos');
+      const listaResumo = document.getElementById('listaResumo');
       listaPrincipal.innerHTML = '';
+      listaResumo.innerHTML = '';
 
-      ativos
+      const filtrados = ativos
       .filter(a => tipoFiltro ? a.tipoEquip === tipoFiltro: true)
       .filter(a => statusFiltro ? a.status === statusFiltro: true)
-      .filter(a => !busca || (a.nome && a.nome.toLowerCase().includes(busca)) || (a.setor && a.setor.toLowerCase().includes(busca)))
-      .forEach(a => {
+      .filter(a => !busca || (a.nome && a.nome.toLowerCase().includes(busca)) || (a.setor && a.setor.toLowerCase().includes(busca)));
+
+      // Tabela Principal
+      filtrados.forEach(a => {
         const row = `
           <tr class="hover:bg-slate-200">
             <td class="hidden px-4 py-2 border-b">${a.id}</td>
@@ -540,8 +562,28 @@
               <button class="text-md bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded" onclick="apagarAtivo(${a.id})">🗑️ Apagar</button>
             </td>
           </tr>`;
+        listaPrincipal.innerHTML += row;
+      });
 
-        if (listaPrincipal) listaPrincipal.innerHTML += row;
+      // Tabela Resumo
+      filtrados.forEach(a => {
+        const row = `
+          <tr class="hover:bg-slate-200">
+            <td class="hidden px-4 py-2 border-b">${a.id}</td>
+            <td class="px-4 py-2 border-b">${a.tipoEquip}</td>
+            <td class="px-4 py-2 border-b">${a.patrimonio}</td>
+            <td class="px-4 py-2 border-b">${a.marca}</td>
+            <td class="px-4 py-2 border-b">${a.nome}</td>
+            <td class="px-4 py-2 border-b">${a.setor}</td>
+            <td class="px-4 py-2 border-b">${a.sistemaOperacional || '-'}</td>
+            <td class="px-4 py-2 border-b">
+              <span class="inline-flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full ${a.status === 'Em uso' ? 'bg-green-500' : a.status === 'Manutenção' ? 'bg-yellow-500' : 'bg-slate-400'}"></span>
+                ${a.status}
+              </span>
+            </td>
+          </tr>`;
+        listaResumo.innerHTML += row;
       });
 
       // Atualiza badges
@@ -1037,6 +1079,42 @@
         alert("Não foi possível apagar o chamado."); // Log de erro
       }
     }
+
+    // -------------------------------------------------------------------------------------------------------------------- Atualiza Dashboard
+    function refreshDashboard() {
+      document.getElementById('dashAtivos').textContent = ativos.length;
+      document.getElementById('dashPecas').textContent = pecas.length;
+      document.getElementById('dashChamados').textContent = chamados.length;
+    }
+
+    // Atualiza o dashboard sempre que a página é carregada
+    window.addEventListener('DOMContentLoaded', refreshDashboard);
+
+    // Permite "Enter" para adicionar ativo
+    const sectionAtivos = document.getElementById('page-ativos');
+    const sectionPecas = document.getElementById('page-pecas');
+    const sectionChamados = document.getElementById('page-chamados');
+
+    sectionAtivos.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        adicionarAtivo();
+      }
+    });
+
+    sectionPecas.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        adicionarPeca();
+      }
+    });
+
+    sectionChamados.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        adicionarChamado();
+      }
+    });
+
   </script>
 </body>
-
