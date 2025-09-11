@@ -692,7 +692,7 @@
       };
 
       // Confirmação antes de adicionar
-      if (!confirm(`Deseja realmente adicionar o ativo "${ativo.hostname}"?`)) return;
+      if (!confirm(`Deseja realmente adicionar o ativo ${ativo.hostname}?`)) return;
 
      try {
         const response = await fetch(`${API_URL}/api/ativos`, {
@@ -799,7 +799,7 @@
     //--------------------------------------------------------------------------------------------------------------------------------Apagar Ativo
     async function apagarAtivo(id) {
       const ativo = ativos.find(a => a.id === id);
-      if (!confirm(`❌ Deseja realmente apagar o ativo "${ativo.serial}"?\nEsta ação não pode ser desfeita.`)) return;
+      if (!confirm(`❌ Deseja realmente apagar o ativo ${ativo.serial}?\nEsta ação não pode ser desfeita.`)) return;
 
       try {
         const response = await fetch(`${API_URL}/api/ativos/${id}`, { method: 'DELETE' });
@@ -863,7 +863,7 @@
         observacao: document.getElementById('pecaObservacao').value
       };
 
-      if (!confirm(`Deseja realmente adicionar a peça "${peca.nome}"?`)) return;
+      if (!confirm(`Deseja realmente adicionar a peça ${peca.nome}?`)) return;
 
       try {
         const response = await fetch(`${API_URL}/api/pecas`, {
@@ -953,7 +953,7 @@
     //-------------------------------------------------------------------------------------------------------------------------------- Apagar Peça
     async function apagarPeca(id) {
       const peca = pecas.find(p => p.id === id);
-      if (!confirm(`❌ Deseja realmente apagar a peça "${peca.nome}"?\nEsta ação não pode ser desfeita.`)) return;
+      if (!confirm(`❌ Deseja realmente apagar a peça ${peca.nome}?\nEsta ação não pode ser desfeita.`)) return;
 
       try {
         const response = await fetch(`${API_URL}/api/pecas/${id}`, { method: 'DELETE' });
@@ -1151,7 +1151,7 @@
     // ---------------------------------------------------------------------------------------------------------------- Apagar Chamado
     async function apagarChamado(id) {
       const chamado = chamados.find(c => c.id === id);
-      if (!confirm(`❌ Deseja realmente apagar o chamado "${chamado.numero}"?\nEsta ação não pode ser desfeita.`)) return;
+      if (!confirm(`❌ Deseja realmente apagar o chamado #${chamado.numero}?\nEsta ação não pode ser desfeita.`)) return;
 
       try {
         const response = await fetch(`${API_URL}/api/chamados/${id}`, { method: 'DELETE' });
