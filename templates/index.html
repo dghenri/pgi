@@ -101,7 +101,7 @@
             <h3 class="text-lg font-semibold mb-2">Ativos Resumidos</h3>
             <div class="mb-4 flex flex-wrap gap-3 items-center">
               <div>
-                <label class="block text-sm font-medium">Tipo</label>
+                <label for="dashFiltroTipo" class="block text-sm font-medium">Tipo</label>
                 <select id="dashFiltroTipo" class="w-full mt-1 p-2 border rounded-lg" onchange="renderAtivos()">
                   <option value="">Todos</option>
                   <option>Notebook</option>
@@ -111,7 +111,7 @@
                 </select>
               </div>
               <div>
-                <label class="block text-sm font-medium">Status</label>
+                <label for="dashFiltroStatus" class="block text-sm font-medium">Status</label>
                 <select id="dashFiltroStatus" class="w-full mt-1 p-2 border rounded-lg" onchange="renderAtivos()">
                   <option value="">Todos</option>
                   <option>Em uso</option>
@@ -120,7 +120,7 @@
                 </select>
               </div>
               <div>
-                <label class="block text-sm font-medium">Pesquisar</label>
+                <label for="dashBuscaAtivo" class="block text-sm font-medium">Pesquisar</label>
                 <input id="dashBuscaAtivo" type="text" placeholder="Usuário, setor" class="w-full mt-1 p-2 border rounded-lg" oninput="renderAtivos()" />
               </div>
             </div>
@@ -151,40 +151,40 @@
             <h3 id="formTitle" class="text-xl font-semibold mb-4">Cadastrar Ativo</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label class="block text-sm font-medium">Tipo</label>
+                <label for="tipoEquip" class="block text-sm font-medium">Tipo</label>
                 <select id="tipoEquip" class="w-full mt-1 p-2 border rounded-lg">
                   <option>Notebook</option>
                   <option>Desktop</option>
                   <option>Telefonia</option>
                   <option>Estoque</option>
                 </select>
-                <label class="block text-sm font-medium mt-3">Patrimônio</label>
+                <label for="patrimonio" class="block text-sm font-medium mt-3">Patrimônio</label>
                 <input id="patrimonio" class="w-full mt-1 p-2 border rounded-lg" />
-                <label class="block text-sm font-medium mt-3">Marca/Modelo</label>
+                <label for="marca" class="block text-sm font-medium mt-3">Marca/Modelo</label>
                 <input id="marca" class="w-full mt-1 p-2 border rounded-lg" />
-                <label class="block text-sm font-medium mt-3">Número de Série</label>
+                <label for="serial" class="block text-sm font-medium mt-3">Número de Série</label>
                 <input id="serial" class="w-full mt-1 p-2 border rounded-lg" />
-                <label class="block text-sm font-medium mt-3">Disco</label>
+                <label for="disco" class="block text-sm font-medium mt-3">Disco</label>
                 <input id="disco" class="w-full mt-1 p-2 border rounded-lg" />
-                <label class="block text-sm font-medium mt-3">Hostname</label>
+                <label for="hostname" class="block text-sm font-medium mt-3">Hostname</label>
                 <input id="hostname" class="w-full mt-1 p-2 border rounded-lg" />
               </div>
               <div>
-                <label class="block text-sm font-medium">Nome</label>
+                <label for="nome" class="block text-sm font-medium">Nome</label>
                 <input id="nome" class="w-full mt-1 p-2 border rounded-lg" />
-                <label class="block text-sm font-medium mt-3">Login</label>
+                <label for="login" class="block text-sm font-medium mt-3">Login</label>
                 <input id="login" class="w-full mt-1 p-2 border rounded-lg" />
-                <label class="block text-sm font-medium mt-3">Setor</label>
+                <label for="setor" class="block text-sm font-medium mt-3">Setor</label>
                 <input id="setor" class="w-full mt-1 p-2 border rounded-lg" />
-                <label class="block text-sm font-medium mt-3">Local</label>
+                <label for="local" class="block text-sm font-medium mt-3">Local</label>
                 <input id="local" class="w-full mt-1 p-2 border rounded-lg" />
-                <label class="block text-sm font-medium mt-3">Status</label>
+                <label for="status" class="block text-sm font-medium mt-3">Status</label>
                 <select id="status" class="w-full mt-1 p-2 border rounded-lg">
                   <option>Em uso</option>
                   <option>Estoque</option>
                   <option>Manutenção</option>
                 </select>
-                <label class="block text-sm font-medium mt-3">Sistema Operacional</label>
+                <label for="sistemaOperacional" class="block text-sm font-medium mt-3">Sistema Operacional</label>
                 <input id="sistemaOperacional" class="w-full mt-1 p-2 border rounded-lg" />
               </div>
             </div>
@@ -204,7 +204,7 @@
           <div class="bg-white border rounded-2xl shadow-sm p-4">
             <div class="mb-4 flex flex-wrap gap-3 items-center">
               <div>
-                <label class="block text-sm font-medium">Tipo</label>
+                <label for="filtroTipo" class="block text-sm font-medium">Tipo</label>
                 <select id="filtroTipo" class="w-full mt-1 p-2 border rounded-lg" onchange="renderAtivos()">
                   <option value="">Todos</option>
                   <option>Notebook</option>
@@ -214,7 +214,7 @@
                 </select>
               </div>
               <div>
-                <label class="block text-sm font-medium">Status</label>
+                <label for="filtroStatus" class="block text-sm font-medium">Status</label>
                 <select id="filtroStatus" class="w-full mt-1 p-2 border rounded-lg" onchange="renderAtivos()">
                   <option value="">Todos</option>
                   <option>Em uso</option>
@@ -223,7 +223,7 @@
                 </select>
               </div>
               <div>
-                <label class="block text-sm font-medium">Buscar</label>
+                <label for="buscaAtivo" class="block text-sm font-medium">Buscar</label>
                   <input type="text" id="buscaAtivo" placeholder="Usuário, setor" class="w-full mt-1 p-2 border rounded-lg" oninput="renderAtivos()">
               </div>
             </div>
@@ -254,16 +254,16 @@
             <h3 class="text-xl font-semibold mb-4">Cadastrar Peça</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label class="block text-sm font-medium">Nome</label>
+                <label for="pecaNome" class="block text-sm font-medium">Nome</label>
                 <input id="pecaNome" placeholder="Memória RAM, Placa mãe" class="w-full mt-1 p-2 border rounded-lg" />
-                <label class="block text-sm font-medium mt-3">Categoria</label>
+                <label for="pecaCategoria" class="block text-sm font-medium mt-3">Categoria</label>
                 <input id="pecaCategoria" placeholder="Armazenamento, Rede" class="w-full mt-1 p-2 border rounded-lg" />
               </div>
 
               <div>
-                <label class="block text-sm font-medium">Quantidade</label>
+                <label for="pecaQuantidade" class="block text-sm font-medium">Quantidade</label>
                 <input type="number" id="pecaQuantidade" placeholder="1, 2, 3" class="w-full mt-1 p-2 border rounded-lg" />
-                <label class="block text-sm font-medium mt-3">Observação</label>
+                <label for="pecaObservacao" class="block text-sm font-medium mt-3">Observação</label>
                 <input id="pecaObservacao" placeholder="Nova, Testada, Usada" class="w-full mt-1 p-2 border rounded-lg" />
               </div>
             </div>
@@ -279,7 +279,7 @@
           <div class="bg-white border rounded-2xl shadow-sm p-4">
             <div class="mb-4 flex flex-wrap gap-3 items-center">
               <div>
-                <label class="block text-sm font-medium">Buscar</label>
+                <label for="buscaPeca" class="block text-sm font-medium">Buscar</label>
                 <input id="buscaPeca" type="text" placeholder="Nome, Categoria" class="w-full mt-1 p-2 border rounded-lg" oninput="renderPecas()" />
               </div>
             </div>
@@ -307,29 +307,29 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
               <div>
-              <label class="block text-sm font-medium">Nome</label>
+              <label for="chamadoUsuario" class="block text-sm font-medium">Nome</label>
               <input id="chamadoUsuario" placeholder="e.g. Laudivan" class="w-full mt-1 p-2 border rounded-lg" />
-              <label class="block text-sm font-medium mt-3">Tipo</label>
+              <label for="chamadoTipo" class="block text-sm font-medium mt-3">Tipo</label>
               <select id="chamadoTipo" class="w-full mt-1 p-2 border rounded-lg">
                 <option>Remoto</option>
                 <option>Presencial</option>
                 <option>Blip</option>
               </select>
-              <label class="block text-sm font-medium mt-3">Data</label>
+              <label for="chamadoData" class="block text-sm font-medium mt-3">Data</label>
               <input type="date" id="chamadoData" class="w-full mt-1 p-2 border rounded-lg" />
               </div>
 
               <div>
-              <label class="block text-sm font-medium">Número</label>
+              <label for="chamadoNumero" class="block text-sm font-medium">Número</label>
               <input id="chamadoNumero" placeholder="#00000" class="w-full mt-1 p-2 border rounded-lg" />
-              <label class="block text-sm font-medium mt-3">Técnico</label>
+              <label for="chamadoTecnico" class="block text-sm font-medium mt-3">Técnico</label>
               <input id="chamadoTecnico" placeholder="e.g. Douglas" class="w-full mt-1 p-2 border rounded-lg" />
               </div>
 
               <div>
-              <label class="block text-sm font-medium">Assunto</label>
+              <label for="chamadoAssunto" class="block text-sm font-medium">Assunto</label>
               <input id="chamadoAssunto" placeholder="e.g. Teclado não funciona" class="w-full mt-1 p-2 border rounded-lg" />
-              <label class="block text-sm font-medium mt-3">Grupo</label>
+              <label for="chamadoGrupo" class="block text-sm font-medium mt-3">Grupo</label>
               <input id="chamadoGrupo" placeholder="e.g. TI_CSC_Suporte ao Usuário - Cidade" class="w-full mt-1 p-2 border rounded-lg" />
               </div>
 
@@ -349,15 +349,15 @@
 
             <div class="mb-4 flex flex-wrap gap-3 items-center">
               <div>
-                <label class="block text-sm font-medium">Inicio</label>
+                <label for="dataInicio" class="block text-sm font-medium">Inicio</label>
                 <input type="date" id="dataInicio" class="w-full mt-1 p-2 border rounded-lg" />
               </div>
               <div>
-                <label class="block text-sm font-medium">Fim</label>
+                <label for="dataFim" class="block text-sm font-medium">Fim</label>
                 <input type="date" id="dataFim" class="w-full mt-1 p-2 border rounded-lg" />
               </div>
               <div>
-                <label class="block text-sm font-medium">Buscar</label>
+                <label for="buscaChamado" class="block text-sm font-medium">Buscar</label>
                 <input id="buscaChamado" type="text" placeholder="Nome, assunto, técnico..." class="w-full mt-1 p-2 border rounded-lg" oninput="renderChamados()" />
               </div>
               <div class ="mt-5">
