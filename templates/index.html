@@ -18,11 +18,16 @@
   <div class="min-h-screen grid grid-cols-1 md:grid-cols-[280px_1fr]">
     <!------------------------------------------------------------------------------------------------------------------------------ Sidebar -->
     <aside class="md:sticky md:top-0 md:h-screen bg-white border-r border-slate-200 shadow-sm">
-      <div class="p-5 flex items-center gap-3 border-b">
-        <div class="h-10 w-10 rounded-2xl bg-blue-600 text-white grid place-items-center text-lg font-bold">IT</div>
+      <div class="p-5 flex justify-between gap-3 items-center border-b">
+        <div class="flex item-center gap-3">
+          <div class="h-10 w-10 rounded-2xl bg-blue-600 text-white grid place-items-center text-lg font-bold">IT</div>
+          <div>
+            <h1 class="text-lg font-bold">Painel de Gestão</h1>
+            <p class="text-xs text-slate-500">Ativos • Peças • Chamados</p>
+          </div>
+        </div>
         <div>
-          <h1 class="text-lg font-bold">Painel de Gestão</h1>
-          <p class="text-xs text-slate-500">Ativos • Peças • Chamados</p>
+          <button id="menuBtn" class="md:hidden rounded-lg border px-2 py-1">☰</button>
         </div>
       </div>
 
@@ -54,30 +59,29 @@
 
     <!-- ---------------------------------------------------------------------------------------------------------------- Conteúdo principal -->
     <main class="min-h-screen">
-      <header class="sticky top-0 z-20 bg-white/70 backdrop-blur border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 py-3  items-center">
+        <div class="max-w-7xl mx-auto px-4 items-center">
           <div class="items-center gap-3">
             <div class="md:block">
-              <div id="overlayMobile" class="fixed insert-0 z-40 hidden md:hidden bg-black/30 backdrop-blur-sm">
+              <div id="overlayMobile" class="fixed inset-0 z-40 hidden bg-black/50 backdrop-blur-sm">
                 <aside id="sidebar" 
-                class="md:sticky md:top-0 md:h-screen bg-white border-r border-slate-200 shadow-sm w-64 transform -translate-y-full transition-transform duration-300 ease-in-out">
+                class="md:sticky md:top-0 md:h-screen bg-white border-r border-slate-200 shadow-sm w-full transform -translate-y-full transition-transform duration-300 ease-in-out">
                   <nav class="md:hidden space-y-2">
-                    <button data-page="dashboard" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100/50 group" onclick="renderAtivos()">
+                    <button id="btnDashboard" data-page="dashboard" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100/50 group" onclick="renderAtivos()">
                       <span class="text-xl">📊</span>
                       <span class="font-medium">Dashboard</span>
                     </button>
 
-                    <button data-page="ativos" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100/50 group">
+                    <button id="btnAtivos" data-page="ativos" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100/50 group">
                       <span class="text-xl">💻</span>
                       <span class="font-medium">Ativos</span>
                     </button>
 
-                    <button data-page="pecas" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100/50 group">
+                    <button id="btnPecas" data-page="pecas" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100/50 group">
                       <span class="text-xl">🛠️</span>
                       <span class="font-medium">Peças</span>
                     </button>
 
-                    <button data-page="chamados" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100/50 group">
+                    <button id="btnChamados" data-page="chamados" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100/50 group">
                       <span class="text-xl">🎫</span>
                       <span class="font-medium">Chamados</span>
                     </button>
@@ -85,341 +89,338 @@
                 </aside>
               </div>
             </div>
-            <div class="py-2 flex items-center gap-3">
-              <button id="menuBtn" class="md:hidden rounded-lg border px-2 py-1">☰</button>
-              <h2 id="pageTitle" class="text-2xl font-bold tracking-tight text-gray-900">Dashboard</h2>
-            </div>
           </div>
         </div>
-      </header>
+        <div class="sticky top-0 z-20 bg-white/70 backdrop-blur border-b border-slate-200 px-5 py-4 flex items-center gap-3">
+            <h2 id="pageTitle" class="text-2xl font-bold tracking-tight text-gray-900">Dashboard</h2>
+        </div>
 
-      <div class="max-w-7xl mx-auto p-4 md:p-6">
-        <!------------------------------------------------------------------------------------------------------------------------ DASHBOARD -->
-        <section id="page-dashboard" class="space-y-6">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white p-6 rounded-xl shadow border">
-              <h3 class="text-sm font-medium text-slate-500">Total Ativos</h3>
-              <p id="dashAtivos" class="text-3xl font-bold mt-2">0</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow border">
-              <h3 class="text-sm font-medium text-slate-500">Total Peças</h3>
-              <p id="dashPecas" class="text-3xl font-bold mt-2">0</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow border">
-              <h3 class="text-sm font-medium text-slate-500">Chamados</h3>
-              <p id="dashChamados" class="text-3xl font-bold mt-2">0</p>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white p-4 rounded-2xl border shadow-sm">
-              <h3 class="text-lg font-semibold mb-2">Distribuição por Tipo</h3>
-              <canvas id="graficoTipo" height="220"></canvas>
-            </div>
-            <div class="bg-white p-4 rounded-2xl border shadow-sm">
-              <h3 class="text-lg font-semibold mb-2">Distribuição por Status</h3>
-              <canvas id="graficoStatus" height="220"></canvas>
-            </div>
-          </div>
-
-          <div class="bg-white p-4 rounded-2xl border shadow-sm mb-4 gap-4 items-center">
-            <h3 class="text-lg font-semibold mb-2">Chamados</h3>
-            <canvas id="graficoChamados" height="100"></canvas>
-          </div>
-
-          <div class="bg-white p-4 rounded-2xl border shadow-sm mb-4 gap-4 items-center">
-            <h3 class="text-lg font-semibold mb-2">Ativos Resumidos</h3>
-            <div class="mb-4 flex flex-wrap gap-3 items-center">
-              <div>
-                <label for="dashFiltroTipo" class="block text-sm font-medium">Tipo</label>
-                <select id="dashFiltroTipo" class="w-full mt-1 p-2 border rounded-lg" onchange="renderAtivos()">
-                  <option value="">Todos</option>
-                  <option>Notebook</option>
-                  <option>Desktop</option>
-                  <option>Telefonia</option>
-                  <option>Estoque</option>
-                </select>
+        <div class="max-w-7xl mx-auto p-4 md:p-6">
+          <!------------------------------------------------------------------------------------------------------------------------ DASHBOARD -->
+          <section id="page-dashboard" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="bg-white p-6 rounded-xl shadow border">
+                <h3 class="text-sm font-medium text-slate-500">Total Ativos</h3>
+                <p id="dashAtivos" class="text-3xl font-bold mt-2">0</p>
               </div>
-              <div>
-                <label for="dashFiltroStatus" class="block text-sm font-medium">Status</label>
-                <select id="dashFiltroStatus" class="w-full mt-1 p-2 border rounded-lg" onchange="renderAtivos()">
-                  <option value="">Todos</option>
-                  <option>Em uso</option>
-                  <option>Estoque</option>
-                  <option>Manutenção</option>
-                </select>
+              <div class="bg-white p-6 rounded-xl shadow border">
+                <h3 class="text-sm font-medium text-slate-500">Total Peças</h3>
+                <p id="dashPecas" class="text-3xl font-bold mt-2">0</p>
               </div>
-              <div>
-                <label for="dashBuscaAtivo" class="block text-sm font-medium">Pesquisar</label>
-                <input id="dashBuscaAtivo" type="text" placeholder="Usuário, setor" class="w-full mt-1 p-2 border rounded-lg" oninput="renderAtivos()" />
+              <div class="bg-white p-6 rounded-xl shadow border">
+                <h3 class="text-sm font-medium text-slate-500">Chamados</h3>
+                <p id="dashChamados" class="text-3xl font-bold mt-2">0</p>
               </div>
             </div>
-            <div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="bg-white p-4 rounded-2xl border shadow-sm">
+                <h3 class="text-lg font-semibold mb-2">Distribuição por Tipo</h3>
+                <canvas id="graficoTipo" height="220"></canvas>
+              </div>
+              <div class="bg-white p-4 rounded-2xl border shadow-sm">
+                <h3 class="text-lg font-semibold mb-2">Distribuição por Status</h3>
+                <canvas id="graficoStatus" height="220"></canvas>
+              </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border shadow-sm mb-4 gap-4 items-center">
+              <h3 class="text-lg font-semibold mb-2">Chamados</h3>
+              <canvas id="graficoChamados" height="100"></canvas>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border shadow-sm mb-4 gap-4 items-center">
+              <h3 class="text-lg font-semibold mb-2">Ativos Resumidos</h3>
+              <div class="mb-4 flex flex-wrap gap-3 items-center">
+                <div>
+                  <label for="dashFiltroTipo" class="block text-sm font-medium">Tipo</label>
+                  <select id="dashFiltroTipo" class="w-full mt-1 p-2 border rounded-lg" onchange="renderAtivos()">
+                    <option value="">Todos</option>
+                    <option>Notebook</option>
+                    <option>Desktop</option>
+                    <option>Telefonia</option>
+                    <option>Estoque</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="dashFiltroStatus" class="block text-sm font-medium">Status</label>
+                  <select id="dashFiltroStatus" class="w-full mt-1 p-2 border rounded-lg" onchange="renderAtivos()">
+                    <option value="">Todos</option>
+                    <option>Em uso</option>
+                    <option>Estoque</option>
+                    <option>Manutenção</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="dashBuscaAtivo" class="block text-sm font-medium">Pesquisar</label>
+                  <input id="dashBuscaAtivo" type="text" placeholder="Usuário, setor" class="w-full mt-1 p-2 border rounded-lg" oninput="renderAtivos()" />
+                </div>
+              </div>
+              <div>
+                <div class="w-auto overflow-x-auto overflow-y-auto max-h-96 rounded-xl shadow-md border">
+                  <table class="w-full text-sm border rounded-xl overflow-hidden shadow-md">
+                    <thead class="bg-slate-50 text-slate-600">
+                      <tr>
+                        <th class="text-left px-4 py-2 border-b">Tipo</th>
+                        <th class="text-left px-4 py-2 border-b">Patrimônio</th>
+                        <th class="text-left px-4 py-2 border-b">Marca/Modelo</th>
+                        <th class="text-left px-4 py-2 border-b">Usuário</th>
+                        <th class="text-left px-4 py-2 border-b">Setor</th>
+                        <th class="text-left px-4 py-2 border-b">SO</th>
+                        <th class="text-left px-4 py-2 border-b">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="listaResumo" class="text-slate-800"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!--------------------------------------------------------------------------------------------------------------------------- ATIVOS -->
+          <section id="page-ativos" class="hidden space-y-6">
+            <div class="bg-white border rounded-2xl shadow-sm p-6">
+              <h3 id="formTitle" class="text-xl font-semibold">Cadastrar Ativo</h3>
+              <p class="mb-2 text-slate-500"><span class="font-bold text-red-500">*</span> Campos obrigatórios</p>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="tipoEquip" class="block text-sm font-medium">Tipo <span class="font-bold text-red-500">*</span></label>
+                  <select id="tipoEquip" class="w-full mt-1 p-2 border rounded-lg">
+                    <option>Notebook</option>
+                    <option>Desktop</option>
+                    <option>Telefonia</option>
+                    <option>Estoque</option>
+                  </select>
+                  <label for="patrimonio" class="block text-sm font-medium mt-3">Patrimônio <span class="font-bold text-red-500">*</span></label>
+                  <input id="patrimonio" class="w-full mt-1 p-2 border rounded-lg" />
+                  <label for="marca" class="block text-sm font-medium mt-3">Marca/Modelo <span class="font-bold text-red-500">*</span></label>
+                  <input id="marca" class="w-full mt-1 p-2 border rounded-lg" />
+                  <label for="serial" class="block text-sm font-medium mt-3">Número de Série <span class="font-bold text-red-500">*</span></label>
+                  <input id="serial" class="w-full mt-1 p-2 border rounded-lg" />
+                  <label for="disco" class="block text-sm font-medium mt-3">Disco <span class="font-bold text-red-500">*</span></label>
+                  <input id="disco" class="w-full mt-1 p-2 border rounded-lg" />
+                  <label for="hostname" class="block text-sm font-medium mt-3">Hostname <span class="font-bold text-red-500">*</span></label>
+                  <input id="hostname" class="w-full mt-1 p-2 border rounded-lg" />
+                </div>
+                <div>
+                  <label for="nome" class="block text-sm font-medium">Nome <span class="font-bold text-red-500">*</span></label>
+                  <input id="nome" class="w-full mt-1 p-2 border rounded-lg" />
+                  <label for="login" class="block text-sm font-medium mt-3">Login <span class="font-bold text-red-500">*</span></label>
+                  <input id="login" class="w-full mt-1 p-2 border rounded-lg" />
+                  <label for="setor" class="block text-sm font-medium mt-3">Setor <span class="font-bold text-red-500">*</span></label>
+                  <input id="setor" class="w-full mt-1 p-2 border rounded-lg" />
+                  <label for="local" class="block text-sm font-medium mt-3">Local <span class="font-bold text-red-500">*</span></label>
+                  <input id="local" class="w-full mt-1 p-2 border rounded-lg" />
+                  <label for="status" class="block text-sm font-medium mt-3">Status <span class="font-bold text-red-500">*</span></label>
+                  <select id="status" class="w-full mt-1 p-2 border rounded-lg">
+                    <option>Em uso</option>
+                    <option>Estoque</option>
+                    <option>Manutenção</option>
+                  </select>
+                  <label for="sistemaOperacional" class="block text-sm font-medium mt-3">Sistema Operacional <span class="font-bold text-red-500">*</span></label>
+                  <input id="sistemaOperacional" class="w-full mt-1 p-2 border rounded-lg" />
+                </div>
+              </div>
+              <div class="mt-5 flex flex-wrap gap-3">
+                <button onclick="adicionarAtivo()" id="a_addBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Adicionar</button>
+
+                <button onclick="a_salvarEdicao()" id="a_editBtn" class="hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Salvar Alterações</button>
+
+                <button onclick="a_cancelarEdicao()" id="a_cancelEditBtn" class="hidden bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-xl">Cancelar Edição</button>
+
+                <input type="file" id="importExcel" accept=".xlsx, .xls" class="hidden" onchange="importarExcel(event)" />
+                <button onclick="document.getElementById('importExcel').click()" 
+                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl">Importar Dados</button>
+              </div>
+            </div>
+
+            <div class="bg-white border rounded-2xl shadow-sm p-4">
+              <div class="mb-4 flex flex-wrap gap-3 items-center">
+                <div>
+                  <label for="filtroTipo" class="block text-sm font-medium">Tipo</label>
+                  <select id="filtroTipo" class="w-full mt-1 p-2 border rounded-lg" onchange="renderAtivos()">
+                    <option value="">Todos</option>
+                    <option>Notebook</option>
+                    <option>Desktop</option>
+                    <option>Telefonia</option>
+                    <option>Estoque</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="filtroStatus" class="block text-sm font-medium">Status</label>
+                  <select id="filtroStatus" class="w-full mt-1 p-2 border rounded-lg" onchange="renderAtivos()">
+                    <option value="">Todos</option>
+                    <option>Em uso</option>
+                    <option>Estoque</option>
+                    <option>Manutenção</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="buscaAtivo" class="block text-sm font-medium">Buscar</label>
+                    <input type="text" id="buscaAtivo" placeholder="Usuário, setor" class="w-full mt-1 p-2 border rounded-lg" oninput="renderAtivos()">
+                </div>
+              </div>
               <div class="w-auto overflow-x-auto overflow-y-auto max-h-96 rounded-xl shadow-md border">
                 <table class="w-full text-sm border rounded-xl overflow-hidden shadow-md">
                   <thead class="bg-slate-50 text-slate-600">
                     <tr>
                       <th class="text-left px-4 py-2 border-b">Tipo</th>
                       <th class="text-left px-4 py-2 border-b">Patrimônio</th>
-                      <th class="text-left px-4 py-2 border-b">Marca/Modelo</th>
+                      <th class="text-left px-4 py-2 border-b">Marca</th>
+                      <th class="text-left px-4 py-2 border-b">Série</th>
                       <th class="text-left px-4 py-2 border-b">Usuário</th>
                       <th class="text-left px-4 py-2 border-b">Setor</th>
                       <th class="text-left px-4 py-2 border-b">SO</th>
                       <th class="text-left px-4 py-2 border-b">Status</th>
+                      <th class="text-left px-4 py-2 border-b">Ações</th>
                     </tr>
                   </thead>
-                  <tbody id="listaResumo" class="text-slate-800"></tbody>
+                  <tbody id="listaAtivos" class="text-slate-800"></tbody>
                 </table>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <!--------------------------------------------------------------------------------------------------------------------------- ATIVOS -->
-        <section id="page-ativos" class="hidden space-y-6">
-          <div class="bg-white border rounded-2xl shadow-sm p-6">
-            <h3 id="formTitle" class="text-xl font-semibold">Cadastrar Ativo</h3>
-            <p class="mb-2 text-slate-500"><span class="font-bold text-red-500">*</span> Campos obrigatórios</p>
+          <!---------------------------------------------------------------------------------------------------------------------------- PEÇAS -->
+          <section id="page-pecas" class="hidden space-y-6">
+            <div class="bg-white border rounded-2xl shadow-sm p-6">
+              <h3 class="text-xl font-semibold mb-4">Cadastrar Peça</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="pecaNome" class="block text-sm font-medium">Nome</label>
+                  <input id="pecaNome" placeholder="Memória RAM, Placa mãe" class="w-full mt-1 p-2 border rounded-lg" />
+                  <label for="pecaCategoria" class="block text-sm font-medium mt-3">Categoria</label>
+                  <input id="pecaCategoria" placeholder="Armazenamento, Rede" class="w-full mt-1 p-2 border rounded-lg" />
+                </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label for="tipoEquip" class="block text-sm font-medium">Tipo <span class="font-bold text-red-500">*</span></label>
-                <select id="tipoEquip" class="w-full mt-1 p-2 border rounded-lg">
-                  <option>Notebook</option>
-                  <option>Desktop</option>
-                  <option>Telefonia</option>
-                  <option>Estoque</option>
+                <div>
+                  <label for="pecaQuantidade" class="block text-sm font-medium">Quantidade</label>
+                  <input type="number" id="pecaQuantidade" placeholder="1, 2, 3" class="w-full mt-1 p-2 border rounded-lg" />
+                  <label for="pecaObservacao" class="block text-sm font-medium mt-3">Observação</label>
+                  <input id="pecaObservacao" placeholder="Nova, Testada, Usada" class="w-full mt-1 p-2 border rounded-lg" />
+                </div>
+              </div>
+              <div class="mt-4">
+                <button onclick="adicionarPeca()" id="p_addBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Adicionar</button>
+
+                <button onclick="p_salvarEdicao()" id="p_editBtn" class="hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Salvar Alterações</button>
+
+                <button onclick="p_cancelarEdicao()" id="p_cancelEditBtn" class="hidden bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-xl">Cancelar Edição</button>
+              </div>
+            </div>
+
+            <div class="bg-white border rounded-2xl shadow-sm p-4">
+              <div class="mb-4 flex flex-wrap gap-3 items-center">
+                <div>
+                  <label for="buscaPeca" class="block text-sm font-medium">Buscar</label>
+                  <input id="buscaPeca" type="text" placeholder="Nome, Categoria" class="w-full mt-1 p-2 border rounded-lg" oninput="renderPecas()" />
+                </div>
+              </div>
+              <div class="w-auto overflow-x-auto overflow-y-auto max-h-96 rounded-xl shadow-md border">
+                <table class="w-full text-sm border rounded-xl overflow-hidden shadow-md">
+                  <thead class="bg-slate-50 text-slate-600">
+                    <tr>
+                      <th class="text-left px-4 py-2 border-b">Nome</th>
+                      <th class="text-left px-4 py-2 border-b">Categoria</th>
+                      <th class="text-left px-4 py-2 border-b">Quantidade</th>
+                      <th class="text-left px-4 py-2 border-b">Observação</th>
+                      <th class="text-left px-4 py-2 border-b">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="listaPecas"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- ---------------------------------------------------------------------------------------------------------------------- CHAMADOS -->
+          <section id="page-chamados" class="hidden space-y-6">
+            <div class="bg-white border rounded-2xl shadow-sm p-6">
+              <h3 class="text-xl font-semibold mb-4">Registrar Chamado</h3>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                <div>
+                <label for="chamadoUsuario" class="block text-sm font-medium">Nome</label>
+                <input id="chamadoUsuario" placeholder="e.g. Laudivan" class="w-full mt-1 p-2 border rounded-lg" />
+                <label for="chamadoTipo" class="block text-sm font-medium mt-3">Tipo</label>
+                <select id="chamadoTipo" class="w-full mt-1 p-2 border rounded-lg">
+                  <option>Remoto</option>
+                  <option>Presencial</option>
+                  <option>Blip</option>
                 </select>
-                <label for="patrimonio" class="block text-sm font-medium mt-3">Patrimônio <span class="font-bold text-red-500">*</span></label>
-                <input id="patrimonio" class="w-full mt-1 p-2 border rounded-lg" />
-                <label for="marca" class="block text-sm font-medium mt-3">Marca/Modelo <span class="font-bold text-red-500">*</span></label>
-                <input id="marca" class="w-full mt-1 p-2 border rounded-lg" />
-                <label for="serial" class="block text-sm font-medium mt-3">Número de Série <span class="font-bold text-red-500">*</span></label>
-                <input id="serial" class="w-full mt-1 p-2 border rounded-lg" />
-                <label for="disco" class="block text-sm font-medium mt-3">Disco <span class="font-bold text-red-500">*</span></label>
-                <input id="disco" class="w-full mt-1 p-2 border rounded-lg" />
-                <label for="hostname" class="block text-sm font-medium mt-3">Hostname <span class="font-bold text-red-500">*</span></label>
-                <input id="hostname" class="w-full mt-1 p-2 border rounded-lg" />
+                <label for="chamadoData" class="block text-sm font-medium mt-3">Data</label>
+                <input type="date" id="chamadoData" class="w-full mt-1 p-2 border rounded-lg" />
+                </div>
+
+                <div>
+                <label for="chamadoNumero" class="block text-sm font-medium">Número</label>
+                <input id="chamadoNumero" placeholder="#00000" class="w-full mt-1 p-2 border rounded-lg" />
+                <label for="chamadoTecnico" class="block text-sm font-medium mt-3">Técnico</label>
+                <input id="chamadoTecnico" placeholder="e.g. Douglas" class="w-full mt-1 p-2 border rounded-lg" />
+                </div>
+
+                <div>
+                <label for="chamadoAssunto" class="block text-sm font-medium">Assunto</label>
+                <input id="chamadoAssunto" placeholder="e.g. Teclado não funciona" class="w-full mt-1 p-2 border rounded-lg" />
+                <label for="chamadoGrupo" class="block text-sm font-medium mt-3">Grupo</label>
+                <input id="chamadoGrupo" placeholder="e.g. TI_CSC_Suporte ao Usuário - Cidade" class="w-full mt-1 p-2 border rounded-lg" />
+                </div>
+
               </div>
-              <div>
-                <label for="nome" class="block text-sm font-medium">Nome <span class="font-bold text-red-500">*</span></label>
-                <input id="nome" class="w-full mt-1 p-2 border rounded-lg" />
-                <label for="login" class="block text-sm font-medium mt-3">Login <span class="font-bold text-red-500">*</span></label>
-                <input id="login" class="w-full mt-1 p-2 border rounded-lg" />
-                <label for="setor" class="block text-sm font-medium mt-3">Setor <span class="font-bold text-red-500">*</span></label>
-                <input id="setor" class="w-full mt-1 p-2 border rounded-lg" />
-                <label for="local" class="block text-sm font-medium mt-3">Local <span class="font-bold text-red-500">*</span></label>
-                <input id="local" class="w-full mt-1 p-2 border rounded-lg" />
-                <label for="status" class="block text-sm font-medium mt-3">Status <span class="font-bold text-red-500">*</span></label>
-                <select id="status" class="w-full mt-1 p-2 border rounded-lg">
-                  <option>Em uso</option>
-                  <option>Estoque</option>
-                  <option>Manutenção</option>
-                </select>
-                <label for="sistemaOperacional" class="block text-sm font-medium mt-3">Sistema Operacional <span class="font-bold text-red-500">*</span></label>
-                <input id="sistemaOperacional" class="w-full mt-1 p-2 border rounded-lg" />
+              <div class="mt-4">
+                <button onclick="adicionarChamado()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl">Registrar</button>
               </div>
             </div>
-            <div class="mt-5 flex flex-wrap gap-3">
-              <button onclick="adicionarAtivo()" id="a_addBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Adicionar</button>
 
-              <button onclick="a_salvarEdicao()" id="a_editBtn" class="hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Salvar Alterações</button>
+            <div class="bg-white border rounded-2xl shadow-sm p-4">
 
-              <button onclick="a_cancelarEdicao()" id="a_cancelEditBtn" class="hidden bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-xl">Cancelar Edição</button>
-
-              <input type="file" id="importExcel" accept=".xlsx, .xls" class="hidden" onchange="importarExcel(event)" />
-              <button onclick="document.getElementById('importExcel').click()" 
-              class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl">Importar Dados</button>
-            </div>
-          </div>
-
-          <div class="bg-white border rounded-2xl shadow-sm p-4">
-            <div class="mb-4 flex flex-wrap gap-3 items-center">
-              <div>
-                <label for="filtroTipo" class="block text-sm font-medium">Tipo</label>
-                <select id="filtroTipo" class="w-full mt-1 p-2 border rounded-lg" onchange="renderAtivos()">
-                  <option value="">Todos</option>
-                  <option>Notebook</option>
-                  <option>Desktop</option>
-                  <option>Telefonia</option>
-                  <option>Estoque</option>
-                </select>
-              </div>
-              <div>
-                <label for="filtroStatus" class="block text-sm font-medium">Status</label>
-                <select id="filtroStatus" class="w-full mt-1 p-2 border rounded-lg" onchange="renderAtivos()">
-                  <option value="">Todos</option>
-                  <option>Em uso</option>
-                  <option>Estoque</option>
-                  <option>Manutenção</option>
-                </select>
-              </div>
-              <div>
-                <label for="buscaAtivo" class="block text-sm font-medium">Buscar</label>
-                  <input type="text" id="buscaAtivo" placeholder="Usuário, setor" class="w-full mt-1 p-2 border rounded-lg" oninput="renderAtivos()">
-              </div>
-            </div>
-            <div class="w-auto overflow-x-auto overflow-y-auto max-h-96 rounded-xl shadow-md border">
-              <table class="w-full text-sm border rounded-xl overflow-hidden shadow-md">
-                <thead class="bg-slate-50 text-slate-600">
-                  <tr>
-                    <th class="text-left px-4 py-2 border-b">Tipo</th>
-                    <th class="text-left px-4 py-2 border-b">Patrimônio</th>
-                    <th class="text-left px-4 py-2 border-b">Marca</th>
-                    <th class="text-left px-4 py-2 border-b">Série</th>
-                    <th class="text-left px-4 py-2 border-b">Usuário</th>
-                    <th class="text-left px-4 py-2 border-b">Setor</th>
-                    <th class="text-left px-4 py-2 border-b">SO</th>
-                    <th class="text-left px-4 py-2 border-b">Status</th>
-                    <th class="text-left px-4 py-2 border-b">Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="listaAtivos" class="text-slate-800"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <!---------------------------------------------------------------------------------------------------------------------------- PEÇAS -->
-        <section id="page-pecas" class="hidden space-y-6">
-          <div class="bg-white border rounded-2xl shadow-sm p-6">
-            <h3 class="text-xl font-semibold mb-4">Cadastrar Peça</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label for="pecaNome" class="block text-sm font-medium">Nome</label>
-                <input id="pecaNome" placeholder="Memória RAM, Placa mãe" class="w-full mt-1 p-2 border rounded-lg" />
-                <label for="pecaCategoria" class="block text-sm font-medium mt-3">Categoria</label>
-                <input id="pecaCategoria" placeholder="Armazenamento, Rede" class="w-full mt-1 p-2 border rounded-lg" />
+              <div class="block text-sm font-medium mb-4">
+                <span>Chamados Hoje: <span id="contadorHoje" class="text-red-500">0</span></span> |
+                <span>Chamados no Mês: <span id="contadorMes" class="text-red-500">0</span></span> |
+                <span>Total: <span id="contadorTotal" class="text-blue-500">0</span></span>
               </div>
 
-              <div>
-                <label for="pecaQuantidade" class="block text-sm font-medium">Quantidade</label>
-                <input type="number" id="pecaQuantidade" placeholder="1, 2, 3" class="w-full mt-1 p-2 border rounded-lg" />
-                <label for="pecaObservacao" class="block text-sm font-medium mt-3">Observação</label>
-                <input id="pecaObservacao" placeholder="Nova, Testada, Usada" class="w-full mt-1 p-2 border rounded-lg" />
+              <div class="mb-4 flex flex-wrap gap-3 items-center">
+                <div>
+                  <label for="dataInicio" class="block text-sm font-medium">Inicio</label>
+                  <input type="date" id="dataInicio" class="w-full mt-1 p-2 border rounded-lg" />
+                </div>
+                <div>
+                  <label for="dataFim" class="block text-sm font-medium">Fim</label>
+                  <input type="date" id="dataFim" class="w-full mt-1 p-2 border rounded-lg" />
+                </div>
+                <div>
+                  <label for="buscaChamado" class="block text-sm font-medium">Buscar</label>
+                  <input id="buscaChamado" type="text" placeholder="Nome, assunto, técnico..." class="w-full mt-1 p-2 border rounded-lg" oninput="renderChamados()" />
+                </div>
+                <div class ="mt-5">
+                  <button onclick="filtrarChamados()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Filtrar</button>
+                  <button onclick="limparFiltro()" class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Limpar</button>
+                </div>
+              </div>
+              <div class="w-auto overflow-x-auto overflow-y-auto max-h-96 rounded-xl shadow-md border">
+                <table class="w-full text-sm border rounded-xl overflow-hidden shadow-md">
+                  <thead class="bg-slate-50 text-slate-600">
+                    <tr>
+                      <th class="text-left px-4 py-2 border-b">Usuário</th>
+                      <th class="text-left px-4 py-2 border-b">Número</th>
+                      <th class="text-left px-4 py-2 border-b">Assunto</th>
+                      <th class="text-left px-4 py-2 border-b">Tipo</th>
+                      <th class="text-left px-4 py-2 border-b">Técnico</th>
+                      <th class="text-left px-4 py-2 border-b">Grupo</th>
+                      <th class="text-left px-4 py-2 border-b">Data</th>
+                      <th class="text-left px-4 py-2 border-b">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="listaChamados"></tbody>
+                </table>
               </div>
             </div>
-            <div class="mt-4">
-              <button onclick="adicionarPeca()" id="p_addBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Adicionar</button>
-
-              <button onclick="p_salvarEdicao()" id="p_editBtn" class="hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">Salvar Alterações</button>
-
-              <button onclick="p_cancelarEdicao()" id="p_cancelEditBtn" class="hidden bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-xl">Cancelar Edição</button>
-            </div>
-          </div>
-
-          <div class="bg-white border rounded-2xl shadow-sm p-4">
-            <div class="mb-4 flex flex-wrap gap-3 items-center">
-              <div>
-                <label for="buscaPeca" class="block text-sm font-medium">Buscar</label>
-                <input id="buscaPeca" type="text" placeholder="Nome, Categoria" class="w-full mt-1 p-2 border rounded-lg" oninput="renderPecas()" />
-              </div>
-            </div>
-            <div class="w-auto overflow-x-auto overflow-y-auto max-h-96 rounded-xl shadow-md border">
-              <table class="w-full text-sm border rounded-xl overflow-hidden shadow-md">
-                <thead class="bg-slate-50 text-slate-600">
-                  <tr>
-                    <th class="text-left px-4 py-2 border-b">Nome</th>
-                    <th class="text-left px-4 py-2 border-b">Categoria</th>
-                    <th class="text-left px-4 py-2 border-b">Quantidade</th>
-                    <th class="text-left px-4 py-2 border-b">Observação</th>
-                    <th class="text-left px-4 py-2 border-b">Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="listaPecas"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <!-- ---------------------------------------------------------------------------------------------------------------------- CHAMADOS -->
-        <section id="page-chamados" class="hidden space-y-6">
-          <div class="bg-white border rounded-2xl shadow-sm p-6">
-            <h3 class="text-xl font-semibold mb-4">Registrar Chamado</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-              <div>
-              <label for="chamadoUsuario" class="block text-sm font-medium">Nome</label>
-              <input id="chamadoUsuario" placeholder="e.g. Laudivan" class="w-full mt-1 p-2 border rounded-lg" />
-              <label for="chamadoTipo" class="block text-sm font-medium mt-3">Tipo</label>
-              <select id="chamadoTipo" class="w-full mt-1 p-2 border rounded-lg">
-                <option>Remoto</option>
-                <option>Presencial</option>
-                <option>Blip</option>
-              </select>
-              <label for="chamadoData" class="block text-sm font-medium mt-3">Data</label>
-              <input type="date" id="chamadoData" class="w-full mt-1 p-2 border rounded-lg" />
-              </div>
-
-              <div>
-              <label for="chamadoNumero" class="block text-sm font-medium">Número</label>
-              <input id="chamadoNumero" placeholder="#00000" class="w-full mt-1 p-2 border rounded-lg" />
-              <label for="chamadoTecnico" class="block text-sm font-medium mt-3">Técnico</label>
-              <input id="chamadoTecnico" placeholder="e.g. Douglas" class="w-full mt-1 p-2 border rounded-lg" />
-              </div>
-
-              <div>
-              <label for="chamadoAssunto" class="block text-sm font-medium">Assunto</label>
-              <input id="chamadoAssunto" placeholder="e.g. Teclado não funciona" class="w-full mt-1 p-2 border rounded-lg" />
-              <label for="chamadoGrupo" class="block text-sm font-medium mt-3">Grupo</label>
-              <input id="chamadoGrupo" placeholder="e.g. TI_CSC_Suporte ao Usuário - Cidade" class="w-full mt-1 p-2 border rounded-lg" />
-              </div>
-
-            </div>
-            <div class="mt-4">
-              <button onclick="adicionarChamado()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl">Registrar</button>
-            </div>
-          </div>
-
-          <div class="bg-white border rounded-2xl shadow-sm p-4">
-
-            <div class="block text-sm font-medium mb-4">
-              <span>Chamados Hoje: <span id="contadorHoje" class="text-red-500">0</span></span> |
-              <span>Chamados no Mês: <span id="contadorMes" class="text-red-500">0</span></span> |
-              <span>Total: <span id="contadorTotal" class="text-blue-500">0</span></span>
-            </div>
-
-            <div class="mb-4 flex flex-wrap gap-3 items-center">
-              <div>
-                <label for="dataInicio" class="block text-sm font-medium">Inicio</label>
-                <input type="date" id="dataInicio" class="w-full mt-1 p-2 border rounded-lg" />
-              </div>
-              <div>
-                <label for="dataFim" class="block text-sm font-medium">Fim</label>
-                <input type="date" id="dataFim" class="w-full mt-1 p-2 border rounded-lg" />
-              </div>
-              <div>
-                <label for="buscaChamado" class="block text-sm font-medium">Buscar</label>
-                <input id="buscaChamado" type="text" placeholder="Nome, assunto, técnico..." class="w-full mt-1 p-2 border rounded-lg" oninput="renderChamados()" />
-              </div>
-              <div class ="mt-5">
-                <button onclick="filtrarChamados()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Filtrar</button>
-                <button onclick="limparFiltro()" class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg">Limpar</button>
-              </div>
-            </div>
-            <div class="w-auto overflow-x-auto overflow-y-auto max-h-96 rounded-xl shadow-md border">
-              <table class="w-full text-sm border rounded-xl overflow-hidden shadow-md">
-                <thead class="bg-slate-50 text-slate-600">
-                  <tr>
-                    <th class="text-left px-4 py-2 border-b">Usuário</th>
-                    <th class="text-left px-4 py-2 border-b">Número</th>
-                    <th class="text-left px-4 py-2 border-b">Assunto</th>
-                    <th class="text-left px-4 py-2 border-b">Tipo</th>
-                    <th class="text-left px-4 py-2 border-b">Técnico</th>
-                    <th class="text-left px-4 py-2 border-b">Grupo</th>
-                    <th class="text-left px-4 py-2 border-b">Data</th>
-                    <th class="text-left px-4 py-2 border-b">Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="listaChamados"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-      </div>
+          </section>
+        </div>
     </main>
   </div>
-
   <script>
     const API_URL = 'https://pgi-kt9a.onrender.com';
 
@@ -501,17 +502,29 @@
     const menuBtn = document.getElementById('menuBtn');
     const overlayMobile = document.getElementById('overlayMobile');
     const sidebar = document.getElementById('sidebar');
+    const closeOverlay = document.querySelectorAll('#btnAtivos, #btnPecas, #btnChamados, #btnDashboard');
 
     menuBtn.addEventListener('click', () => {
       overlayMobile.classList.remove('hidden');
       setTimeout(() => {
-        sidebar.classList.remove('-translate-x-full');
+        sidebar.classList.remove('-translate-y-full');
       }, 10);
+    });
+
+    closeOverlay.forEach(section => {
+      section.addEventListener('click', () => {
+        if (!overlayMobile.classList.contains('hidden')) {
+          sidebar.classList.add('-translate-y-full');
+          setTimeout(() => {
+            overlayMobile.classList.add('hidden');
+          }, 10);
+        }
+      });
     });
 
     overlayMobile.addEventListener('click', (e) => {
       if (e.target === overlayMobile) {
-        sidebar.classList.add('-translate-x-full');
+        sidebar.classList.add('-translate-y-full');
         setTimeout(() => {
           overlayMobile.classList.add('hidden');
         }, 300);
