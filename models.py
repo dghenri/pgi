@@ -13,15 +13,15 @@ class Ativo(Base):
         nullable=False, default='Notebook'
     )
     patrimonio = Column(String, nullable=False)
-    marca = Column(String)
+    marca = Column(String, nullable=True)
     serial = Column(String, nullable=False)
-    disco = Column(String)
+    disco = Column(String, nullable=True)
     hostname = Column(String, nullable=False)
-    nome = Column(String)
-    login = Column(String)
+    nome = Column(String, nullable=True)
+    login = Column(String, nullable=True)
     setor = Column(String, nullable=False)
     local = Column(String, nullable=False)
-    sistemaOperacional = Column(String)
+    sistemaOperacional = Column(String, nullable=True)
     status = Column(
         Enum('Em uso', 'Estoque', 'Manutenção', name='status_enum'),
         nullable=False, default='Em uso'

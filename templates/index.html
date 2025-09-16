@@ -40,7 +40,7 @@
           <span id="badgeAtivos" class="ml-auto inline-flex items-center justify-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-700">0</span>
         </button>
 
-        <button data-page="pecas" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100 group">
+        <button data-page="peças" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100 group">
           <span class="text-xl">🛠️</span>
           <span class="font-medium">Peças</span>
           <span id="badgePecas" class="ml-auto inline-flex items-center justify-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-700">0</span>
@@ -63,6 +63,13 @@
                 <aside id="sidebar" 
                 class="md:sticky md:top-0 md:h-screen bg-white border-r border-slate-200 shadow-sm w-full transform -translate-y-full transition-transform duration-300 ease-in-out">
                   <nav class="md:hidden space-y-2 px-3 py-5">
+                    <div class="flex item-center gap-3 mb-4">
+                      <div class="h-10 w-10 rounded-2xl bg-blue-600 text-white grid place-items-center text-lg font-bold">IT</div>
+                      <div>
+                        <h1 class="text-lg font-bold">Painel de Gestão</h1>
+                        <p class="text-xs text-slate-500">Ativos • Peças • Chamados</p>
+                      </div>
+                    </div>
                     <button id="btnDashboard" data-page="dashboard" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl bg-slate-100/50 group" onclick="renderAtivos()">
                       <span class="text-xl">📊</span>
                       <span class="font-medium">Dashboard</span>
@@ -73,7 +80,7 @@
                       <span class="font-medium">Ativos</span>
                     </button>
 
-                    <button id="btnPecas" data-page="pecas" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl bg-slate-100/50 group">
+                    <button id="btnPecas" data-page="peças" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl bg-slate-100/50 group">
                       <span class="text-xl">🛠️</span>
                       <span class="font-medium">Peças</span>
                     </button>
@@ -218,7 +225,7 @@
                     <option>Estoque</option>
                     <option>Manutenção</option>
                   </select>
-                  <label for="sistemaOperacional" class="block text-sm font-medium mt-3">Sistema Operacional <span class="font-bold text-red-500">*</span></label>
+                  <label for="sistemaOperacional" class="block text-sm font-medium mt-3">Sistema Operacional</label>
                   <input id="sistemaOperacional" class="w-full mt-1 p-2 border rounded-lg" />
                 </div>
               </div>
@@ -283,7 +290,7 @@
           </section>
 
           <!---------------------------------------------------------------------------------------------------------------------------- PEÇAS -->
-          <section id="page-pecas" class="hidden space-y-6">
+          <section id="page-peças" class="hidden space-y-6">
             <div class="bg-white border rounded-2xl shadow-sm p-6">
               <h3 class="text-xl font-semibold">Cadastrar Peça</h3>
               <p class="mb-2 text-slate-500"><span class="font-bold text-red-500">*</span> Campos obrigatórios</p>
@@ -341,32 +348,45 @@
               <h3 class="text-xl font-semibold">Registrar Chamado</h3>
               <p class="mb-2 text-slate-500"><span class="font-bold text-red-500">*</span> Campos obrigatórios</p>
               <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
                 <div>
-                <label for="chamadoUsuario" class="block text-sm font-medium">Nome <span class="font-bold text-red-500">*</span></label>
-                <input id="chamadoUsuario" placeholder="e.g. Laudivan" class="w-full mt-1 p-2 border rounded-lg" />
-                <label for="chamadoTipo" class="block text-sm font-medium mt-3">Tipo <span class="font-bold text-red-500">*</span></label>
-                <select id="chamadoTipo" class="w-full mt-1 p-2 border rounded-lg">
-                  <option>Remoto</option>
-                  <option>Presencial</option>
-                  <option>Blip</option>
-                </select>
-                <label for="chamadoData" class="block text-sm font-medium mt-3">Data <span class="font-bold text-red-500">*</span></label>
-                <input type="date" id="chamadoData" class="w-full mt-1 p-2 border rounded-lg" />
+                  <div>
+                    <label for="chamadoUsuario" class="block text-sm font-medium">Nome <span class="font-bold text-red-500">*</span></label>
+                    <input id="chamadoUsuario" placeholder="e.g. Laudivan" class="w-full mt-1 p-2 border rounded-lg" />
+                  </div>
+                  <div>
+                    <label for="chamadoTipo" class="block text-sm font-medium mt-1">Tipo <span class="font-bold text-red-500">*</span></label>
+                    <select id="chamadoTipo" class="w-full mt-1 p-2 border rounded-lg">
+                      <option>Remoto</option>
+                      <option>Presencial</option>
+                      <option>Blip</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="chamadoData" class="block text-sm font-medium mt-1">Data <span class="font-bold text-red-500">*</span></label>
+                    <input type="date" id="chamadoData" class="w-full mt-1 p-2 border rounded-lg" />
+                  </div>
                 </div>
 
                 <div>
-                <label for="chamadoNumero" class="block text-sm font-medium">Número <span class="font-bold text-red-500">*</span></label>
-                <input id="chamadoNumero" placeholder="#00000" class="w-full mt-1 p-2 border rounded-lg" />
-                <label for="chamadoTecnico" class="block text-sm font-medium mt-3">Técnico <span class="font-bold text-red-500">*</span></label>
-                <input id="chamadoTecnico" placeholder="e.g. Douglas" class="w-full mt-1 p-2 border rounded-lg" />
+                  <div>
+                    <label for="chamadoNumero" class="block text-sm font-medium">Número <span class="font-bold text-red-500">*</span></label>
+                    <input id="chamadoNumero" placeholder="00000" class="w-full mt-1 p-2 border rounded-lg" />
+                  </div>
+                  <div>
+                    <label for="chamadoTecnico" class="block text-sm font-medium mt-1">Técnico <span class="font-bold text-red-500">*</span></label>
+                    <input id="chamadoTecnico" placeholder="e.g. Douglas" class="w-full mt-1 p-2 border rounded-lg" />
+                  </div>
                 </div>
 
                 <div>
-                <label for="chamadoAssunto" class="block text-sm font-medium">Assunto <span class="font-bold text-red-500">*</span></label>
-                <input id="chamadoAssunto" placeholder="e.g. Teclado não funciona" class="w-full mt-1 p-2 border rounded-lg" />
-                <label for="chamadoGrupo" class="block text-sm font-medium mt-3">Grupo <span class="font-bold text-red-500">*</span></label>
-                <input id="chamadoGrupo" placeholder="e.g. TI_CSC_Suporte ao Usuário - Cidade" class="w-full mt-1 p-2 border rounded-lg" />
+                  <div>
+                    <label for="chamadoAssunto" class="block text-sm font-medium">Assunto <span class="font-bold text-red-500">*</span></label>
+                    <input id="chamadoAssunto" placeholder="e.g. Teclado não funciona" class="w-full mt-1 p-2 border rounded-lg" />
+                  </div>
+                  <div>
+                    <label for="chamadoGrupo" class="block text-sm font-medium mt-1">Grupo <span class="font-bold text-red-500">*</span></label>
+                    <input id="chamadoGrupo" placeholder="e.g. TI_CSC_Suporte ao Usuário - Cidade" class="w-full mt-1 p-2 border rounded-lg" />
+                  </div>
                 </div>
 
               </div>
@@ -479,7 +499,44 @@
     }
 
     function limparCampos() {
-      document.querySelectorAll('#page-ativos input, #page-ativos select, #page-pecas input, #page-pecas select, #page-chamados input, #page-chamados select').forEach(el => el.value = '');
+      document.querySelectorAll('#page-ativos input, #page-ativos select, #page-peças input, #page-peças select, #page-chamados input, #page-chamados select')
+        .forEach(el => {
+          el.value = '';
+          el.classList.remove('border-red-500');
+        });
+
+        document.querySelectorAll('.erro-campo').forEach(el => el.remove());
+    }
+
+    function validarCampos(ids) {
+      let valido = true;
+
+      ids.forEach(id => {
+        const campo = document.getElementById(id);
+        if (!campo) {
+          console.warn(`⚠️ Campo ${id} não encontrado na página.`);
+          return;
+        }
+
+        let erro = campo.parentNode.querySelector(".error-campo");
+        if (erro) erro.remove();
+
+        if (!campo.value.trim()) {
+          valido = false;
+
+          erro = document.createElement("p");
+          erro.textContent = `⚠️ Este campo é obrigatório!`;
+          erro.className = "erro-campo text-red-600 text-sm";
+
+          campo.parentNode.appendChild(erro);
+
+          campo.classList.add("border-red-500")
+        } else {
+          campo.classList.remove("border-red-500")
+        }
+      });
+
+      return valido;
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------- Navegação
@@ -498,7 +555,7 @@
       document.querySelector(`aside nav button[data-page="${key}"]`).classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-600');
     }
     pageButtons.forEach(btn => btn.addEventListener('click', () => showPage(btn.dataset.page)));
-      showPage('dashboard'); // Página inicial
+      showPage('chamados'); // Página inicial
 
     //------------------------------------------------------------------------------------------------------------------------------ Menu Mobile
     const menuBtn = document.getElementById('menuBtn');
@@ -697,9 +754,9 @@
             <td class="hidden px-4 py-2 border-b">${a.id}</td>
             <td class="px-4 py-2 border-b">${a.tipoEquip}</td>
             <td class="px-4 py-2 border-b">${a.patrimonio}</td>
-            <td class="px-4 py-2 border-b">${a.marca}</td>
+            <td class="px-4 py-2 border-b">${a.marca || '-'}</td>
             <td class="px-4 py-2 border-b">${a.serial}</td>
-            <td class="px-4 py-2 border-b">${a.nome}</td>
+            <td class="px-4 py-2 border-b">${a.nome || '-'}</td>
             <td class="px-4 py-2 border-b">${a.setor}</td>
             <td class="px-4 py-2 border-b">${a.sistemaOperacional || '-'}</td>
             <td class="px-4 py-2 border-b">
@@ -724,8 +781,8 @@
             <td class="hidden px-4 py-2 border-b">${a.id}</td>
             <td class="px-4 py-2 border-b">${a.tipoEquip}</td>
             <td class="px-4 py-2 border-b">${a.patrimonio}</td>
-            <td class="px-4 py-2 border-b">${a.marca}</td>
-            <td class="px-4 py-2 border-b">${a.nome}</td>
+            <td class="px-4 py-2 border-b">${a.marca || '-'}</td>
+            <td class="px-4 py-2 border-b">${a.nome || '-'}</td>
             <td class="px-4 py-2 border-b">${a.setor}</td>
             <td class="px-4 py-2 border-b">${a.sistemaOperacional || '-'}</td>
             <td class="px-4 py-2 border-b">
@@ -744,6 +801,10 @@
     }
     //----------------------------------------------------------------------------------------------------------------------------Adiciona Ativo
     async function adicionarAtivo() {
+      if (!validarCampos (['tipoEquip', 'patrimonio', 'serial', 'hostname', 'setor', 'local', 'status'])) {
+        return;
+      }
+
       const ativo = {
         tipoEquip: document.getElementById("tipoEquip").value,
         patrimonio: document.getElementById("patrimonio").value,
@@ -757,8 +818,8 @@
         local: document.getElementById("local").value,
         sistemaOperacional: document.getElementById("sistemaOperacional").value,
         status: document.getElementById("status").value
-      };
-
+      }
+    
       // Confirmação antes de adicionar
       if (!confirm(`Deseja realmente adicionar o ativo ${ativo.hostname}?`)) return;
 
@@ -924,12 +985,17 @@
 
     //-------------------------------------------------------------------------------------------------------------------------------- Adicionar Peça
     async function adicionarPeca() {
+      if (!validarCampos (['pecaNome', 'pecaCategoria', 'pecaQuantidade', 'pecaObservacao'])) {
+        return;
+      }
+
+
       const peca = {
         nome: document.getElementById('pecaNome').value,
         categoria: document.getElementById('pecaCategoria').value,
         quantidade: document.getElementById('pecaQuantidade').value,
         observacao: document.getElementById('pecaObservacao').value
-      };
+      }
 
       if (!confirm(`Deseja realmente adicionar a peça ${peca.nome}?`)) return;
 
@@ -1182,6 +1248,10 @@
 
     //------------------------------------------------------------------------------------------------------------------- Adicionar Chamado
     async function adicionarChamado() {
+      if (!validarCampos(['chamadoUsuario', 'chamadoNumero', 'chamadoAssunto', 'chamadoTipo', 'chamadoTecnico', 'chamadoGrupo', 'chamadoData'])) {
+        return;
+      }
+
       const chamado = {
         nome: document.getElementById('chamadoUsuario').value,
         numero: document.getElementById('chamadoNumero').value,
@@ -1238,7 +1308,7 @@
     //-------------------------------------------------------------------------------------------------------------------------- Atalhos de Teclado
     // Permite "Enter" para adicionar ativo
     const sectionAtivos = document.getElementById('page-ativos');
-    const sectionPecas = document.getElementById('page-pecas');
+    const sectionPecas = document.getElementById('page-peças');
     const sectionChamados = document.getElementById('page-chamados');
 
     sectionAtivos.addEventListener('keypress', function(e) {
