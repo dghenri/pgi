@@ -194,19 +194,19 @@
                   </select>
                   <label for="patrimonio" class="block text-sm font-medium mt-3">Patrimônio <span class="font-bold text-red-500">*</span></label>
                   <input id="patrimonio" class="w-full mt-1 p-2 border rounded-lg" />
-                  <label for="marca" class="block text-sm font-medium mt-3">Marca/Modelo <span class="font-bold text-red-500">*</span></label>
+                  <label for="marca" class="block text-sm font-medium mt-3">Marca/Modelo</label>
                   <input id="marca" class="w-full mt-1 p-2 border rounded-lg" />
                   <label for="serial" class="block text-sm font-medium mt-3">Número de Série <span class="font-bold text-red-500">*</span></label>
                   <input id="serial" class="w-full mt-1 p-2 border rounded-lg" />
-                  <label for="disco" class="block text-sm font-medium mt-3">Disco <span class="font-bold text-red-500">*</span></label>
+                  <label for="disco" class="block text-sm font-medium mt-3">Disco</label>
                   <input id="disco" class="w-full mt-1 p-2 border rounded-lg" />
                   <label for="hostname" class="block text-sm font-medium mt-3">Hostname <span class="font-bold text-red-500">*</span></label>
                   <input id="hostname" class="w-full mt-1 p-2 border rounded-lg" />
                 </div>
                 <div>
-                  <label for="nome" class="block text-sm font-medium">Nome <span class="font-bold text-red-500">*</span></label>
+                  <label for="nome" class="block text-sm font-medium">Nome </label>
                   <input id="nome" class="w-full mt-1 p-2 border rounded-lg" />
-                  <label for="login" class="block text-sm font-medium mt-3">Login <span class="font-bold text-red-500">*</span></label>
+                  <label for="login" class="block text-sm font-medium mt-3">Login</label>
                   <input id="login" class="w-full mt-1 p-2 border rounded-lg" />
                   <label for="setor" class="block text-sm font-medium mt-3">Setor <span class="font-bold text-red-500">*</span></label>
                   <input id="setor" class="w-full mt-1 p-2 border rounded-lg" />
@@ -285,19 +285,20 @@
           <!---------------------------------------------------------------------------------------------------------------------------- PEÇAS -->
           <section id="page-pecas" class="hidden space-y-6">
             <div class="bg-white border rounded-2xl shadow-sm p-6">
-              <h3 class="text-xl font-semibold mb-4">Cadastrar Peça</h3>
+              <h3 class="text-xl font-semibold">Cadastrar Peça</h3>
+              <p class="mb-2 text-slate-500"><span class="font-bold text-red-500">*</span> Campos obrigatórios</p>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label for="pecaNome" class="block text-sm font-medium">Nome</label>
+                  <label for="pecaNome" class="block text-sm font-medium">Nome <span class="font-bold text-red-500">*</span></label>
                   <input id="pecaNome" placeholder="Memória RAM, Placa mãe" class="w-full mt-1 p-2 border rounded-lg" />
-                  <label for="pecaCategoria" class="block text-sm font-medium mt-3">Categoria</label>
+                  <label for="pecaCategoria" class="block text-sm font-medium mt-3">Categoria <span class="font-bold text-red-500">*</span></label>
                   <input id="pecaCategoria" placeholder="Armazenamento, Rede" class="w-full mt-1 p-2 border rounded-lg" />
                 </div>
 
                 <div>
-                  <label for="pecaQuantidade" class="block text-sm font-medium">Quantidade</label>
+                  <label for="pecaQuantidade" class="block text-sm font-medium">Quantidade <span class="font-bold text-red-500">*</span></label>
                   <input type="number" id="pecaQuantidade" placeholder="1, 2, 3" class="w-full mt-1 p-2 border rounded-lg" />
-                  <label for="pecaObservacao" class="block text-sm font-medium mt-3">Observação</label>
+                  <label for="pecaObservacao" class="block text-sm font-medium mt-3">Observação <span class="font-bold text-red-500">*</span></label>
                   <input id="pecaObservacao" placeholder="Nova, Testada, Usada" class="w-full mt-1 p-2 border rounded-lg" />
                 </div>
               </div>
@@ -337,33 +338,34 @@
           <!-- ---------------------------------------------------------------------------------------------------------------------- CHAMADOS -->
           <section id="page-chamados" class="hidden space-y-6">
             <div class="bg-white border rounded-2xl shadow-sm p-6">
-              <h3 class="text-xl font-semibold mb-4">Registrar Chamado</h3>
+              <h3 class="text-xl font-semibold">Registrar Chamado</h3>
+              <p class="mb-2 text-slate-500"><span class="font-bold text-red-500">*</span> Campos obrigatórios</p>
               <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
                 <div>
-                <label for="chamadoUsuario" class="block text-sm font-medium">Nome</label>
+                <label for="chamadoUsuario" class="block text-sm font-medium">Nome <span class="font-bold text-red-500">*</span></label>
                 <input id="chamadoUsuario" placeholder="e.g. Laudivan" class="w-full mt-1 p-2 border rounded-lg" />
-                <label for="chamadoTipo" class="block text-sm font-medium mt-3">Tipo</label>
+                <label for="chamadoTipo" class="block text-sm font-medium mt-3">Tipo <span class="font-bold text-red-500">*</span></label>
                 <select id="chamadoTipo" class="w-full mt-1 p-2 border rounded-lg">
                   <option>Remoto</option>
                   <option>Presencial</option>
                   <option>Blip</option>
                 </select>
-                <label for="chamadoData" class="block text-sm font-medium mt-3">Data</label>
+                <label for="chamadoData" class="block text-sm font-medium mt-3">Data <span class="font-bold text-red-500">*</span></label>
                 <input type="date" id="chamadoData" class="w-full mt-1 p-2 border rounded-lg" />
                 </div>
 
                 <div>
-                <label for="chamadoNumero" class="block text-sm font-medium">Número</label>
+                <label for="chamadoNumero" class="block text-sm font-medium">Número <span class="font-bold text-red-500">*</span></label>
                 <input id="chamadoNumero" placeholder="#00000" class="w-full mt-1 p-2 border rounded-lg" />
-                <label for="chamadoTecnico" class="block text-sm font-medium mt-3">Técnico</label>
+                <label for="chamadoTecnico" class="block text-sm font-medium mt-3">Técnico <span class="font-bold text-red-500">*</span></label>
                 <input id="chamadoTecnico" placeholder="e.g. Douglas" class="w-full mt-1 p-2 border rounded-lg" />
                 </div>
 
                 <div>
-                <label for="chamadoAssunto" class="block text-sm font-medium">Assunto</label>
+                <label for="chamadoAssunto" class="block text-sm font-medium">Assunto <span class="font-bold text-red-500">*</span></label>
                 <input id="chamadoAssunto" placeholder="e.g. Teclado não funciona" class="w-full mt-1 p-2 border rounded-lg" />
-                <label for="chamadoGrupo" class="block text-sm font-medium mt-3">Grupo</label>
+                <label for="chamadoGrupo" class="block text-sm font-medium mt-3">Grupo <span class="font-bold text-red-500">*</span></label>
                 <input id="chamadoGrupo" placeholder="e.g. TI_CSC_Suporte ao Usuário - Cidade" class="w-full mt-1 p-2 border rounded-lg" />
                 </div>
 

@@ -12,15 +12,15 @@ class Ativo(Base):
         Enum('Notebook', 'Desktop', 'Telefonia', 'Estoque', name='tipoEquip_enum'),
         nullable=False, default='Notebook'
     )
-    patrimonio = Column(String)
+    patrimonio = Column(String, nullable=False)
     marca = Column(String)
-    serial = Column(String)
+    serial = Column(String, nullable=False)
     disco = Column(String)
-    hostname = Column(String)
+    hostname = Column(String, nullable=False)
     nome = Column(String)
     login = Column(String)
-    setor = Column(String)
-    local = Column(String)
+    setor = Column(String, nullable=False)
+    local = Column(String, nullable=False)
     sistemaOperacional = Column(String)
     status = Column(
         Enum('Em uso', 'Estoque', 'Manutenção', name='status_enum'),
@@ -32,23 +32,23 @@ class Peca(Base):
     __tablename__ = 'pecas'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    nome = Column(String)
-    categoria = Column(String)
-    quantidade = Column(Integer)
-    observacao = Column(String)
+    nome = Column(String, nullable=False)
+    categoria = Column(String, nullable=False)
+    quantidade = Column(Integer, nullable=False)
+    observacao = Column(String, nullable=False)
 
 
 class Chamado(Base):
     __tablename__ = 'chamados'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    nome = Column(String)
-    numero = Column(Integer)
-    assunto = Column(String)
+    nome = Column(String, nullable=False)
+    numero = Column(Integer, nullable=False)
+    assunto = Column(String, nullable=False)
     tipoChamado = Column(
         Enum('Remoto', 'Presencial', 'Blip', name='tipoChamado_enum'),
         nullable=False, default='Remoto'
     )
-    tecnico = Column(String)
-    grupo = Column(String)
-    data = Column(Date)
+    tecnico = Column(String, nullable=False)
+    grupo = Column(String, nullable=False)
+    data = Column(Date, nullable=False)
