@@ -26,9 +26,6 @@
             <p class="text-xs text-slate-500">Ativos • Peças • Chamados</p>
           </div>
         </div>
-        <div>
-          <button id="menuBtn" class="md:hidden rounded-lg border px-2 py-1">☰</button>
-        </div>
       </div>
 
       <nav class="hidden md:block p-3 space-y-2">
@@ -65,23 +62,23 @@
               <div id="overlayMobile" class="fixed inset-0 z-40 hidden bg-black/50 backdrop-blur-sm">
                 <aside id="sidebar" 
                 class="md:sticky md:top-0 md:h-screen bg-white border-r border-slate-200 shadow-sm w-full transform -translate-y-full transition-transform duration-300 ease-in-out">
-                  <nav class="md:hidden space-y-2">
-                    <button id="btnDashboard" data-page="dashboard" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100/50 group" onclick="renderAtivos()">
+                  <nav class="md:hidden space-y-2 px-3 py-5">
+                    <button id="btnDashboard" data-page="dashboard" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl bg-slate-100/50 group" onclick="renderAtivos()">
                       <span class="text-xl">📊</span>
                       <span class="font-medium">Dashboard</span>
                     </button>
 
-                    <button id="btnAtivos" data-page="ativos" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100/50 group">
+                    <button id="btnAtivos" data-page="ativos" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl bg-slate-100/50 group">
                       <span class="text-xl">💻</span>
                       <span class="font-medium">Ativos</span>
                     </button>
 
-                    <button id="btnPecas" data-page="pecas" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100/50 group">
+                    <button id="btnPecas" data-page="pecas" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl bg-slate-100/50 group">
                       <span class="text-xl">🛠️</span>
                       <span class="font-medium">Peças</span>
                     </button>
 
-                    <button id="btnChamados" data-page="chamados" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100/50 group">
+                    <button id="btnChamados" data-page="chamados" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl bg-slate-100/50 group">
                       <span class="text-xl">🎫</span>
                       <span class="font-medium">Chamados</span>
                     </button>
@@ -91,8 +88,11 @@
             </div>
           </div>
         </div>
-        <div class="sticky top-0 z-20 bg-white/70 backdrop-blur border-b border-slate-200 px-5 py-4 flex items-center gap-3">
+        <div class="flex justify-between sticky top-0 z-20 bg-white/70 backdrop-blur border-b border-slate-200 px-5 py-4 flex items-center gap-3">
             <h2 id="pageTitle" class="text-2xl font-bold tracking-tight text-gray-900">Dashboard</h2>
+            <div>
+              <button id="menuBtn" class="md:hidden rounded-lg border px-2 py-1">☰</button>
+            </div>
         </div>
 
         <div class="max-w-7xl mx-auto p-4 md:p-6">
@@ -502,12 +502,12 @@
 
     //------------------------------------------------------------------------------------------------------------------------------ Menu Mobile
     const menuBtn = document.getElementById('menuBtn');
-    const overlayMobile = document.getElementById('overlayMobile');
+    const overlay = document.getElementById('overlayMobile');
     const sidebar = document.getElementById('sidebar');
     const closeOverlay = document.querySelectorAll('#btnAtivos, #btnPecas, #btnChamados, #btnDashboard');
 
     menuBtn.addEventListener('click', () => {
-      overlayMobile.classList.remove('hidden');
+      overlay.classList.remove('hidden');
       setTimeout(() => {
         sidebar.classList.remove('-translate-y-full');
       }, 10);
@@ -515,20 +515,20 @@
 
     closeOverlay.forEach(section => {
       section.addEventListener('click', () => {
-        if (!overlayMobile.classList.contains('hidden')) {
+        if (!overlay.classList.contains('hidden')) {
           sidebar.classList.add('-translate-y-full');
           setTimeout(() => {
-            overlayMobile.classList.add('hidden');
+            overlay.classList.add('hidden');
           }, 10);
         }
       });
     });
 
-    overlayMobile.addEventListener('click', (e) => {
-      if (e.target === overlayMobile) {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
         sidebar.classList.add('-translate-y-full');
         setTimeout(() => {
-          overlayMobile.classList.add('hidden');
+          overlay.classList.add('hidden');
         }, 300);
       }
     })
