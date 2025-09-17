@@ -481,8 +481,8 @@
                 <table class="w-full text-sm border rounded-xl overflow-hidden shadow-md">
                   <thead class="bg-slate-50 text-slate-600">
                     <tr>
+                      <th class="text-left px-4 py-2 border-b">Número #</th>
                       <th class="text-left px-4 py-2 border-b">Usuário</th>
-                      <th class="text-left px-4 py-2 border-b">Número</th>
                       <th class="text-left px-4 py-2 border-b">Assunto</th>
                       <th class="text-left px-4 py-2 border-b">Tipo</th>
                       <th class="text-left px-4 py-2 border-b">Técnico</th>
@@ -754,6 +754,9 @@
         },
         options: {
           scales: {
+            x: {
+              offset: true
+            },
             y: {
               beginAtZero: true,
               ticks: {
@@ -844,7 +847,7 @@
       // Tabela Principal
       filtrados.forEach(a => {
         const row = `
-          <tr class="hover:bg-slate-200">
+          <tr class="hover:bg-slate-100">
             <td class="hidden px-4 py-2 border-b">${a.id}</td>
             <td class="px-4 py-2 border-b">${a.tipoEquip}</td>
             <td class="px-4 py-2 border-b">${a.patrimonio}</td>
@@ -853,15 +856,15 @@
             <td class="px-4 py-2 border-b">${a.nome || '-'}</td>
             <td class="px-4 py-2 border-b">${a.setor}</td>
             <td class="px-4 py-2 border-b">${a.sistemaOperacional || '-'}</td>
-            <td class="px-4 py-2 border-b">
+            <td class="px-0 py-2 border-b">
               <span class="inline-flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full ${a.status === 'Em uso' ? 'bg-green-500' : a.status === 'Manutenção' ? 'bg-yellow-500' : 'bg-slate-400'}"></span>
+                <span class="w-2 h-2 rounded-full ${a.status === 'Em uso' ? 'bg-green-500' : a.status === 'Manutenção' ? 'bg-yellow-500' : 'bg-slate-400'}"></span>
                 ${a.status}
               </span>
             </td>
             <td class="px-4 py-2 border-b">
-              <button class="text-md bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded" onclick="editarAtivo(${a.id})">✏️ Editar</button>
-              <button class="text-md bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded" onclick="apagarAtivo(${a.id})">🗑️ Apagar</button>
+              <button class="inline-flex items-center gap-x-2 rounded px-5 py-1 text-md/5 font-medium sm:text-xs/5 forced-colors:outline bg-blue-400/20 text-blue-700 hover:bg-blue-400/30" onclick="editarAtivo(${a.id})">Editar</button>
+              <button class="inline-flex items-center gap-x-2 rounded px-4 py-1 text-md/5 font-medium sm:text-xs/5 forced-colors:outline bg-rose-400/15 text-rose-700 hover:bg-rose-400/30" onclick="apagarAtivo(${a.id})">Apagar</button>
             </td>
           </tr>`;
         listaPrincipal.innerHTML += row;
@@ -871,7 +874,7 @@
       // Tabela Resumo
       filtrados.forEach(a => {
         const row = `
-          <tr class="hover:bg-slate-200">
+          <tr class="hover:bg-slate-100">
             <td class="hidden px-4 py-2 border-b">${a.id}</td>
             <td class="px-4 py-2 border-b">${a.tipoEquip}</td>
             <td class="px-4 py-2 border-b">${a.patrimonio}</td>
@@ -879,9 +882,9 @@
             <td class="px-4 py-2 border-b">${a.nome || '-'}</td>
             <td class="px-4 py-2 border-b">${a.setor}</td>
             <td class="px-4 py-2 border-b">${a.sistemaOperacional || '-'}</td>
-            <td class="px-4 py-2 border-b">
+            <td class="px-0 py-2 border-b">
               <span class="inline-flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full ${a.status === 'Em uso' ? 'bg-green-500' : a.status === 'Manutenção' ? 'bg-yellow-500' : 'bg-slate-400'}"></span>
+                <span class="w-2 h-2 rounded-full ${a.status === 'Em uso' ? 'bg-green-500' : a.status === 'Manutenção' ? 'bg-yellow-500' : 'bg-slate-400'}"></span>
                 ${a.status}
               </span>
             </td>
@@ -1058,15 +1061,15 @@
       .filter(p => !busca || (p.nome && p.nome.toLowerCase().includes(busca)) || (p.categoria && p.categoria.toLowerCase().includes(busca)))
       .forEach(p => {
         const row = `
-          <tr class="hover:bg-slate-200">
+          <tr class="hover:bg-slate-100">
             <td class="hidden px-4 py-2 border-b">${p.id}</td>
             <td class="px-4 py-2 border-b">${p.nome}</td>
             <td class="px-4 py-2 border-b">${p.categoria}</td>
             <td class="px-4 py-2 border-b">${p.quantidade}</td>
             <td class="px-4 py-2 border-b">${p.observacao||'-'}</td>
             <td class="px-4 py-2 border-b">
-                <button class="text-md bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded" onclick="editarPeca(${p.id})">✏️ Editar</button>
-                <button class="text-md bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded" onclick="apagarPeca(${p.id})">🗑️ Apagar</button>
+                <button class="inline-flex items-center gap-x-2 rounded px-5 py-1 text-md/5 font-medium sm:text-xs/5 forced-colors:outline bg-blue-400/20 text-blue-700 hover:bg-blue-400/30" onclick="editarPeca(${p.id})">Editar</button>
+                <button class="inline-flex items-center gap-x-2 rounded px-4 py-1 text-md/5 font-medium sm:text-xs/5 forced-colors:outline bg-rose-400/15 text-rose-700 hover:bg-rose-400/30" onclick="apagarPeca(${p.id})">Apagar</button>
               </td>
           </tr>`;
         if (lista) lista.innerHTML += row;
@@ -1211,6 +1214,11 @@
 
       return null;
     }
+
+    function formatarDataBR(dataStr) {
+      const data = parseData(dataStr);
+      return data ? data.toLocaleDateString("pt-BR") : dataStr;
+    }
    
     async function renderChamados() {
       const res = await fetch(`${API_URL}/api/chamados`);
@@ -1237,6 +1245,7 @@
 
       chamados.forEach(c => {
         const dataChamado = parseData(c.data);
+        const dataBR = formatarDataBR(c.data);
         if (!dataChamado) return;
 
         // Chamados de hoje
@@ -1253,20 +1262,18 @@
           mesCount++;
         }
 
-        const dataBR = dataChamado ? dataChamado.toLocaleDateString("pt-BR") : c.data;
-
         lista.innerHTML += `
-        <tr class="hover:bg-slate-200">
+        <tr class="hover:bg-slate-100">
           <td class="hidden px-4 py-2 border-b">${c.id}</td>
+          <td class="px-4 py-2 border-b">#${c.numero}</td>
           <td class="px-4 py-2 border-b">${c.nome}</td>
-          <td class="px-4 py-2 border-b">${c.numero}</td>
           <td class="px-4 py-2 border-b">${c.assunto}</td>
           <td class="px-4 py-2 border-b">${c.tipoChamado}</td>
           <td class="px-4 py-2 border-b">${c.tecnico}</td>
           <td class="px-4 py-2 border-b">${c.grupo}</td>
           <td class="px-4 py-2 border-b">${dataBR}</td>
           <td class="px-4 py-2 border-b">
-            <button class="text-md bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded" onclick="apagarChamado(${c.id})">🗑️ Apagar</button>
+            <button class="inline-flex items-center gap-x-2 rounded px-4 py-1 text-md/5 font-medium sm:text-xs/5 forced-colors:outline bg-rose-400/15 text-rose-700 hover:bg-rose-400/30" onclick="apagarChamado(${c.id})">Apagar</button>
           </td>
         </tr>`;
       });
@@ -1288,6 +1295,7 @@
       const dataFim = document.getElementById('dataFim').value;
       const busca = document.getElementById('buscaChamado').value.toLowerCase();
       const lista = document.getElementById('listaChamados');
+      const dataBR = formatarDataBR(c.data);
       lista.innerHTML = '';
 
       // 1) Filtro de busca
@@ -1316,17 +1324,17 @@
 
       filtrados.forEach(c => {
         lista.innerHTML += `
-          <tr>
-            <td class="px-4 py-2 border-b">${c.id}</td>
+          <tr class="hover:bg-slate-100">
+            <td class="hidden px-4 py-2 border-b">${c.id}</td>
+            <td class="px-4 py-2 border-b">#${c.numero}</td>
             <td class="px-4 py-2 border-b">${c.nome}</td>
-            <td class="px-4 py-2 border-b">${c.numero}</td>
             <td class="px-4 py-2 border-b">${c.assunto}</td>
             <td class="px-4 py-2 border-b">${c.tipoChamado}</td>
             <td class="px-4 py-2 border-b">${c.tecnico}</td>
             <td class="px-4 py-2 border-b">${c.grupo}</td>
-            <td class="px-4 py-2 border-b">${c.data}</td>
+            <td class="px-4 py-2 border-b">${dataBR}</td>
             <td class="px-4 py-2 border-b">
-              <button class="text-md bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded" onclick="apagarChamado(${c.id})">🗑️ Apagar</button>
+              <button class="inline-flex items-center gap-x-2 rounded px-4 py-1 text-md/5 font-medium sm:text-xs/5 forced-colors:outline bg-rose-400/15 text-rose-700 hover:bg-rose-400/30" onclick="apagarChamado(${c.id})">Apagar</button>
             </td>
           </tr>`;
       });
