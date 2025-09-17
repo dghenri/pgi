@@ -347,7 +347,7 @@
             <div class="bg-white border rounded-2xl shadow-sm p-6">
               <h3 class="text-xl font-semibold">Registrar Chamado</h3>
               <p class="mb-2 text-slate-500"><span class="font-bold text-red-500">*</span> Campos obrigatórios</p>
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="grid grid-cols-1 md:grid-cols-3 md:gap-6">
                 <div>
                   <div>
                     <label for="chamadoUsuario" class="block text-sm font-medium">Nome <span class="font-bold text-red-500">*</span></label>
@@ -518,21 +518,29 @@
           return;
         }
 
-        let erro = campo.parentNode.querySelector(".error-campo");
+        let erro = campo.parentNode.querySelector(".erro-campo");
         if (erro) erro.remove();
 
         if (!campo.value.trim()) {
           valido = false;
 
+          campo.classList.add("border-red-500");
+
           erro = document.createElement("p");
           erro.textContent = `⚠️ Este campo é obrigatório!`;
           erro.className = "erro-campo text-red-600 text-sm";
-
           campo.parentNode.appendChild(erro);
 
-          campo.classList.add("border-red-500")
+          if (!campo.dataset.listenerAdded) { 
+            campo.addEventListener("input", () => {
+              campo.classList.remove("border-red-500");
+              const msg = campo.parentNode.querySelector(".erro-campo");
+              if (msg) msg.remove();
+            });
+            campo.dataset.listenerAdded = "true";
+          }
         } else {
-          campo.classList.remove("border-red-500")
+          campo.classList.remove("border-red-500");
         }
       });
 
