@@ -261,29 +261,25 @@
 
                 <button onclick="a_cancelarEdicao()" id="a_cancelEditBtn" class="hidden bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-xl">Cancelar Edição</button>
 
-                <input type="file" id="importExcel" accept=".xlsx, .xls" class="hidden" onchange="importarExcel(event)" />
-
                 <div class="relative inline-block text-left">
-                  <button id="btnImport"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl flex items-center justify-between gap-2 w-48">
+                  <button id="btnDropdown"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl flex items-center justify-between gap-2">
                     Importar Dados 
-                    <svg id="iconArrow" xmlns="http://www.w3.org/2000/svg" 
-                        fill="none" 
-                        viewBox="0 0 24 24" 
-                        stroke-width="2" 
-                        stroke="currentColor" 
-                        class="w-6 h-6 transition-transform duration-300">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    <svg id="iconArrow" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
 
-                  <div id="dropdownImport" class="absolute left-0 mt-2 w-48 rounded-x1 bg-white border border-gray-200 shadow-lg transform scale-y-0 origin-top transition-all duration-300 ease-in-out z-50">
-                    <ul class="py-2 text-gray-700">
+                  <div id="menuDropdown" 
+                    class="absolute left-0 mt-2 w-48 rounded-x1 bg-white border border-gray-200 shadow-lg transform scale-y-0 origin-top transition-all duration-300 ease-in-out z-50 rounded-lg">
+                    <ul class="rounded-xl p-1 outline outline-transparent focus:outline-hidden overflow-y-auto bg-white/75 backdrop-blur-xl dark:bg-zinc-800/75 shadow-lg supports-[grid-template-columns:subgrid]:grid-cols-[auto_1fr_1.5rem_0.5rem_auto] transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0">
                       <li>
-                        <button class="w-full text-left px-4 py-2 hover:bg-gray-100">📂 Importar Excel</button>
+                        <input type="file" id="importEx" accept=".xlsx, .xls" onchange="importarExcel(event)" class="hidden" />
+                        <button id="btnImportEx" onclick="document.getElementById('importEx').click()" 
+                        class="w-full text-white text-left px-4 py-2 hover:bg-blue-600 rounded-lg">📂 Importar Excel</button>
                       </li>
                       <li>
-                        <button class="w-full text-left px-4 py-2 hover:bg-gray-100">💻 importar este computador</button>
+                        <button id="importPc" class="w-full text-white text-left px-4 py-2 hover:bg-blue-600 rounded-lg">💻 Importar PC</button>
                       </li>
                     </ul>
                   </div>
@@ -518,9 +514,9 @@
 
 
     //---------------------------------------------------------------------------------------------------------------------- Funções diversas
-    // Dropdown botão import
-    const btn = document.getElementById("btnImport");
-    const menu = document.getElementById("dropdownImport")
+    // Dropdown import
+    const btn = document.getElementById("btnDropdown");
+    const menu = document.getElementById("menuDropdown")
     const icon = document.getElementById("iconArrow");
 
     // Animação
@@ -533,8 +529,8 @@
         icon.classList.remove("rotate-180")
       } else {
         menu.classList.remove("scale-y-0", "opacity-0");
-        menu.classList.add("scale-y-0", "opacity-0");
-        icon.classList.remove("rotate-180");
+        menu.classList.add("scale-y-100", "opacity-100");
+        icon.classList.add("rotate-180");
       }
     });
 
@@ -545,6 +541,51 @@
         icon.classList.remove("rotate-180");
       }
     })
+
+    //----------------------------------------------------------------------------------------------------------------------------Importar Excel
+    function importarExcel(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: "array" });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+
+      rows.forEach(row => {
+        const ativo = {
+          tipoEquip: row["Tipo"] || "Notebook",
+          patrimonio: row["Patrimonio"] || "",
+          marca: row["Marca"] || "",
+          serial: row["Serie"] || "",
+          disco: row["Disco"] || "",
+          hostname: row["Hostname"] || "",
+          nome: row["Nome"] || "",
+          login: row["Login"] || "",
+          setor: row["Setor"] || "",
+          local: row["Local"] || "",
+          status: row["Status"] || "Em uso",
+          sistemaOperacional: row["SO"] || ""
+        };
+        ativos.push(ativo);
+      });
+
+      // envia para o backend e atualiza a UI
+      saveAtivos()
+        .then(() => {
+          renderAtivos();
+          alert("Importação concluída com sucesso!");
+        })
+        .catch(err => {
+          console.error(err);
+          alert("Erro ao importar: verifique o console.");
+        });
+      };
+
+      reader.readAsArrayBuffer(file);
+    }
 
     // Salva ativos no backend
     async function saveAtivos() {
@@ -766,51 +807,6 @@
           }
       }
       });
-    }
-
-    //----------------------------------------------------------------------------------------------------------------------------Importar Excel
-    function importarExcel(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-      const data = new Uint8Array(e.target.result);
-      const workbook = XLSX.read(data, { type: "array" });
-      const sheet = workbook.Sheets[workbook.SheetNames[0]];
-      const rows = XLSX.utils.sheet_to_json(sheet, { defval: "" });
-
-      rows.forEach(row => {
-        const ativo = {
-          tipoEquip: row["Tipo"] || "Notebook",
-          patrimonio: row["Patrimonio"] || "",
-          marca: row["Marca"] || "",
-          serial: row["Serie"] || "",
-          disco: row["Disco"] || "",
-          hostname: row["Hostname"] || "",
-          nome: row["Nome"] || "",
-          login: row["Login"] || "",
-          setor: row["Setor"] || "",
-          local: row["Local"] || "",
-          status: row["Status"] || "Em uso",
-          sistemaOperacional: row["SO"] || ""
-        };
-        ativos.push(ativo);
-      });
-
-      // envia para o backend e atualiza a UI
-      saveAtivos()
-        .then(() => {
-          renderAtivos();
-          alert("Importação concluída com sucesso!");
-        })
-        .catch(err => {
-          console.error(err);
-          alert("Erro ao importar: verifique o console.");
-        });
-      };
-
-      reader.readAsArrayBuffer(file);
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------------- ATIVOS
