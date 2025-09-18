@@ -279,7 +279,7 @@
                         class="w-full text-white text-left px-4 py-2 hover:bg-blue-600 rounded-lg">📂 Importar Excel</button>
                       </li>
                       <li>
-                        <button onclick="captarPC" class="w-full text-white text-left px-4 py-2 hover:bg-blue-600 rounded-lg">💻 Adicionar este PC</button>
+                        <button onclick="captarPC()" class="w-full text-white text-left px-4 py-2 hover:bg-blue-600 rounded-lg">💻 Adicionar este PC</button>
                       </li>
                     </ul>
                   </div>
@@ -947,7 +947,7 @@
     }
 
     async function captarPC() {
-      const resp = await fetch("/api/devide-info");
+      const resp = await fetch("/api/device-info");
       const data = await resp.json();
 
       document.getElementById("hostname").value = data.nome || "-";

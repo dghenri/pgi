@@ -75,7 +75,7 @@ def adicionar_ativo():
     session.commit()
     return jsonify({"message": "Ativo adicionado"})
 
-@app.get("/api/devide-info")
+@app.get("/api/device-info")
 def get_device_info():
     return {
         "nome": platform.node(),
