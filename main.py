@@ -1,6 +1,7 @@
 import os
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
+import platform
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
@@ -73,6 +74,14 @@ def adicionar_ativo():
     session.add(novo)
     session.commit()
     return jsonify({"message": "Ativo adicionado"})
+
+@app.get("/api/devide-info")
+def get_device_info():
+    return {
+        "nome": platform.node(),
+        "so": platform.system(),
+        "release": platform.release(),
+    }
 
 @app.route("/api/ativos/<int:id>", methods=["PUT"])
 def atualizar_ativo(id):

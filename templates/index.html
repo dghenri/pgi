@@ -275,11 +275,11 @@
                     <ul class="rounded-xl p-1 outline outline-transparent focus:outline-hidden overflow-y-auto bg-white/75 backdrop-blur-xl dark:bg-zinc-800/75 shadow-lg supports-[grid-template-columns:subgrid]:grid-cols-[auto_1fr_1.5rem_0.5rem_auto] transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0">
                       <li>
                         <input type="file" id="importEx" accept=".xlsx, .xls" onchange="importarExcel(event)" class="hidden" />
-                        <button id="btnImportEx" onclick="document.getElementById('importEx').click()" 
+                        <button onclick="document.getElementById('importE').click()" 
                         class="w-full text-white text-left px-4 py-2 hover:bg-blue-600 rounded-lg">📂 Importar Excel</button>
                       </li>
                       <li>
-                        <button id="importPc" class="w-full text-white text-left px-4 py-2 hover:bg-blue-600 rounded-lg">💻 Importar PC</button>
+                        <button onclick="captarPC" class="w-full text-white text-left px-4 py-2 hover:bg-blue-600 rounded-lg">💻 Adicionar este PC</button>
                       </li>
                     </ul>
                   </div>
@@ -944,6 +944,14 @@
         console.error("❌ Erro ao adicionar ativo: ", err);
         alert("❌ Não foi possível adicionar o ativo."); // Log de erro
       }
+    }
+
+    async function captarPC() {
+      const resp = await fetch("/api/devide-info");
+      const data = await resp.json();
+
+      document.getElementById("hostname").value = data.nome || "-";
+      document.getElementById("sistemaOperacional").value = `${data.so} ${data.release}` || "-";
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------Editar Ativo
