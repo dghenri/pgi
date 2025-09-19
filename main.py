@@ -75,14 +75,6 @@ def adicionar_ativo():
     session.commit()
     return jsonify({"message": "Ativo adicionado"})
 
-@app.get("/api/device-info")
-def get_device_info():
-    return {
-        "nome": platform.node(),
-        "so": platform.system(),
-        "release": platform.release(),
-    }
-
 @app.route("/api/ativos/<int:id>", methods=["PUT"])
 def atualizar_ativo(id):
     try:
