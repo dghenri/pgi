@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="/src/favicon.svg">
   <title>Painel Gestão Interno</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -140,7 +141,11 @@
         <div class="flex justify-between sticky top-0 z-20 bg-white/70 backdrop-blur border-b border-slate-200 px-5 py-4 flex items-center gap-3">
           <h2 id="pageTitle" class="text-2xl font-bold tracking-tight text-gray-900">Dashboard</h2>
           <div>
-            <button id="menuBtn" class="md:hidden rounded-lg border px-2 py-1">☰</button>
+            <button id="menuBtn" class="md:hidden rounded-lg border px-2 py-1">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M12 17.25h8.25" />
+              </svg>
+            </button>
           </div>
         </div>
 
