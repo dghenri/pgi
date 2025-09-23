@@ -82,20 +82,27 @@
           <div class="items-center gap-3">
             <div class="md:block">
               <!--------------------------------------------------------------------- Menu Mobile -->
-              <div id="overlayMobile" class="fixed inset-0 z-40 hidden bg-black/50 backdrop-blur-sm">
+              <div id="overlayMobile" class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-400 ease-in-out">
                 <aside id="sidebar" 
-                class="md:sticky md:top-0 md:h-screen bg-white border-r border-slate-200 shadow-sm w-full transform -translate-y-full transition-transform duration-300 ease-in-out">
+                class="md:sticky md:top-0 md:h-[calc(100vh-5rem)] bg-white border-r border-slate-200 shadow-sm w-full transform -translate-y-full transition-transform duration-300 ease-in-out">
                   <nav class="md:hidden space-y-2 px-3 py-5">
-                    <div class="flex item-center gap-3 mb-4">
-                      <div class="h-10 w-10 rounded-2xl bg-blue-600 text-white grid place-items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-7">
-                          <path fill-rule="evenodd" d="M11.622 1.602a.75.75 0 0 1 .756 0l2.25 1.313a.75.75 0 0 1-.756 1.295L12 3.118 10.128 4.21a.75.75 0 1 1-.756-1.295l2.25-1.313ZM5.898 5.81a.75.75 0 0 1-.27 1.025l-1.14.665 1.14.665a.75.75 0 1 1-.756 1.295L3.75 8.806v.944a.75.75 0 0 1-1.5 0V7.5a.75.75 0 0 1 .372-.648l2.25-1.312a.75.75 0 0 1 1.026.27Zm12.204 0a.75.75 0 0 1 1.026-.27l2.25 1.312a.75.75 0 0 1 .372.648v2.25a.75.75 0 0 1-1.5 0v-.944l-1.122.654a.75.75 0 1 1-.756-1.295l1.14-.665-1.14-.665a.75.75 0 0 1-.27-1.025Zm-9 5.25a.75.75 0 0 1 1.026-.27L12 11.882l1.872-1.092a.75.75 0 1 1 .756 1.295l-1.878 1.096V15a.75.75 0 0 1-1.5 0v-1.82l-1.878-1.095a.75.75 0 0 1-.27-1.025ZM3 13.5a.75.75 0 0 1 .75.75v1.82l1.878 1.095a.75.75 0 1 1-.756 1.295l-2.25-1.312a.75.75 0 0 1-.372-.648v-2.25A.75.75 0 0 1 3 13.5Zm18 0a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-.372.648l-2.25 1.312a.75.75 0 1 1-.756-1.295l1.878-1.096V14.25a.75.75 0 0 1 .75-.75Zm-9 5.25a.75.75 0 0 1 .75.75v.944l1.122-.654a.75.75 0 1 1 .756 1.295l-2.25 1.313a.75.75 0 0 1-.756 0l-2.25-1.313a.75.75 0 1 1 .756-1.295l1.122.654V19.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+                    <div class="flex items-center justify-between mb-4">
+                      <div class="flex items-center gap-3">
+                        <div class="h-10 w-10 rounded-2xl bg-blue-600 text-white grid place-items-center">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-7">
+                            <path fill-rule="evenodd" d="M11.622 1.602a.75.75 0 0 1 .756 0l2.25 1.313a.75.75 0 0 1-.756 1.295L12 3.118 10.128 4.21a.75.75 0 1 1-.756-1.295l2.25-1.313ZM5.898 5.81a.75.75 0 0 1-.27 1.025l-1.14.665 1.14.665a.75.75 0 1 1-.756 1.295L3.75 8.806v.944a.75.75 0 0 1-1.5 0V7.5a.75.75 0 0 1 .372-.648l2.25-1.312a.75.75 0 0 1 1.026.27Zm12.204 0a.75.75 0 0 1 1.026-.27l2.25 1.312a.75.75 0 0 1 .372.648v2.25a.75.75 0 0 1-1.5 0v-.944l-1.122.654a.75.75 0 1 1-.756-1.295l1.14-.665-1.14-.665a.75.75 0 0 1-.27-1.025Zm-9 5.25a.75.75 0 0 1 1.026-.27L12 11.882l1.872-1.092a.75.75 0 1 1 .756 1.295l-1.878 1.096V15a.75.75 0 0 1-1.5 0v-1.82l-1.878-1.095a.75.75 0 0 1-.27-1.025ZM3 13.5a.75.75 0 0 1 .75.75v1.82l1.878 1.095a.75.75 0 1 1-.756 1.295l-2.25-1.312a.75.75 0 0 1-.372-.648v-2.25A.75.75 0 0 1 3 13.5Zm18 0a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-.372.648l-2.25 1.312a.75.75 0 1 1-.756-1.295l1.878-1.096V14.25a.75.75 0 0 1 .75-.75Zm-9 5.25a.75.75 0 0 1 .75.75v.944l1.122-.654a.75.75 0 1 1 .756 1.295l-2.25 1.313a.75.75 0 0 1-.756 0l-2.25-1.313a.75.75 0 1 1 .756-1.295l1.122.654V19.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+                          </svg>
+                        </div>
+                        <div>
+                          <h1 class="text-lg font-bold">Painel de Gestão</h1>
+                          <p class="text-xs text-slate-500">Ativos • Peças • Chamados</p>
+                        </div>
+                      </div>
+                      <button id="closeMenu" class="md:hidden rounded-lg bg-slate-100/90 px-2 py-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                         </svg>
-                      </div>
-                      <div>
-                        <h1 class="text-lg font-bold">Painel de Gestão</h1>
-                        <p class="text-xs text-slate-500">Ativos • Peças • Chamados</p>
-                      </div>
+                      </button>
                     </div>
                     <button id="btnDashboard" data-page="dashboard" class="nav-mobile w-full bg-slate-100/50 hover:bg-slate-100 flex items-center gap-3 px-3 py-2 rounded-xl" onclick="renderAtivos()">
                       <span class="text-xl">
@@ -142,7 +149,7 @@
         <div class="flex justify-between sticky top-0 z-20 bg-white/70 backdrop-blur border-b border-slate-200 px-5 py-4 flex items-center gap-3">
           <h2 id="pageTitle" class="text-2xl font-bold tracking-tight text-gray-900">Dashboard</h2>
           <div>
-            <button id="menuBtn" class="md:hidden rounded-lg border px-2 py-1">
+            <button id="menuBtn" class="md:hidden rounded-lg bg-slate-100/90 px-2 py-1">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M12 17.25h8.25" />
               </svg>
@@ -817,31 +824,52 @@
     const menuBtn = document.getElementById('menuBtn');
     const overlay = document.getElementById('overlayMobile');
     const sidebar = document.getElementById('sidebar');
-    const closeOverlay = document.querySelectorAll('#btnAtivos, #btnPecas, #btnChamados, #btnDashboard');
+    const closeOverlay = document.querySelectorAll('#btnAtivos, #btnPecas, #btnChamados, #btnDashboard, #closeMenu');
+
+    let aberto = false;
 
     menuBtn.addEventListener('click', () => {
-      overlay.classList.remove('hidden');
-      setTimeout(() => {
-        sidebar.classList.remove('-translate-y-full');
-      }, 10);
+      aberto = !aberto;
+
+      if (aberto) {
+        overlay.classList.remove("opacity-0", "pointer-events-none");
+        overlay.classList.add("opacity-100", "pointer-events-auto");
+
+        sidebar.classList.remove("-translate-y-full");
+        sidebar.classList.add("translate-y-0");
+      } else {
+        overlay.classList.remove("opacity-100", "pointer-events-auto");
+        overlay.classList.add("opacity-0", "pointer-events-none");
+
+        sidebar.classList.remove("translate-y-0");
+        sidebar.classList.add("-translate-y-full")
+      }
     });
 
     closeOverlay.forEach(section => {
       section.addEventListener('click', () => {
-        if (!overlay.classList.contains('hidden')) {
+        if (aberto) {
+          sidebar.classList.remove("translate-y-0")
           sidebar.classList.add('-translate-y-full');
+
           setTimeout(() => {
-            overlay.classList.add('hidden');
+            overlay.classList.remove("opacity-100", "pointer-events-auto");
+            overlay.classList.add("opacity-0", "pointer-events-none");
+            aberto = false;
           }, 300);
         }
       });
     });
 
     overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) {
+      if (e.target === overlay && aberto) {
+        sidebar.classList.remove('translate-y-0');
         sidebar.classList.add('-translate-y-full');
+
         setTimeout(() => {
-          overlay.classList.add('hidden');
+          overlay.classList.remove("opacity-100", "pointer-events-auto");
+          overlay.classList.add("opacity-0", "pointer-events-none");
+          aberto = false;
         }, 300);
       }
     })
