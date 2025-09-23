@@ -81,6 +81,7 @@
         <div class="max-w-7xl mx-auto px-4 items-center">
           <div class="items-center gap-3">
             <div class="md:block">
+              <!--------------------------------------------------------------------- Menu Mobile -->
               <div id="overlayMobile" class="fixed inset-0 z-40 hidden bg-black/50 backdrop-blur-sm">
                 <aside id="sidebar" 
                 class="md:sticky md:top-0 md:h-screen bg-white border-r border-slate-200 shadow-sm w-full transform -translate-y-full transition-transform duration-300 ease-in-out">
@@ -319,7 +320,7 @@
 
                   <div id="menuDropdown" 
                     class="absolute left-0 mt-2 w-48 rounded-xl border border-gray-200 shadow-lg transform scale-y-0 opacity-0 origin-top transition-all duration-300 ease-in-out z-50 rounded-lg">
-                    <ul class="rounded-xl p-1 outline outline-transparent focus:outline-hidden overflow-y-auto bg-white/75 backdrop-blur-xl dark:bg-zinc-800/75 shadow-lg supports-[grid-template-columns:subgrid]:grid-cols-[auto_1fr_1.5rem_0.5rem_auto] transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0">
+                    <ul class="rounded-xl p-1 outline outline-transparent focus:outline-hidden overflow-y-auto bg-zinc-800/75 backdrop-blur-xl shadow-lg transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0">
                       <li>
                         <input type="file" id="importEx" accept=".xlsx, .xls" onchange="importarExcel(event)" class="hidden" />
                         <button id="btnImportEx" onclick="document.getElementById('importEx').click()" 
@@ -544,6 +545,27 @@
         </div>
     </main>
   </div>
+   
+  <div id="confirmModal" 
+    class="fixed inset-0 flex z-50 w-screen justify-center overflow-y-auto bg-zinc-950/35 backdrop-blur-sm px-2 py-2 sm:px-6 sm:py-8 lg:px-8 lg:py-16 opacity-0  pointer-events-none transition-all duration-400 ease-in-out ">
+    <div class="fixed inset-0 w-screen overflow-y-auto pt-6 sm:pt-0">
+      <div class="min-h-full flex justify-center items-center p-8 sm:p-4">
+        <div class="sm:max-w-md row-start-2 w-full rounded-2xl bg-white p-8 shadow-lg sm:rounded-2xl sm:p-6 forced-colors:outline transition-transform duration-400 ease-in-out will-change-transform data-closed:opacity-0 data-enter:ease-out data-closed:data-enter: data-leave:ease-in">
+          <h2 id="confirmTitle" class="text-center text-base/6 font-semibold text-balance text-zinc-950 sm:text-left sm:text-wrap">Atenção</h2>
+          <p id="confirmMessage" class="mt-2 text-center text-pretty sm:text-left text-base/6 text-zinc-500 whitespace-pre-line">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Earum temporibus nemo animi dolorum maxime eligendi nesciunt!</p>
+          <div class="mt-6 flex flex-col-reverse items-center justify-end gap-3 *:w-full sm:mt-4 sm:flex-row sm:*:w-auto">
+            <button id="confirmNo" class="justify-center rounded-lg font-semibold px-4 py-2 sm:text-md text-rose-700 hover:bg-slate-500/10 transition 300">
+              Cancelar
+            </button>
+            <button id="confirmYes" class="justify-center rounded-lg font-semibold px-4 py-2 sm:text-md text-white bg-green-600 hover:bg-green-700 transition 300" type="button">
+              Confirmar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     const API_URL = 'https://pgi-kt9a.onrender.com';
 
@@ -561,8 +583,45 @@
     renderChamados();
     });
 
-
     //---------------------------------------------------------------------------------------------------------------------- Funções diversas
+
+    // Confirmações
+    function customConfirm(message) {
+      return new Promise((resolve) => {
+        const modal = document.getElementById("confirmModal");
+        const title = document.getElementById("confirmTitle")
+        const msg = document.getElementById("confirmMessage");
+        const yesBtn = document.getElementById("confirmYes");
+        const noBtn = document.getElementById("confirmNo");
+
+        msg.textContent = message;
+
+        modal.classList.remove("opacity-0", "pointer-events-none");
+        modal.classList.add("opacity-100")
+
+        const close = (result) => {
+          modal.classList.remove("opacity-100");
+          modal.classList.add("opacity-0")
+
+          const onEnd = () => {
+            modal.classList.add("pointer-events-none");
+            modal.removeEventListener("transitionend", onEnd);
+          };
+          modal.addEventListener("transitionend", onEnd);
+
+          yesBtn.removeEventListener("click", yesHandler);
+          noBtn.removeEventListener("click", noHandler);
+          resolve(result);
+        };
+
+        const yesHandler = () => close(true);
+        const noHandler = () => close(false);
+
+        yesBtn.addEventListener("click", yesHandler);
+        noBtn.addEventListener("click", noHandler);
+      });
+    }
+
     // Dropdown import
     const btn = document.getElementById("btnDropdown");
     const menu = document.getElementById("menuDropdown")
@@ -975,7 +1034,7 @@
       }
     
       // Confirmação antes de adicionar
-      if (!confirm(`Deseja realmente adicionar o ativo ${ativo.hostname}?`)) return;
+      if (!(await customConfirm(`Deseja realmente adicionar o ativo ${ativo.hostname}?`))) return;
 
      try {
         const response = await fetch(`${API_URL}/api/ativos`, {
@@ -1082,14 +1141,14 @@
     //--------------------------------------------------------------------------------------------------------------------------------Apagar Ativo
     async function apagarAtivo(id) {
       const ativo = ativos.find(a => a.id === id);
-      if (!confirm(`❌ Deseja realmente apagar o ativo ${ativo.serial}?\nEsta ação não pode ser desfeita.`)) return;
+      if (!(await customConfirm(`Deseja realmente apagar o ativo ${ativo.serial}?\nEsta ação não pode ser desfeita.`))) return;
 
       try {
         const response = await fetch(`${API_URL}/api/ativos/${id}`, { method: 'DELETE' });
         if (!response.ok) {
           throw new Error("Erro ao excluir ativo"); // Log de erro
         }
-        renderAtivos();
+        await renderAtivos();
         alert("✅ Ativo apagado com sucesso!");
       }
       catch (err) {
@@ -1151,7 +1210,7 @@
         observacao: document.getElementById('pecaObservacao').value
       }
 
-      if (!confirm(`Deseja realmente adicionar a peça ${peca.nome}?`)) return;
+      if (!(await customConfirm(`Deseja realmente adicionar a peça ${peca.nome}?`))) return;
 
       try {
         const response = await fetch(`${API_URL}/api/pecas`, {
@@ -1241,14 +1300,14 @@
     //-------------------------------------------------------------------------------------------------------------------------------- Apagar Peça
     async function apagarPeca(id) {
       const peca = pecas.find(p => p.id === id);
-      if (!confirm(`❌ Deseja realmente apagar a peça ${peca.nome}?\nEsta ação não pode ser desfeita.`)) return;
+      if (!(await customConfirm(`Deseja realmente apagar a peça ${peca.nome}?\nEsta ação não pode ser desfeita.`))) return;
 
       try {
         const response = await fetch(`${API_URL}/api/pecas/${id}`, { method: 'DELETE' });
         if (!response.ok) {
           throw new Error("Erro ao excluir peça"); // Log de erro
         }
-        renderPecas();
+        await renderPecas();
         alert("✅ Peça apagada com sucesso!");
       }
       catch (err) {
@@ -1421,7 +1480,7 @@
         data: document.getElementById('chamadoData').value
       };
 
-      if (!confirm(`Deseja realmente registrar o chamado ${chamado.numero} para ${chamado.nome}?`)) return;
+      if (!(await customConfirm(`Deseja realmente registrar o chamado ${chamado.numero} para ${chamado.nome}?`))) return;
       
       try {
         const response = await fetch(`${API_URL}/api/chamados`, {
@@ -1448,14 +1507,14 @@
     // ---------------------------------------------------------------------------------------------------------------- Apagar Chamado
     async function apagarChamado(id) {
       const chamado = chamados.find(c => c.id === id);
-      if (!confirm(`❌ Deseja realmente apagar o chamado #${chamado.numero}?\nEsta ação não pode ser desfeita.`)) return;
+      if (!(await customConfirm(`Deseja realmente apagar o chamado #${chamado.numero}?\nEsta ação não pode ser desfeita.`))) return;
 
       try {
         const response = await fetch(`${API_URL}/api/chamados/${id}`, { method: 'DELETE' });
         if (!response.ok) {
           throw new Error("Erro ao excluir chamado"); // Log de erro
         }
-        renderChamados();
+        await renderChamados();
         alert("✅ Chamado apagado com sucesso!");
       }
       catch (err) {
